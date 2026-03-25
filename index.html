@@ -1,0 +1,3408 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AtendeBem — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  /* ── Typography tokens (textStyles.json) ──
+     text-xs → text-2xl : Inter (12–24px)
+     text-3xl → text-9xl : Plus Jakarta Sans (30–128px)
+     Weights: light=300, regular=400, medium=500, semibold=600, bold=700, extrabold=800 */
+  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", sans-serif;
+  /* UI scale */
+  --text-xs:12px; --text-sm:14px; --text-base:16px;
+  --text-lg:18px; --text-xl:20px; --text-2xl:24px;
+  /* Display scale */
+  --text-3xl:30px; --text-4xl:36px; --text-5xl:48px;
+  /* Weights */
+  --fw-light:300; --fw-regular:400; --fw-medium:500;
+  --fw-semibold:600; --fw-bold:700; --fw-extrabold:800;
+  /* Color tokens */
+  --bg-page:#F8FAFC; --bg-surface:#FFFFFF; --bg-subtle:#F1F5F9;
+  --text-primary:#0F172A; --text-secondary:#475569; --text-tertiary:#94A3B8;
+  --border:#E2E8F0; --border-strong:#CBD5E1;
+  --brand:#10B981; --brand-hover:#059669; --brand-dark:#047857;
+  --ok-bg:#DCFCE7; --ok-text:#15803D;
+  --warn-bg:#FEF3C7; --warn-text:#D97706;
+  --err-bg:#FEE2E2; --err-text:#DC2626;
+  --info-bg:#DBEAFE; --info-text:#2563EB;
+  --badge-bg:#D1FAE5; --badge-text:#047857;
+  --r-sm:8px; --r-md:12px; --r-lg:20px; --r-xl:24px; --r-full:9999px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}html{overflow-x:hidden;}body{overflow-x:hidden;}
+body{
+  font-family:var(--font-ui);
+  font-size:var(--text-sm);
+  font-weight:var(--fw-regular);
+  background:var(--bg-page);
+  color:var(--text-primary);
+  display:flex;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  letter-spacing:0;
+  transition:background 0.25s, color 0.2s;
+}
+::-webkit-scrollbar{width:3px;} ::-webkit-scrollbar-track{background:transparent;} ::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:99px;}
+
+/* ── Dark Mode tokens (Dark_tokens.json) ────────────────────── */
+[data-theme="dark"] {
+  --bg-page:    #0F172A;
+  --bg-surface: #1E293B;
+  --bg-subtle:  #334155;
+  --bg-raised:  #475569;
+
+  --text-primary:   #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-tertiary:  #64748B;
+  --text-disabled:  #334155;
+  --text-link:      #34D399;
+
+  --border:        #334155;
+  --border-strong: #475569;
+  --border-focus:  #34D399;
+
+  --brand:       #10B981;
+  --brand-hover: #059669;
+  --brand-dark:  #047857;
+
+  --ok-bg:   #15803D; --ok-text:   #22C55E;
+  --warn-bg: #D97706; --warn-text: #FBBF24;
+  --err-bg:  #DC2626; --err-text:  #F87171;
+  --info-bg: #2563EB; --info-text: #60A5FA;
+
+  --badge-bg:   #064E3B;
+  --badge-text: #34D399;
+
+  /* Status — dark variants */
+  --status-ok-bg:   #15803D; --status-ok-text:   #22C55E;
+  --status-warn-bg: #92400E; --status-warn-text: #FBBF24;
+  --status-err-bg:  #7F1D1D; --status-err-text:  #F87171;
+  --status-info-bg: #1E3A5F; --status-info-text: #60A5FA;
+}
+
+/* Dark mode overrides for hardcoded colors */
+[data-theme="dark"] .sb { background: #1E293B; border-right: 1px solid rgba(255,255,255,0.06); }
+[data-theme="dark"] .sb-foot { border-top-color: rgba(255,255,255,0.05); }
+[data-theme="dark"] .ngl { color: #475569; }
+[data-theme="dark"] .ni { color: #64748B; }
+[data-theme="dark"] .ni:hover { background: rgba(255,255,255,0.04); color: #94A3B8; }
+[data-theme="dark"] .ni.a { background: #1E293B; color: #F1F5F9; }
+[data-theme="dark"] .uname { color: #F1F5F9; }
+[data-theme="dark"] .urole { color: #64748B; }
+
+[data-theme="dark"] .topbar { background: #1E293B; box-shadow: 0 1px 0 rgba(255,255,255,0.04); }
+[data-theme="dark"] .tl h1 { color: #F1F5F9; }
+[data-theme="dark"] .tmeta { color: #64748B; }
+[data-theme="dark"] .btni { border-color: #334155; color: #94A3B8; }
+[data-theme="dark"] .btni:hover { background: #334155; }
+[data-theme="dark"] .ndotred { border-color: #1E293B; }
+[data-theme="dark"] .pill-b { background: #1E3A5F; color: #60A5FA; }
+[data-theme="dark"] .pill-y { background: #92400E; color: #FBBF24; }
+
+[data-theme="dark"] .cnt { background: #0F172A; }
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .kpi-card,
+[data-theme="dark"] .amc,
+[data-theme="dark"] .kpi-strip {
+  background: #1E293B;
+  border-color: #334155;
+  box-shadow: none;
+}
+
+[data-theme="dark"] .kpi-card { background: #1E293B; border-color: #334155; }
+[data-theme="dark"] .kpi-blue,
+[data-theme="dark"] .kpi-teal,
+[data-theme="dark"] .kpi-purple,
+[data-theme="dark"] .kpi-amber,
+[data-theme="dark"] .kpi-slate { background: #1E293B; border-color: #334155; }
+[data-theme="dark"] .kpi-icon { background: #064E3B !important; }
+[data-theme="dark"] .kpi-label { color: #94A3B8; }
+[data-theme="dark"] .kpi-value { color: #F1F5F9; }
+[data-theme="dark"] .kpi-up { color: #34D399; }
+[data-theme="dark"] .kpi-dn { color: #F87171; }
+[data-theme="dark"] .kpi-vs { color: #64748B; }
+[data-theme="dark"] .kpi-foot { border-top-color: rgba(255,255,255,0.05); }
+[data-theme="dark"] .kpi-foot a { color: #94A3B8; }
+[data-theme="dark"] .kpi-foot a:hover { color: #F1F5F9; }
+[data-theme="dark"] .kpi-spark canvas { filter: brightness(1.3); }
+
+[data-theme="dark"] .ctit { color: #F1F5F9; }
+[data-theme="dark"] .cdsc { color: #64748B; }
+[data-theme="dark"] .chdr { border-bottom-color: #334155; }
+[data-theme="dark"] .cbdy { background: transparent; }
+[data-theme="dark"] .lnk { color: #34D399; }
+
+/* Agenda */
+[data-theme="dark"] .prt { background: #334155; }
+[data-theme="dark"] .aprw span:first-child { color: #64748B; }
+[data-theme="dark"] .aprw span:last-child { color: #34D399; }
+[data-theme="dark"] .ci { border-bottom-color: rgba(255,255,255,0.04); }
+[data-theme="dark"] .ci:hover { background: rgba(255,255,255,0.03); }
+[data-theme="dark"] .ctime .hr { color: #F1F5F9; }
+[data-theme="dark"] .ctime .dr { color: #64748B; }
+[data-theme="dark"] .cinfo .cn { color: #F1F5F9; }
+[data-theme="dark"] .cinfo .ct { color: #64748B; }
+[data-theme="dark"] .cbg-ok   { background: #15803D; color: #22C55E; }
+[data-theme="dark"] .cbg-w    { background: #92400E; color: #FBBF24; }
+[data-theme="dark"] .cbg-i    { background: #1E3A5F; color: #60A5FA; }
+[data-theme="dark"] .cbg-e    { background: #7F1D1D; color: #F87171; }
+[data-theme="dark"] .cbg-n    { background: #334155; color: #94A3B8; }
+
+/* Analytics */
+[data-theme="dark"] .amtit { color: #F1F5F9; }
+[data-theme="dark"] .amdsc { color: #64748B; }
+[data-theme="dark"] #fluxoChart div { /* bar labels */ }
+
+/* Right col */
+[data-theme="dark"] .shdr { border-bottom-color: rgba(255,255,255,0.05); }
+[data-theme="dark"] .stit { color: #F1F5F9; }
+[data-theme="dark"] .stit svg { color: #34D399; }
+[data-theme="dark"] .lvlrow { background: #92400E; }
+[data-theme="dark"] .lvlname { color: #FBBF24; }
+[data-theme="dark"] .xphint { color: #64748B; }
+[data-theme="dark"] .s3b { background: #334155; }
+[data-theme="dark"] .s3n { color: #F1F5F9; }
+[data-theme="dark"] .s3l { color: #64748B; }
+[data-theme="dark"] .bconq { background: #064E3B; color: #34D399; }
+[data-theme="dark"] .togrow span { color: #94A3B8; }
+
+[data-theme="dark"] .ai { background: #1E293B; border-color: #334155; }
+[data-theme="dark"] .ai:hover { background: #334155; box-shadow: none; }
+[data-theme="dark"] .ai.dk { background: #0F172A; border-color: #0F172A; }
+[data-theme="dark"] .ai.dk:hover { background: #1E293B; }
+[data-theme="dark"] .atit { color: #F1F5F9; }
+[data-theme="dark"] .asub { color: #64748B; }
+[data-theme="dark"] .chv svg { color: #64748B; }
+[data-theme="dark"] .aic-g { background: #064E3B; color: #34D399; }
+[data-theme="dark"] .aic-b { background: #1E3A5F; color: #60A5FA; }
+[data-theme="dark"] .aic-o { background: #92400E; color: #FBBF24; }
+
+[data-theme="dark"] .pitem { border-bottom-color: rgba(255,255,255,0.04); }
+[data-theme="dark"] .pitem:hover { background: rgba(255,255,255,0.03); }
+[data-theme="dark"] .ptit { color: #F1F5F9; }
+[data-theme="dark"] .psub { color: #64748B; }
+[data-theme="dark"] .pcnt { background: #92400E; color: #FBBF24; }
+[data-theme="dark"] .pcnt-r { background: #7F1D1D; color: #F87171; }
+
+[data-theme="dark"] .aitm { border-bottom-color: rgba(255,255,255,0.04); }
+[data-theme="dark"] .atxt { color: #F1F5F9; }
+[data-theme="dark"] .anm { color: #64748B; }
+[data-theme="dark"] .atm { color: #64748B; }
+[data-theme="dark"] .vwall { border-top-color: rgba(255,255,255,0.04); }
+[data-theme="dark"] .vwall a { color: #34D399; }
+[data-theme="dark"] .aico-g { background: #15803D; color: #22C55E; }
+[data-theme="dark"] .aico-b { background: #1E3A5F; color: #60A5FA; }
+[data-theme="dark"] .aico-o { background: #92400E; color: #FBBF24; }
+
+/* Posts */
+[data-theme="dark"] .tabrow { border-bottom-color: rgba(255,255,255,0.05); }
+[data-theme="dark"] .tab { color: #64748B; }
+[data-theme="dark"] .tab.a { color: #F1F5F9; border-bottom-color: #34D399; }
+[data-theme="dark"] .tab:hover { color: #94A3B8; }
+[data-theme="dark"] .post { border-bottom-color: rgba(255,255,255,0.04); }
+[data-theme="dark"] .pnm { color: #F1F5F9; }
+[data-theme="dark"] .pbdg { background: #064E3B; color: #34D399; }
+[data-theme="dark"] .ptm { color: #64748B; }
+[data-theme="dark"] .pbdy { color: #94A3B8; }
+[data-theme="dark"] .pact { color: #64748B; }
+[data-theme="dark"] .pav { background: #1E3A5F; color: #60A5FA; }
+
+/* NPS Section */
+[data-theme="dark"] #npsPromoRow { background: rgba(6,78,59,0.4) !important; border-color: rgba(52,211,153,0.2) !important; }
+[data-theme="dark"] #npsNeutRow  { background: rgba(120,53,15,0.4) !important; border-color: rgba(251,191,36,0.2) !important; }
+[data-theme="dark"] #npsDetRow   { background: rgba(127,29,29,0.4) !important; border-color: rgba(248,113,113,0.2) !important; }
+[data-theme="dark"] #npsScore    { color: #F1F5F9 !important; }
+[data-theme="dark"] #npsLabel    { color: #34D399 !important; }
+[data-theme="dark"] #npsPeriod   { color: #64748B !important; }
+[data-theme="dark"] #npsRespostas { color: #34D399 !important; }
+
+/* Scrollbar dark */
+[data-theme="dark"] ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); }
+
+/* Toggle button */
+/* theme toggle now inside sidebar */
+.icon-sun  { display: none; }
+.icon-moon { display: block; }
+[data-theme="dark"] .icon-sun  { display: block; }
+[data-theme="dark"] .icon-moon { display: none; }
+
+/* Dark: NPS big score font color */
+[data-theme="dark"] span[style*="color:#101828"] { color: #F1F5F9 !important; }
+/* Dark: "Muito Bom" stays green */
+/* Dark: NPS row label colors */
+[data-theme="dark"] span[style*="color:#004f3b"] { color: #34D399 !important; }
+[data-theme="dark"] span[style*="color:#007a55"] { color: #34D399 !important; opacity: 0.7; }
+[data-theme="dark"] span[style*="color:#733e0a"] { color: #FBBF24 !important; }
+[data-theme="dark"] span[style*="color:#a65f00"] { color: #FBBF24 !important; opacity: 0.7; }
+[data-theme="dark"] span[style*="color:#82181a"] { color: #F87171 !important; }
+[data-theme="dark"] span[style*="color:#c10007"] { color: #F87171 !important; opacity: 0.7; }
+[data-theme="dark"] span[style*="color:#009966"] { color: #34D399 !important; }
+[data-theme="dark"] span[style*="color:#d08700"] { color: #FBBF24 !important; }
+[data-theme="dark"] span[style*="color:#e7000b"] { color: #F87171 !important; }
+[data-theme="dark"] span[style*="color:#00bc7d"] { color: #34D399 !important; }
+[data-theme="dark"] span[style*="color:#94A3B8"] { color: #64748B !important; }
+
+/* Dark: fluxo chart labels */
+[data-theme="dark"] #fluxoChart { }
+
+/* Dark: analytics card overrides */
+[data-theme="dark"] .card[style*="overflow:visible"] {
+  background: #1E293B;
+  border-color: #334155;
+}
+
+
+/* SIDEBAR */
+.sb{width:268px;min-width:268px;background:#1E293B;display:flex;flex-direction:column;overflow:hidden;transition:background .25s, border-color .2s;border-right:1px solid rgba(255,255,255,0.06);}
+.sb-logo{display:flex;align-items:center;justify-content:space-between;padding:20px 16px 14px;}
+.sb-logo-l{display:flex;align-items:center;gap:10px;overflow:hidden;min-width:0;transition:max-width .25s;}
+.lmark{width:38px;height:38px;border-radius:12px;background:#10B981;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lmark svg{width:22px;height:22px;}
+.ltxt{font-family:var(--font-display);font-size:var(--text-lg);font-weight:var(--fw-bold);color:#fff;} .ltxt span{color:#10B981;}
+.cbtn{width:28px;height:28px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#94A3B8;background:transparent;}
+.cbtn svg{width:14px;height:14px;}
+.sb-nav{flex:1;padding:4px 10px 8px;overflow-y:auto;}
+.ngl{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-semibold);letter-spacing:.06em;color:#64748B;text-transform:uppercase;padding:12px 8px 4px;}
+.ni{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:#94A3B8;font-family:var(--font-ui);font-size:var(--text-sm);font-weight:var(--fw-regular);cursor:pointer;transition:background .15s,color .15s;margin-bottom:2px;position:relative;}
+.ni:hover{background:rgba(255,255,255,0.05);color:#CBD5E1;}
+.ni.a{background:#134E3F;color:#fff;font-weight:var(--fw-medium);border-radius:10px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);}
+.ni.a::before{display:none;}
+.ni svg{width:17px;height:17px;flex-shrink:0;}
+.nbadge{margin-left:auto;background:#10B981;color:#fff;font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-bold);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.ndot{margin-left:auto;width:7px;height:7px;border-radius:50%;background:#10B981;}
+.sb-foot{padding:12px 14px 16px;border-top:1px solid rgba(255,255,255,0.06);}
+.ucard{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;cursor:pointer;transition:background .15s;}
+.ucard:hover{background:rgba(255,255,255,0.05);}
+.uav{width:36px;height:36px;border-radius:50%;background:#10B981;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;position:relative;box-shadow:0 0 0 2px rgba(16,185,129,0.3);}
+.uav::after{content:'';position:absolute;bottom:0;right:0;width:9px;height:9px;border-radius:50%;background:#22C55E;border:2px solid #0F1923;}
+.uname{font-family:var(--font-ui);font-size:var(--text-sm);font-weight:var(--fw-semibold);color:#fff;}
+.urole{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:#94A3B8;margin-top:1px;}
+.uchev svg{width:14px;height:14px;color:#94A3B8;}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;max-width:100%;}
+
+/* TOPBAR */
+.topbar{background:#fff;border-bottom:none;box-shadow:0 1px 0 rgba(0,0,0,0.06);padding:0 20px;height:78px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;transition:background .25s,box-shadow .2s;}
+.tl h1{font-family:var(--font-display);font-size:clamp(14px,1.8vw,var(--text-xl));font-weight:var(--fw-bold);display:flex;align-items:center;gap:8px;letter-spacing:0;white-space:nowrap;}
+.tl h1 svg{width:18px;height:18px;color:var(--brand);}
+.tmeta{display:flex;align-items:center;gap:6px;font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);margin-top:2px;}
+.tmeta svg{width:12px;height:12px;}
+.pill{padding:2px 9px;border-radius:var(--r-full);font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-semibold);}
+.pill-b{background:var(--info-bg);color:var(--info-text);}
+.pill-y{background:var(--warn-bg);color:var(--warn-text);}
+.tr{display:flex;align-items:center;gap:8px;}
+.btnp{display:inline-flex;align-items:center;gap:6px;background:var(--brand);color:#fff;border:none;border-radius:var(--r-full);padding:0 20px;height:40px;font-family:var(--font-ui);font-size:var(--text-sm);font-weight:var(--fw-semibold);cursor:pointer;box-shadow:0 2px 8px rgba(16,185,129,0.25);transition:box-shadow .18s,transform .12s;}
+.btnp:hover{box-shadow:0 4px 16px rgba(16,185,129,0.35);transform:translateY(-1px);} .btnp svg{width:14px;height:14px;}
+.btni{display:inline-flex;align-items:center;justify-content:center;background:transparent;border:1px solid rgba(0,0,0,0.08);border-radius:var(--r-full);width:40px;height:40px;cursor:pointer;color:var(--text-secondary);transition:background .15s,box-shadow .15s;}
+.btni:hover{background:var(--bg-subtle);box-shadow:0 1px 6px rgba(0,0,0,0.08);} .btni svg{width:15px;height:15px;}
+.nw{position:relative;}
+.ndotred{position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;background:#DC2626;border:2px solid #fff;}
+
+/* CONTENT */
+.cnt{flex:1;overflow-y:auto;padding:18px 24px 24px;display:flex;flex-direction:column;gap:16px;}
+
+/* CARD */
+.card{background:#fff;border:1px solid #E2E8F0;border-radius:var(--r-lg);overflow:hidden;box-shadow:none;transition:background .25s, border-color .2s;}
+.chdr{padding:20px 22px 0;display:flex;align-items:flex-start;justify-content:space-between;}
+.ctit{font-family:var(--font-ui);font-size:var(--text-base);font-weight:var(--fw-semibold);color:var(--text-primary);display:flex;align-items:center;gap:8px;}
+.ctit svg{width:15px;height:15px;color:var(--brand-hover);}
+.cdsc{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);margin-top:2px;}
+.cbdy{padding:14px 22px;}
+.lnk{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-medium);color:var(--brand);cursor:pointer;display:flex;align-items:center;gap:3px;white-space:nowrap;}
+.lnk svg{width:12px;height:12px;}
+
+/* METRICS */
+/* ── KPI Strip — sempre no topo ── */
+.kpi-strip{background:transparent;border:none;border-radius:0;overflow:visible;flex-shrink:0;box-shadow:none;padding:0;}
+.kpi-strip-hdr{display:none;}
+.kpi-strip-title{font-family:var(--font-display);font-size:var(--text-xl);font-weight:var(--fw-bold);color:var(--text-primary);letter-spacing:-0.01em;}
+.kpi-strip-desc{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);margin-top:3px;}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0;}
+.kpi-card{border-radius:16px;padding:15px;display:flex;flex-direction:column;background:#fff;border:1px solid #E2E8F0;box-shadow:none;transition:transform .18s,background .25s,border-color .2s;cursor:pointer;}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:none;}
+.kpi-blue,.kpi-teal,.kpi-purple,.kpi-slate{background:#fff;border-color:#E2E8F0;}
+.kpi-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
+.kpi-label{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-medium);color:var(--text-secondary);}
+.kpi-icon{width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#e7f8ef;}
+.kpi-value{font-family:var(--font-ui);font-size:var(--text-2xl);font-weight:var(--fw-bold);line-height:1.1;color:var(--text-primary);}
+.kpi-change{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-medium);margin-top:5px;display:flex;align-items:center;gap:3px;}
+.kpi-up{color:#059669;} .kpi-dn{color:#DC2626;}
+.kpi-vs{font-weight:var(--fw-regular);color:var(--text-tertiary);margin-left:1px;}
+.kpi-spark{margin-top:8px;height:30px;}
+.kpi-foot{border-top:1px solid rgba(0,0,0,0.04);padding-top:10px;margin-top:10px;}
+.kpi-foot a{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-medium);color:var(--text-secondary);cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:color .12s;}
+.kpi-foot a:hover{color:var(--text-primary);}
+
+/* ── Shadcn-style Metrics Section ── */
+.metrics-section{background:#fff;border:1px solid #E2E8F0;border-radius:var(--r-lg);overflow:hidden;}
+.metrics-section-header{text-align:center;padding:16px 24px 6px;}
+.metrics-section-title{font-family:var(--font-display);font-size:var(--text-lg);font-weight:var(--fw-bold);color:var(--text-primary);letter-spacing:0;}
+.metrics-section-desc{font-family:var(--font-ui);font-size:var(--text-sm);font-weight:var(--fw-regular);color:var(--text-tertiary);margin-top:4px;}
+.mgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:10px 16px 16px;}
+
+/* shadcn Card component — colored bg variant */
+.met{border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:0;position:relative;overflow:hidden;border:1px solid #E2E8F0;transition:box-shadow .18s,transform .18s;}
+.met-blue  {background:#EFF6FF;border-color:#DBEAFE;}
+.met-teal  {background:#F0FDF9;border-color:#CCFBEF;}
+.met-green {background:#F0FDF4;border-color:#DCFCE7;}
+.met-amber {background:#FFFBEB;border-color:#FEF3C7;}
+.met-slate {background:#F8FAFC;border-color:#E2E8F0;}
+
+/* Card header row */
+.mt{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
+.mlbl{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-medium);color:var(--text-secondary);letter-spacing:0;}
+
+/* shadcn icon badge — rounded-xl, larger */
+.mic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.mic svg{width:18px;height:18px;}
+.mic-b  {background:#DBEAFE;color:#2563EB;}
+.mic-g  {background:#CCFBEF;color:#059669;}
+.mic-p  {background:#EDE9FE;color:#7C3AED;}
+.mic-y  {background:#FDE68A;color:#D97706;}
+.mic-s  {background:#E2E8F0;color:#475569;}
+
+/* Value — text-2xl/bold */
+.mv{font-family:var(--font-ui);font-size:var(--text-2xl);font-weight:var(--fw-bold);line-height:1.1;color:var(--text-primary);}
+
+/* Change indicator */
+.mc{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-medium);margin-top:5px;display:flex;align-items:center;gap:3px;}
+.mc svg{width:11px;height:11px;}
+.mc .vs{font-weight:var(--fw-regular);color:var(--text-tertiary);margin-left:2px;}
+.up{color:#059669;} .dn{color:#DC2626;} .neu{color:var(--text-tertiary);}
+
+/* Sparkline area */
+.msp{margin-top:8px;height:28px;flex:1;}
+
+/* Separator + footer link — shadcn Separator + link */
+.mft{border-top:1px solid rgba(0,0,0,0.04);padding-top:10px;margin-top:10px;}
+.mft a{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-medium);color:var(--text-secondary);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:color .12s;}
+.mft a:hover{color:var(--text-primary);}
+.mft a svg{width:13px;height:13px;}
+
+/* Progress bar (taxa conclusão) */
+.prsm{height:6px;background:rgba(0,0,0,0.08);border-radius:99px;overflow:hidden;margin-top:10px;}
+.prsmf{height:100%;background:var(--brand);border-radius:99px;}
+
+/* TWO COL */
+.twoc{display:grid;grid-template-columns:1fr 400px;gap:18px;align-items:start;}
+.rcol{display:flex;flex-direction:column;gap:16px;}
+
+/* AGENDA PROGRESS */
+.aprw{display:flex;justify-content:space-between;margin-bottom:5px;font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);}
+.aprw span:last-child{color:var(--brand);font-weight:600;}
+.prt{height:7px;background:rgba(0,0,0,0.06);border-radius:99px;overflow:hidden;}
+.prf{height:100%;background:var(--brand);border-radius:99px;}
+
+/* CONSULT LIST */
+.clist{display:flex;flex-direction:column;}
+.ci{display:flex;align-items:center;gap:12px;padding:12px 22px;border-bottom:1px solid rgba(0,0,0,0.04);cursor:pointer;transition:background .15s;}
+.ci:last-child{border-bottom:none;}
+.ci:hover{background:#F9F9F9;}
+.ctime .hr{font-family:var(--font-ui);font-size:var(--text-sm);font-weight:var(--fw-semibold);}
+.ctime .dr{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);}
+.cbar{width:4px;height:38px;border-radius:4px;flex-shrink:0;}
+.cinfo .cn{font-family:var(--font-ui);font-size:var(--text-sm);font-weight:var(--fw-medium);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(220px,40vw);}
+.cinfo .ct{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);margin-top:1px;}
+.cbg{padding:4px 10px;border-radius:var(--r-full);font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-medium);white-space:nowrap;}
+.cbg-ok{background:var(--ok-bg);color:var(--ok-text);}
+.cbg-w{background:var(--warn-bg);color:var(--warn-text);}
+.cbg-i{background:var(--info-bg);color:var(--info-text);}
+.cbg-e{background:var(--err-bg);color:var(--err-text);}
+.cbg-n{background:var(--bg-subtle);color:var(--text-secondary);}
+
+/* PROGRESSO */
+.lvlrow{background:var(--warn-bg);border-radius:12px;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.lvlpill{background:var(--warn-text);color:#fff;font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-bold);padding:2px 7px;border-radius:var(--r-full);}
+.lvlname{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-semibold);margin-left:8px;}
+.xplbl{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-semibold);color:var(--warn-text);}
+.xphint{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);margin-bottom:8px;}
+.s3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;}
+.s3b{background:var(--bg-subtle);border-radius:12px;padding:10px;text-align:center;}
+.s3n{font-family:var(--font-ui);font-size:var(--text-base);font-weight:var(--fw-bold);}
+.s3l{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);margin-top:2px;}
+.s3b svg{width:14px;height:14px;margin-bottom:2px;}
+.togrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.tog{width:36px;height:20px;border-radius:99px;background:var(--brand);position:relative;cursor:pointer;flex-shrink:0;box-shadow:0 1px 4px rgba(16,185,129,0.4);}
+.tog::after{content:'';position:absolute;top:2px;right:2px;width:16px;height:16px;background:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,0.15);}
+.bconq{display:flex;align-items:center;gap:6px;background:var(--badge-bg);color:var(--badge-text);border-radius:12px;padding:10px 14px;font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-medium);width:100%;margin-bottom:6px;}
+.bconq svg{width:13px;height:13px;flex-shrink:0;}
+
+/* ACTIONS */
+.alist{display:flex;flex-direction:column;gap:8px;padding:12px 14px 16px;}
+.ai{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;border:1px solid #E2E8F0;cursor:pointer;transition:box-shadow .18s,transform .15s;background:#fff;}
+.ai:hover{box-shadow:0 4px 16px rgba(0,0,0,0.09);transform:translateY(-1px);}
+.ai.dk{background:#1E293B;border-color:transparent;box-shadow:0 2px 8px rgba(0,0,0,0.18);}
+.ai.dk:hover{background:#2D3A4A;box-shadow:0 6px 20px rgba(0,0,0,0.24);transform:translateY(-1px);}
+.aic{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.aic svg{width:16px;height:16px;}
+.aic-g{background:var(--badge-bg);color:var(--brand-dark);}
+.aic-b{background:var(--info-bg);color:var(--info-text);}
+.aic-o{background:var(--warn-bg);color:var(--warn-text);}
+.aic-w{background:rgba(255,255,255,.1);color:#fff;}
+.atit{font-family:var(--font-ui);font-size:var(--text-sm);font-weight:var(--fw-semibold);color:var(--text-primary);}
+.asub{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);margin-top:1px;}
+.ai.dk .atit{color:#fff;}
+.ai.dk .asub{color:rgba(255,255,255,.5);}
+.ar{margin-left:auto;display:flex;align-items:center;gap:6px;}
+.cpill{background:var(--brand);color:#fff;font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-bold);width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.cpill-r{background:var(--err-text);}
+.chv svg{width:14px;height:14px;color:var(--text-tertiary);}
+
+/* SEC HEADER */
+.shdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(0,0,0,0.05);}
+.stit{font-family:var(--font-ui);font-size:var(--text-base);font-weight:var(--fw-semibold);display:flex;align-items:center;gap:8px;}
+.stit svg{width:14px;height:14px;color:var(--brand-hover);}
+
+/* PEND/ALERT */
+.pitem{display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:1px solid rgba(0,0,0,0.04);cursor:pointer;transition:background .15s;}
+.pitem:hover{background:#F9F9F9;}
+.pitem:last-child{border-bottom:none;}
+.pdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.ptit{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-medium);}
+.psub{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);}
+.pcnt{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-semibold);background:var(--warn-bg);color:var(--warn-text);padding:2px 8px;border-radius:var(--r-full);white-space:nowrap;}
+.pcnt-r{background:var(--err-bg);color:var(--err-text);}
+
+/* ACTIVITY */
+.aitm{display:flex;align-items:flex-start;gap:10px;padding:10px 18px;border-bottom:1px solid rgba(0,0,0,0.04);}
+.aitm:last-child{border-bottom:none;}
+.aico{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.aico svg{width:11px;height:11px;}
+.aico-g{background:var(--ok-bg);color:var(--ok-text);}
+.aico-b{background:var(--info-bg);color:var(--info-text);}
+.aico-o{background:var(--warn-bg);color:var(--warn-text);}
+.atxt{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-medium);}
+.anm{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);margin-top:1px;}
+.atm{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);white-space:nowrap;}
+.vwall{padding:12px 16px;text-align:center;border-top:1px solid rgba(0,0,0,0.04);}
+.vwall a{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-medium);color:var(--brand);cursor:pointer;display:inline-flex;align-items:center;gap:3px;}
+.vwall a svg{width:11px;height:11px;}
+
+/* ANALYTICS */
+.atop{text-align:center;padding:14px 18px 4px;}
+.atop h3{font-family:var(--font-display);font-size:var(--text-base);font-weight:var(--fw-semibold);}
+.atop p{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);}
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:0;}
+.amc{background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:16px;box-shadow:none;transition:background .25s,border-color .2s;}
+.amtit{font-family:var(--font-ui);font-size:var(--text-sm);font-weight:var(--fw-semibold);display:flex;align-items:center;gap:6px;margin-bottom:2px;}
+.amdsc{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);margin-bottom:10px;}
+.awrap{position:relative;height:120px;}
+
+/* TABS + POSTS */
+.tabrow{display:flex;border-bottom:1px solid rgba(0,0,0,0.06);padding:0 20px;}
+.tab{padding:10px 12px;font-family:var(--font-ui);font-size:var(--text-sm);font-weight:var(--fw-medium);color:var(--text-tertiary);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:5px;}
+.tab:hover{color:var(--text-primary);}
+.tab.a{color:var(--text-primary);border-bottom-color:var(--brand);}
+.tab svg{width:13px;height:13px;}
+.post{padding:16px 20px;border-bottom:1px solid rgba(0,0,0,0.04);}
+.post:last-child{border-bottom:none;}
+.phdr{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.pav{width:36px;height:36px;border-radius:50%;background:var(--info-bg);color:var(--info-text);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pnm{font-family:var(--font-ui);font-size:var(--text-sm);font-weight:var(--fw-semibold);}
+.pbdg{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-semibold);background:var(--badge-bg);color:var(--badge-text);padding:1px 7px;border-radius:var(--r-full);margin-left:4px;}
+.ptm{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);}
+.pbdy{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-secondary);line-height:1.65;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.pacts{display:flex;align-items:center;gap:14px;}
+.pact{display:flex;align-items:center;gap:4px;font-family:var(--font-ui);font-size:var(--text-xs);font-weight:var(--fw-regular);color:var(--text-tertiary);cursor:pointer;}
+.pact svg{width:13px;height:13px;}
+.pact.ml{margin-left:auto;}
+
+/* ── Sidebar theme toggle ── */
+.sb-theme-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 12px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.sb-theme-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748B;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  transition: color .15s;
+}
+.sb-theme-label svg { flex-shrink: 0; color: #64748B; }
+.sb-theme-text { color: #64748B; transition: color .15s; }
+[data-theme="dark"] .sb-theme-text { color: #94A3B8; }
+[data-theme="dark"] .sb-theme-label svg { color: #94A3B8; }
+
+/* Toggle track */
+.sb-toggle-track {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  border-radius: 99px;
+  background: #334155;
+  border: none;
+  cursor: pointer;
+  transition: background .2s;
+  flex-shrink: 0;
+  padding: 0;
+}
+.sb-toggle-track:hover { background: #475569; }
+[data-theme="dark"] .sb-toggle-track { background: #10B981; }
+[data-theme="dark"] .sb-toggle-track:hover { background: #059669; }
+
+/* Toggle thumb */
+.sb-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  transition: transform .2s cubic-bezier(.34,1.56,.64,1);
+  display: block;
+}
+[data-theme="dark"] .sb-toggle-thumb {
+  transform: translateX(18px);
+}
+
+
+/* ── Logo img ── */
+.sb-logo-img {
+  height: 22px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+  display: block;
+  transition: opacity .2s;
+}
+.sb.collapsed .sb-logo-img { opacity: 0; width: 0; overflow: hidden; }
+
+
+
+
+/* ── Collapsed: apenas ícones, zero texto ── */
+.sb.collapsed .sb-logo-l { max-width: 0; margin: 0; padding: 0; }
+.sb.collapsed .sb-logo { justify-content: center; padding: 14px 0; }
+.sb.collapsed .sb-logo-l { display: none; }
+.sb.collapsed .cbtn { margin: 0 auto; }
+
+.sb.collapsed .ni {
+  padding: 10px 0;
+  justify-content: center;
+  gap: 0;
+}
+.sb.collapsed .ni > *:not(svg) { display: none !important; }
+.sb.collapsed .ni > svg { margin: 0; }
+.sb.collapsed .nbadge { display: none !important; }
+.sb.collapsed .ndot   { display: none !important; }
+
+.sb.collapsed .ngl { display: none !important; }
+
+.sb.collapsed .uav { margin: 0 auto; }
+.sb.collapsed .ucard { justify-content: center; padding: 8px 0; gap: 0; }
+.sb.collapsed .ucard > *:not(.uav) { display: none !important; }
+
+.sb.collapsed .sb-theme-row { justify-content: center; padding: 10px 0 12px; gap: 0; }
+.sb.collapsed .sb-theme-label > *:not(svg) { display: none !important; }
+.sb.collapsed .sb-theme-label { gap: 0; }
+.sb.collapsed .sb-toggle-track { display: none !important; }
+
+/* Tooltip nos ícones quando colapsado */
+.sb.collapsed .ni {
+  position: relative;
+}
+.sb.collapsed .ni::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: #0F172A;
+  color: #F1F5F9;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .15s;
+  z-index: 999;
+}
+.sb.collapsed .ni:hover::after { opacity: 1; }
+
+/* Sidebar width colapsada: 60px */
+.sb.collapsed { width: 60px !important; min-width: 60px !important; }
+
+
+/* ════════════════════════════════════════
+   SIDEBAR COLLAPSE — estado colapsado
+   ════════════════════════════════════════ */
+
+/* Transição suave */
+.sb {
+  transition: width .28s cubic-bezier(.4,0,.2,1),
+              min-width .28s cubic-bezier(.4,0,.2,1),
+              background .25s;
+}
+
+/* Estado colapsado: 64px */
+.sb.collapsed {
+  width: 64px !important;
+  min-width: 64px !important;
+}
+
+/* ── Logo ── */
+.sb.collapsed .sb-logo {
+  justify-content: center;
+  padding: 16px 0;
+}
+.sb.collapsed .sb-logo-l { display: none; }
+
+/* ── Labels de seção ── */
+.sb.collapsed .ngl {
+  visibility: hidden;
+  height: 6px;
+  padding: 3px 0;
+}
+
+/* ── Nav items: centralizar, só ícone ── */
+.sb.collapsed .ni {
+  justify-content: center;
+  padding: 10px 0;
+  gap: 0;
+}
+/* Esconder texto e badges */
+.sb.collapsed .ni-txt    { display: none !important; }
+.sb.collapsed .nbadge    { display: none !important; }
+.sb.collapsed .ndot      { display: none !important; }
+
+/* ── Footer: user card ── */
+.sb.collapsed .ucard     { justify-content: center; padding: 8px 0; gap: 0; }
+.sb.collapsed .uname,
+.sb.collapsed .urole,
+.sb.collapsed .uchev     { display: none !important; }
+
+/* ── Theme toggle: só ícone ── */
+.sb.collapsed .sb-theme-row  { justify-content: center; padding: 10px 0 12px; }
+.sb.collapsed .sb-theme-text { display: none !important; }
+.sb.collapsed .sb-toggle-track { display: none !important; }
+.sb.collapsed .sb-theme-label  { gap: 0; }
+
+/* ── Btn colapso: inverter seta ── */
+.cbtn svg { transition: transform .28s; }
+.sb.collapsed .cbtn svg { transform: scaleX(-1); }
+
+/* Tooltip ao hover quando colapsado */
+.sb.collapsed .ni {
+  position: relative;
+}
+.sb.collapsed .ni::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: #0F172A;
+  color: #F1F5F9;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .15s;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+.sb.collapsed .ni:hover::after {
+  opacity: 1;
+}
+/* ════════════════════════════════════════
+   NOVA CONSULTA — STEPPER FLOW (CSS)
+   ════════════════════════════════════════ */
+
+.ncs-screen {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  left: 268px; /* começa após a sidebar do dashboard */
+  z-index: 9000;
+  display: none;
+  flex-direction: row;
+  opacity: 0;
+  transition: opacity .22s, left .28s cubic-bezier(.4,0,.2,1);
+}
+.ncs-screen.open {
+  display: flex;
+  opacity: 1;
+}
+/* Quando sidebar colapsada, ncs ajusta a posição */
+.sb.collapsed ~ .ncs-screen,
+body.sb-collapsed .ncs-screen {
+  left: 64px;
+}
+
+/* Stepper sidebar */
+.ncs-sidebar {
+  width: 272px; min-width: 272px; background: #fff;
+  display: flex; flex-direction: column; overflow: hidden;
+  border-right: 1px solid #E2E8F0;
+}
+[data-theme="dark"] .ncs-sidebar { background: #1E293B; border-right-color: #334155; }
+
+.ncs-sb-head {
+  height: 60px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 1px solid var(--border, #E2E8F0);
+  flex-shrink: 0;
+}
+.ncs-sb-logo { height: 20px; width: auto; display: block; }
+.ncs-sb-title {
+  font-family: var(--font-ui); font-size: 11px; font-weight: var(--fw-semibold);
+  color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .08em;
+  margin-top: 18px; margin-bottom: 2px;
+}
+.ncs-sb-subtitle { font-family: var(--font-ui); font-size: 13px; font-weight: var(--fw-medium); color: var(--text-secondary); }
+
+.ncs-steps { flex: 1; padding: 16px; overflow-y: auto; }
+.ncs-step {
+  display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px;
+  border-radius: 10px; cursor: pointer; transition: background .15s;
+  position: relative; margin-bottom: 2px;
+}
+.ncs-step:not(.active):not(.done):hover { background: rgba(255,255,255,0.04); }
+.ncs-step.active { background: rgba(16,185,129,0.12); }
+.ncs-step.done:hover { background: rgba(255,255,255,0.04); }
+.ncs-step:not(:last-child)::after {
+  content: ''; position: absolute; left: 27px; top: 100%;
+  width: 1px; height: 10px; background: var(--border, #E2E8F0);
+}
+.ncs-step.done::after { background: rgba(16,185,129,0.3); }
+.ncs-step-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-bold);
+  border: 1.5px solid #E2E8F0; background: transparent; color: var(--text-tertiary, #94A3B8); transition: all .15s;
+}
+.ncs-step.active .ncs-step-num { background: #10B981; border-color: #10B981; color: #fff; }
+.ncs-step.done  .ncs-step-num  { background: rgba(16,185,129,0.15); border-color: #10B981; color: #10B981; }
+.ncs-step-num svg { width: 13px; height: 13px; }
+.ncs-step-info { flex: 1; min-width: 0; }
+.ncs-step-label { font-family: var(--font-ui); font-size: 13px; font-weight: var(--fw-medium); color: var(--text-tertiary, #94A3B8); transition: color .15s; }
+.ncs-step.active .ncs-step-label { color: var(--text-primary, #0F172A); font-weight: var(--fw-semibold); }
+.ncs-step.done  .ncs-step-label  { color: #94A3B8; }
+.ncs-step-sub { font-family: var(--font-ui); font-size: 11px; color: var(--text-tertiary, #94A3B8); margin-top: 1px; }
+.ncs-step.active .ncs-step-sub { color: rgba(16,185,129,0.7); }
+.ncs-step.done  .ncs-step-sub  { color: #34D399; }
+
+.ncs-sb-progress { padding: 16px 20px; border-top: 1px solid var(--border, #E2E8F0); flex-shrink: 0; }
+.ncs-sb-prog-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.ncs-sb-prog-label { font-family: var(--font-ui); font-size: 11px; color: var(--text-tertiary); font-weight: var(--fw-medium); }
+.ncs-sb-prog-pct   { font-family: var(--font-ui); font-size: 11px; color: #10B981; font-weight: var(--fw-semibold); }
+.ncs-sb-prog-track { height: 4px; background: var(--bg-subtle, #E2E8F0); border-radius: 99px; overflow: hidden; }
+.ncs-sb-prog-fill  { height: 100%; background: #10B981; border-radius: 99px; transition: width .4s; }
+
+/* Main area */
+.ncs-main { flex: 1; display: flex; flex-direction: column; background: #fff; overflow: hidden; min-width: 0; }
+[data-theme="dark"] .ncs-main { background: #1E293B; }
+
+.ncs-topbar {
+  height: 60px; flex-shrink: 0;
+  background: #fff; border-bottom: 1px solid #E2E8F0;
+  display: flex; align-items: center; padding: 0 28px; gap: 12px;
+}
+[data-theme="dark"] .ncs-topbar { background: #fff; border-color: #E2E8F0; }
+.ncs-topbar-title { font-family: var(--font-display); font-size: var(--text-base); font-weight: var(--fw-bold); color: var(--text-primary); flex: 1; }
+.ncs-topbar-step  { font-family: var(--font-ui); font-size: var(--text-xs); color: var(--text-tertiary); }
+.ncs-topbar-btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px;
+  border-radius: 8px; font-family: var(--font-ui); font-size: 13px; font-weight: var(--fw-medium);
+  cursor: pointer; border: 1px solid var(--border); background: var(--bg-surface);
+  color: var(--text-secondary); transition: background .15s;
+}
+.ncs-topbar-btn svg { width: 14px; height: 14px; }
+.ncs-topbar-btn:hover { background: var(--bg-subtle); }
+.ncs-topbar-close {
+  width: 34px; height: 34px; padding: 0; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 8px; border: none; background: transparent; cursor: pointer;
+  color: var(--text-tertiary); transition: background .15s, color .15s;
+}
+.ncs-topbar-close:hover { background: var(--bg-subtle); color: var(--text-primary); }
+.ncs-topbar-close svg { width: 16px; height: 16px; }
+[data-theme="dark"] .ncs-topbar-btn { background: #1E293B; border-color: #334155; color: #94A3B8; }
+[data-theme="dark"] .ncs-topbar-btn:hover { background: #334155; }
+
+.ncs-content { flex: 1; overflow-y: auto; padding: 40px 48px; display: flex; flex-direction: column; align-items: center; }
+
+.ncs-pane { display: none; width: 100%; max-width: 660px; }
+.ncs-pane.active { display: flex; flex-direction: column; }
+
+.ncs-pane-icon {
+  width: 56px; height: 56px; border-radius: 50%; background: var(--bg-subtle);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 18px; align-self: center;
+}
+.ncs-pane-icon svg { width: 24px; height: 24px; color: var(--text-secondary); }
+[data-theme="dark"] .ncs-pane-icon { background: #334155; }
+.ncs-pane-title { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: var(--fw-bold); color: var(--text-primary); text-align: center; margin-bottom: 8px; }
+.ncs-pane-sub   { font-family: var(--font-ui); font-size: var(--text-sm); color: var(--text-tertiary); text-align: center; margin-bottom: 32px; line-height: 1.6; }
+
+.ncs-field { margin-bottom: 20px; }
+.ncs-label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.ncs-label-text { font-family: var(--font-ui); font-size: var(--text-sm); font-weight: var(--fw-semibold); color: var(--text-secondary); display: flex; align-items: center; gap: 3px; }
+.ncs-label-text .req { color: var(--err-text); }
+.ncs-hint { font-family: var(--font-ui); font-size: var(--text-xs); color: var(--text-tertiary); margin-bottom: 8px; }
+.ncs-label-action {
+  display: inline-flex; align-items: center; gap: 5px; padding: 0 10px; height: 28px;
+  border-radius: 6px; border: 1px solid var(--border-strong); background: transparent; cursor: pointer;
+  font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-medium);
+  color: var(--text-secondary); transition: background .15s;
+}
+.ncs-label-action svg { width: 11px; height: 11px; }
+.ncs-label-action:hover { background: var(--bg-subtle); }
+[data-theme="dark"] .ncs-label-action { border-color: #475569; color: #94A3B8; }
+[data-theme="dark"] .ncs-label-action:hover { background: #334155; }
+
+.ncs-input-wrap { position: relative; display: flex; align-items: center; }
+.ncs-input-wrap .ncs-ico { position: absolute; left: 13px; width: 16px; height: 16px; color: var(--text-tertiary); pointer-events: none; }
+.ncs-input, .ncs-textarea {
+  width: 100%; border-radius: 10px; border: 1px solid var(--border-strong);
+  background: var(--bg-surface); font-family: var(--font-ui); font-size: var(--text-sm);
+  color: var(--text-primary); outline: none; transition: border-color .15s, box-shadow .15s;
+}
+.ncs-input { height: 44px; padding: 0 14px; }
+.ncs-input.with-icon { padding-left: 40px; }
+.ncs-input::placeholder, .ncs-textarea::placeholder { color: var(--text-tertiary); font-size: 13px; }
+.ncs-input:hover, .ncs-textarea:hover { border-color: var(--text-tertiary); }
+.ncs-input:focus, .ncs-textarea:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(16,185,129,0.13); }
+.ncs-textarea { padding: 12px 14px; resize: vertical; min-height: 110px; line-height: 1.6; }
+.ncs-textarea.large { min-height: 160px; }
+[data-theme="dark"] .ncs-input, [data-theme="dark"] .ncs-textarea { background: #0F172A; border-color: #475569; color: #F1F5F9; }
+[data-theme="dark"] .ncs-input:focus, [data-theme="dark"] .ncs-textarea:focus { border-color: #34D399; box-shadow: 0 0 0 3px rgba(52,211,153,0.12); }
+
+.ncs-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.ncs-chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 99px;
+  border: 1px solid var(--border-strong); background: var(--bg-surface);
+  font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-medium);
+  color: var(--text-secondary); cursor: pointer; transition: background .15s, border-color .15s, color .15s; user-select: none;
+}
+.ncs-chip:hover { background: var(--bg-subtle); border-color: var(--text-tertiary); }
+.ncs-chip.selected { background: var(--badge-bg); border-color: var(--brand); color: var(--badge-text); }
+[data-theme="dark"] .ncs-chip { background: #1E293B; border-color: #475569; color: #94A3B8; }
+[data-theme="dark"] .ncs-chip:hover { background: #334155; }
+[data-theme="dark"] .ncs-chip.selected { background: #064E3B; border-color: #34D399; color: #34D399; }
+
+.ncs-patient-card {
+  display: none; align-items: center; gap: 12px; padding: 12px 16px;
+  background: var(--badge-bg); border: 1px solid rgba(16,185,129,0.25);
+  border-radius: 10px; margin-bottom: 16px;
+}
+.ncs-patient-card.visible { display: flex; }
+[data-theme="dark"] .ncs-patient-card { background: #064E3B; border-color: rgba(52,211,153,0.2); }
+.ncs-pat-av { width: 36px; height: 36px; border-radius: 50%; background: var(--brand); color: #fff; font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-bold); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ncs-pat-name { font-family: var(--font-ui); font-size: 13px; font-weight: var(--fw-semibold); color: var(--ok-text); }
+[data-theme="dark"] .ncs-pat-name { color: #34D399; }
+.ncs-pat-info { font-family: var(--font-ui); font-size: 11px; color: var(--text-tertiary); }
+.ncs-pat-clear { margin-left: auto; background: none; border: none; cursor: pointer; color: var(--text-tertiary); padding: 4px; border-radius: 5px; transition: background .12s; }
+.ncs-pat-clear:hover { background: rgba(0,0,0,0.06); }
+.ncs-pat-clear svg { width: 14px; height: 14px; }
+
+.ncs-dropdown {
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+  background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.13); z-index: 50; display: none;
+  overflow: hidden; max-height: 250px; overflow-y: auto;
+}
+.ncs-dropdown.open { display: block; }
+[data-theme="dark"] .ncs-dropdown { background: #1E293B; border-color: #334155; box-shadow: 0 8px 28px rgba(0,0,0,0.45); }
+.ncs-drop-lbl { padding: 8px 14px 6px; font-family: var(--font-ui); font-size: 11px; font-weight: var(--fw-semibold); color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); }
+[data-theme="dark"] .ncs-drop-lbl { border-color: #334155; }
+
+.ncs-link-cadastrar {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 12px;
+  font-family: var(--font-ui); font-size: var(--text-xs); font-weight: var(--fw-medium);
+  color: var(--text-tertiary); cursor: pointer; background: none; border: none;
+  padding: 5px 8px; border-radius: 7px; transition: color .15s, background .15s;
+}
+.ncs-link-cadastrar svg { width: 13px; height: 13px; }
+.ncs-link-cadastrar:hover { color: var(--brand); background: rgba(16,185,129,0.06); }
+[data-theme="dark"] .ncs-link-cadastrar:hover { color: #34D399; background: rgba(52,211,153,0.08); }
+
+.ncs-item-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+.ncs-item { background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; position: relative; }
+[data-theme="dark"] .ncs-item { background: #1E293B; border-color: #334155; }
+.ncs-item-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ncs-item-row.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+.ncs-item-del { position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer; color: var(--text-tertiary); padding: 3px; border-radius: 5px; transition: background .12s, color .12s; }
+.ncs-item-del:hover { background: var(--err-bg); color: var(--err-text); }
+.ncs-item-del svg { width: 13px; height: 13px; }
+[data-theme="dark"] .ncs-item-del:hover { background: #7F1D1D; color: #F87171; }
+
+.ncs-add-btn {
+  display: inline-flex; align-items: center; gap: 7px; padding: 0 16px; height: 38px;
+  border-radius: 9px; border: 1.5px dashed var(--border-strong); background: transparent;
+  cursor: pointer; font-family: var(--font-ui); font-size: 13px; font-weight: var(--fw-medium);
+  color: var(--text-secondary); transition: border-color .15s, color .15s, background .15s;
+  width: 100%; justify-content: center;
+}
+.ncs-add-btn svg { width: 14px; height: 14px; }
+.ncs-add-btn:hover { border-color: var(--brand); color: var(--brand); background: rgba(16,185,129,0.04); }
+[data-theme="dark"] .ncs-add-btn { border-color: #475569; color: #94A3B8; }
+
+.ncs-sub-label { font-family: var(--font-ui); font-size: 11px; font-weight: var(--fw-semibold); color: var(--text-tertiary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
+.ncs-sub-input { width: 100%; height: 36px; padding: 0 10px; border-radius: 7px; border: 1px solid var(--border); background: var(--bg-surface); font-family: var(--font-ui); font-size: 13px; color: var(--text-primary); outline: none; transition: border-color .15s, box-shadow .15s; }
+.ncs-sub-input:focus { border-color: var(--brand); box-shadow: 0 0 0 2px rgba(16,185,129,0.12); }
+[data-theme="dark"] .ncs-sub-input { background: #0F172A; border-color: #475569; color: #F1F5F9; }
+
+.ncs-footer { flex-shrink: 0; background: #fff; border-top: 1px solid #E2E8F0; padding: 16px 28px; display: flex; align-items: center; justify-content: space-between; }
+[data-theme="dark"] .ncs-footer { background: #fff; border-color: #E2E8F0; }
+
+.ncs-btn-back {
+  display: inline-flex; align-items: center; gap: 7px; padding: 0 20px; height: 42px;
+  border-radius: 10px; border: 1px solid var(--border); background: transparent;
+  font-family: var(--font-ui); font-size: var(--text-sm); font-weight: var(--fw-medium);
+  color: var(--text-secondary); cursor: pointer; transition: background .15s;
+}
+.ncs-btn-back svg { width: 15px; height: 15px; }
+.ncs-btn-back:hover { background: var(--bg-subtle); }
+.ncs-btn-back:disabled { opacity: .4; cursor: not-allowed; }
+[data-theme="dark"] .ncs-btn-back { border-color: #334155; color: #94A3B8; }
+
+.ncs-btn-next {
+  display: inline-flex; align-items: center; gap: 8px; padding: 0 24px; height: 42px;
+  border-radius: 10px; background: #1E293B; color: #fff; border: none;
+  font-family: var(--font-ui); font-size: var(--text-sm); font-weight: var(--fw-semibold);
+  cursor: pointer; transition: background .15s, box-shadow .15s, transform .12s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.ncs-btn-next svg { width: 15px; height: 15px; }
+.ncs-btn-next:hover { background: #334155; box-shadow: 0 4px 16px rgba(0,0,0,0.22); }
+.ncs-btn-next:active { transform: scale(.98); }
+.ncs-btn-next:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.ncs-btn-next.finish { background: var(--brand); }
+.ncs-btn-next.finish:hover { background: var(--brand-hover); box-shadow: 0 4px 16px rgba(16,185,129,0.35); }
+[data-theme="dark"] .ncs-btn-next { background: #334155; }
+[data-theme="dark"] .ncs-btn-next:hover { background: #475569; }
+[data-theme="dark"] .ncs-btn-next.finish { background: #10B981; }
+
+
+
+/* KPI — sempre 4 colunas iguais preenchendo toda a largura */
+.kpi-card { width: 100%; min-width: 0; }
+@media (max-width: 600px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+
+/* ── SOAP Tabs ── */
+.ncs-soap-tabs {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  flex-shrink: 0;
+  width: 100%;
+}
+.ncs-soap-tab {
+  flex: 1;
+  height: 42px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border, #E2E8F0);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: var(--fw-medium, 500);
+  color: var(--text-tertiary, #94A3B8);
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.ncs-soap-tab:last-child { border-right: none; }
+.ncs-soap-tab:hover { background: var(--bg-subtle, #F1F5F9); color: var(--text-secondary, #475569); }
+.ncs-soap-tab.active {
+  background: var(--text-primary, #0F172A);
+  color: #fff;
+  font-weight: var(--fw-semibold, 600);
+}
+
+/* ── SOAP pane ── */
+.ncs-soap-pane { display: none; flex-direction: column; gap: 0; }
+.ncs-soap-pane.active { display: flex; }
+
+.ncs-soap-section-title {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: var(--fw-semibold, 600);
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.ncs-soap-section-desc {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+.ncs-soap-divider {
+  height: 1px;
+  background: var(--border, #E2E8F0);
+  margin: 20px 0;
+}
+.ncs-soap-exames-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ncs-soap-exames-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--text-primary);
+}
+.ncs-soap-badge {
+  font-size: 11px;
+  font-weight: var(--fw-regular, 400);
+  color: var(--text-tertiary);
+}
+.ncs-soap-exames-label strong { font-weight: var(--fw-semibold, 600); }
+.ncs-soap-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 44px;
+  padding: 0 16px;
+  flex-shrink: 0;
+  margin-left: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong, #CBD5E1);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: var(--fw-medium, 500);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  white-space: nowrap;
+}
+.ncs-soap-add-btn svg { width: 13px; height: 13px; }
+.ncs-soap-add-btn:hover { background: var(--bg-subtle); border-color: var(--text-tertiary); }
+.ncs-soap-exames-row .ncs-input-wrap {
+  display: flex;
+  align-items: center;
+}
+.ncs-soap-exames-row .ncs-input-wrap .ncs-input {
+  border-radius: 10px;
+  flex: 1;
+}
+
+/* ── Footer nav buttons ── */
+.ncs-btn-skip {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 10px;
+  border: 1px solid var(--border, #E2E8F0);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm, 14px);
+  font-weight: var(--fw-medium, 500);
+  color: var(--text-tertiary, #94A3B8);
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.ncs-btn-skip:hover { background: var(--bg-subtle); color: var(--text-secondary); }
+.ncs-btn-skip:disabled { opacity: .35; cursor: not-allowed; }
+
+.ncs-btn-finish {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 10px;
+  background: var(--brand, #10B981);
+  color: #fff;
+  border: none;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm, 14px);
+  font-weight: var(--fw-semibold, 600);
+  cursor: pointer;
+  transition: background .15s, box-shadow .15s;
+}
+.ncs-btn-finish svg { width: 15px; height: 15px; }
+.ncs-btn-finish:hover { background: var(--brand-hover, #059669); }
+
+
+/* ── Sinais Vitais Card ── */
+.ncs-sv-card {
+  background: var(--bg-subtle, #F8FAFC);
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 4px;
+}
+[data-theme="dark"] .ncs-sv-card { background: #1E293B; border-color: #334155; }
+
+.ncs-sv-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+.ncs-sv-title {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: var(--fw-semibold, 600);
+  color: var(--text-primary);
+}
+
+.ncs-sv-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px 16px;
+}
+
+.ncs-sv-field { display: flex; flex-direction: column; gap: 5px; }
+
+.ncs-sv-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: var(--fw-medium, 500);
+  color: var(--text-secondary);
+  user-select: none;
+}
+.ncs-sv-label svg { flex-shrink: 0; color: var(--text-tertiary); }
+
+.ncs-sv-input {
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #E2E8F0);
+  background: #fff;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+  width: 100%;
+}
+.ncs-sv-input:hover { border-color: #CBD5E1; }
+.ncs-sv-input:focus {
+  border-color: var(--brand, #10B981);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
+}
+.ncs-sv-input[readonly] {
+  cursor: default;
+  background: var(--bg-subtle, #F1F5F9);
+}
+[data-theme="dark"] .ncs-sv-input { background: #0F172A; border-color: #475569; color: #F1F5F9; }
+[data-theme="dark"] .ncs-sv-input[readonly] { background: #334155; }
+
+/* Remove number input spinners */
+.ncs-sv-input[type="number"]::-webkit-inner-spin-button,
+.ncs-sv-input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.ncs-sv-input[type="number"] { -moz-appearance: textfield; }
+
+@media (max-width: 580px) {
+  .ncs-sv-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+
+/* ── HMP ── */
+.ncs-hmp-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.ncs-hmp-input-row .ncs-input-wrap { min-width: 0; }
+
+.ncs-hmp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.ncs-hmp-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 14px;
+  background: var(--bg-subtle, #F8FAFC);
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 9px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--text-primary);
+  gap: 10px;
+}
+[data-theme="dark"] .ncs-hmp-item { background: #1E293B; border-color: #334155; }
+.ncs-hmp-item-text { flex: 1; min-width: 0; }
+.ncs-hmp-item-badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: rgba(16,185,129,0.1);
+  color: #059669;
+  flex-shrink: 0;
+}
+.ncs-hmp-item-del {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-tertiary); padding: 2px; border-radius: 4px;
+  transition: background .12s, color .12s; flex-shrink: 0;
+}
+.ncs-hmp-item-del:hover { background: var(--err-bg, #FEE2E2); color: var(--err-text, #DC2626); }
+.ncs-hmp-item-del svg { width: 13px; height: 13px; display: block; }
+
+.ncs-hmp-empty {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--text-tertiary);
+  text-align: center;
+  padding: 12px 0 4px;
+}
+
+/* Subsection (internações) */
+.ncs-hmp-subsection {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border, #E2E8F0);
+}
+.ncs-hmp-sub-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+/* Social grid */
+.ncs-hmp-social-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.ncs-hmp-social-card {
+  background: var(--bg-subtle, #F8FAFC);
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+[data-theme="dark"] .ncs-hmp-social-card { background: #1E293B; border-color: #334155; }
+.ncs-hmp-social-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.ncs-hmp-social-card .ncs-input {
+  background: #fff;
+  border-color: var(--border, #E2E8F0);
+}
+[data-theme="dark"] .ncs-hmp-social-card .ncs-input { background: #0F172A; }
+
+/* Details (ginecológica) */
+.ncs-hmp-details {
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.ncs-hmp-details-summary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 13px 16px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  list-style: none;
+  user-select: none;
+  background: var(--bg-subtle, #F8FAFC);
+}
+.ncs-hmp-details-summary::-webkit-details-marker { display: none; }
+.ncs-hmp-details[open] .ncs-hmp-details-summary { border-bottom: 1px solid var(--border, #E2E8F0); }
+.ncs-hmp-opt {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  margin-left: 2px;
+}
+.ncs-hmp-gino-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
+}
+
+/* HMP tab aba ativa: borda brand */
+#ncsHmpTabs .ncs-soap-tab.active {
+  background: transparent;
+  color: var(--brand, #10B981);
+  border: 1.5px solid var(--brand, #10B981);
+  font-weight: 600;
+}
+
+
+/* ── 3-column layout adjustments ── */
+
+/* Stepper sidebar: sem logo, borda esquerda visível */
+.ncs-sidebar {
+  border-left: 1px solid rgba(255,255,255,0.06);
+}
+.ncs-sb-head {
+  padding: 20px 20px 16px;
+}
+.ncs-sb-title {
+  font-size: 12px;
+  letter-spacing: .1em;
+  margin-top: 0 !important;
+}
+
+/* Etapas: mostrar nome real (não "Etapa N") */
+.ncs-step-label {
+  font-size: 13px;
+}
+
+/* ncs-topbar harmoniza com topbar do dashboard */
+.ncs-topbar {
+  border-bottom: 1px solid #E2E8F0;
+}
+
+/* Step number no stepper: cor consistente */
+.ncs-step-num {
+  font-size: 11px;
+}
+
+
+/* Sidebar fica visível sobre o ncs-screen overlay */
+.sb { position: relative; z-index: 10000; }
+
+
+/* Dark mode — stepper sidebar cores restauradas */
+[data-theme="dark"] .ncs-sb-head { border-color: #334155; }
+[data-theme="dark"] .ncs-sb-progress { border-top-color: #334155; }
+[data-theme="dark"] .ncs-sb-title { color: #64748B; }
+[data-theme="dark"] .ncs-sb-subtitle { color: #94A3B8; }
+[data-theme="dark"] .ncs-sb-prog-label { color: #64748B; }
+[data-theme="dark"] .ncs-sb-prog-track { background: #334155; }
+[data-theme="dark"] .ncs-step-label { color: #64748B; }
+[data-theme="dark"] .ncs-step-sub { color: #475569; }
+[data-theme="dark"] .ncs-step-num { border-color: #334155; color: #475569; }
+[data-theme="dark"] .ncs-step:not(:last-child)::after { background: rgba(255,255,255,0.07); }
+[data-theme="dark"] .ncs-step.active .ncs-step-label { color: #F1F5F9; }
+[data-theme="dark"] .ncs-step:not(.active):not(.done):hover { background: rgba(255,255,255,0.04); }
+[data-theme="dark"] .ncs-topbar { border-color: #334155; }
+[data-theme="dark"] .ncs-footer { border-color: #334155; }
+
+
+/* ── Alinhamento perfeito das bordas col2/col3 ── */
+.ncs-sidebar {
+  /* A borda vertical deve ir de cima a baixo sem interrupção */
+  border-right: 1px solid #E2E8F0;
+}
+[data-theme="dark"] .ncs-sidebar {
+  border-right-color: #334155;
+}
+/* ncs-sb-head: border-bottom coincide com ncs-topbar border-bottom */
+.ncs-sb-head {
+  border-bottom-color: #E2E8F0;
+}
+[data-theme="dark"] .ncs-sb-head {
+  border-bottom-color: #334155;
+}
+/* ncs-topbar: mesma borda */
+.ncs-topbar {
+  border-bottom: 1px solid #E2E8F0;
+}
+[data-theme="dark"] .ncs-topbar {
+  border-bottom-color: #334155;
+}
+/* Evitar que o border-right da sidebar seja interrompido */
+.ncs-sidebar, .ncs-main {
+  box-sizing: border-box;
+}
+
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-l">
+      <img src="data:image/png;base64,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" alt="AtendeBem" class="sb-logo-img" />
+    </div>
+    <button class="cbtn" onclick="toggleSidebar()" title="Minimizar sidebar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></button>
+  </div>
+  <nav class="sb-nav">
+    <div class="ngl">Principal</div>
+    <div class="ni a" data-tip="Visão geral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="ni-txt">Visão geral</span><span class="ndot"></span></div>
+    <div class="ngl">Clínico</div>
+    <div class="ni" data-tip="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="ni-txt">Agenda</span><span class="nbadge">3</span></div>
+    <div class="ni" data-tip="Pacientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="ni-txt">Pacientes</span></div>
+    <div class="ni" data-tip="Registros Clínicos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span class="ni-txt">Registros Clínicos</span></div>
+    <div class="ni" data-tip="Fisioterapia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg><span class="ni-txt">Fisioterapia</span></div>
+    <div class="ni" data-tip="Hospital"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="ni-txt">Hospital</span></div>
+    <div class="ngl">Apoio</div>
+    <div class="ni" data-tip="Comunicação"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="ni-txt">Comunicação</span></div>
+    <div class="ni" data-tip="Relatórios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg><span class="ni-txt">Relatórios</span></div>
+    <div class="ni" data-tip="Artigos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span class="ni-txt">Artigos</span></div>
+    <div class="ni" data-tip="Ajuda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span class="ni-txt">Ajuda</span></div>
+    <div class="ngl">Administração</div>
+    <div class="ni" data-tip="Financeiro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span class="ni-txt">Financeiro</span></div>
+    <div class="ni" data-tip="Convênios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span class="ni-txt">Convênios</span></div>
+    <div class="ni" data-tip="SUS"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="ni-txt">SUS</span></div>
+    <div class="ni" data-tip="Satisfação"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span class="ni-txt">Satisfação</span></div>
+    <div class="ni" data-tip="Meu portal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><span class="ni-txt">Meu portal</span></div>
+    <div class="ngl">Sistema</div>
+    <div class="ni" data-tip="Assistente IA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="9.01" y2="10"/><line x1="12" y1="10" x2="12.01" y2="10"/><line x1="15" y1="10" x2="15.01" y2="10"/></svg><span class="ni-txt">Assistente IA</span></div>
+    <div class="ni" data-tip="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg><span class="ni-txt">Configurações</span></div>
+  </nav>
+
+  <!-- ── Theme Toggle na Sidebar ── -->
+  <div class="sb-theme-row">
+    <span class="sb-theme-label">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <span class="sb-theme-text">Modo escuro</span>
+    </span>
+    <button class="sb-toggle-track" onclick="toggleTheme()" title="Alternar tema">
+      <span class="sb-toggle-thumb"></span>
+    </button>
+  </div>
+  <div class="sb-foot">
+    <div class="ucard">
+      <div class="uav">R</div>
+      <div style="flex:1;min-width:0;"><div class="uname">Ricardo Sodré</div><div class="urole">Clínica Geral</div></div>
+      <div class="uchev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main" style="position:relative;">
+
+
+  <header class="topbar">
+    <div class="tl">
+      <h1>Boa tarde, Dr. Ricardo! <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></h1>
+      <div class="tmeta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        terça-feira, 24 de março de 2026
+        <span class="pill pill-b">Online</span>
+        <span class="pill pill-y">⚡ 47 XP hoje</span>
+      </div>
+    </div>
+    <div class="tr">
+      <button class="btnp" onclick="openNovaConsulta()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nova Consulta</button>
+      <div class="nw"><button class="btni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button><div class="ndotred"></div></div>
+      <button class="btni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></button>
+    </div>
+  </header>
+
+  <div class="cnt">
+
+    <!-- ══ KPI METRICS STRIP — sempre no topo ══ -->
+    <div class="kpi-strip" style="padding:0;background:transparent;border:none;box-shadow:none;">
+      <div class="kpi-grid">
+
+        <!-- KPI 1: Pacientes Hoje -->
+        <div class="kpi-card kpi-blue">
+          <div class="kpi-top">
+            <span class="kpi-label">Pacientes Hoje</span>
+            <div class="kpi-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">12</div>
+          <div class="kpi-change kpi-up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11"><polyline points="18 15 12 9 6 15"/></svg>
+            +20% <span class="kpi-vs">vs anterior</span>
+          </div>
+          <div class="kpi-spark"><canvas id="ksp1"></canvas></div>
+          <div class="kpi-foot"><a>Ver detalhes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a></div>
+        </div>
+
+        <!-- KPI 2: Semana -->
+        <div class="kpi-card kpi-teal">
+          <div class="kpi-top">
+            <span class="kpi-label">Semana</span>
+            <div class="kpi-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">58</div>
+          <div class="kpi-change kpi-up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11"><polyline points="18 15 12 9 6 15"/></svg>
+            11,6 por dia
+          </div>
+          <div class="kpi-spark"><canvas id="ksp2"></canvas></div>
+          <div class="kpi-foot"><a>Ver detalhes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a></div>
+        </div>
+
+        <!-- KPI 3: Total Pacientes -->
+        <div class="kpi-card kpi-purple">
+          <div class="kpi-top">
+            <span class="kpi-label">Total Pacientes</span>
+            <div class="kpi-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">347</div>
+          <div class="kpi-change kpi-up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11"><polyline points="18 15 12 9 6 15"/></svg>
+            +6% <span class="kpi-vs">vs anterior</span>
+          </div>
+          <div class="kpi-spark"><canvas id="ksp3"></canvas></div>
+          <div class="kpi-foot"><a>Ver detalhes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a></div>
+        </div>
+
+        <!-- KPI 5: Taxa Conclusão -->
+        <div class="kpi-card kpi-slate">
+          <div class="kpi-top">
+            <span class="kpi-label">Taxa Conclusão</span>
+            <div class="kpi-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">88%</div>
+          <div class="kpi-change kpi-up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11"><polyline points="18 15 12 9 6 15"/></svg>
+            +3% <span class="kpi-vs">vs semana</span>
+          </div>
+          <div style="margin-top:8px;height:6px;background:rgba(0,0,0,0.08);border-radius:99px;overflow:hidden;">
+            <div style="width:88%;height:100%;background:#10B981;border-radius:99px;"></div>
+          </div>
+          <div style="height:22px;"></div>
+          <div class="kpi-foot"><a>Ver detalhes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- METRICS — shadcn Card + colored bg variant -->
+    <div class="metrics-section" style="display:none;">
+      <div class="metrics-section-header">
+        <div class="metrics-section-title">Métricas Principais</div>
+        <div class="metrics-section-desc">Visão geral do desempenho da sua clínica em tempo real</div>
+      </div>
+      <div class="mgrid">
+
+        <!-- Card 1: Pacientes Hoje — Blue -->
+        <div class="met met-blue">
+          <div class="mt">
+            <span class="mlbl">Pacientes Hoje</span>
+            <div class="mic mic-b">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+          </div>
+          <div class="mv">12</div>
+          <div class="mc up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            +20% <span class="vs">vs anterior</span>
+          </div>
+          <div class="msp"><canvas id="sp1"></canvas></div>
+          <div class="mft"><a>Ver detalhes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a></div>
+        </div>
+
+        <!-- Card 2: Semana — Teal/Green -->
+        <div class="met met-teal">
+          <div class="mt">
+            <span class="mlbl">Semana</span>
+            <div class="mic mic-g">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+          </div>
+          <div class="mv">58</div>
+          <div class="mc up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            11,6 por dia
+          </div>
+          <div class="msp"><canvas id="sp2"></canvas></div>
+          <div class="mft"><a>Ver detalhes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a></div>
+        </div>
+
+        <!-- Card 3: Total Pacientes — Green -->
+        <div class="met met-green">
+          <div class="mt">
+            <span class="mlbl">Total Pacientes</span>
+            <div class="mic mic-p" style="background:#EDE9FE;color:#7C3AED;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+          </div>
+          <div class="mv">347</div>
+          <div class="mc up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            +6% <span class="vs">vs anterior</span>
+          </div>
+          <div class="msp"><canvas id="sp3"></canvas></div>
+          <div class="mft"><a>Ver detalhes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a></div>
+        </div>
+
+        <!-- Card 4: NPS Score — Amber -->
+        <div class="met met-amber">
+          <div class="mt">
+            <span class="mlbl">NPS Score</span>
+            <div class="mic mic-y">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+          </div>
+          <div class="mv">72</div>
+          <div class="mc up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            +8pts <span class="vs">vs anterior</span>
+          </div>
+          <div class="msp"><canvas id="sp4"></canvas></div>
+          <div class="mft"><a>Ver detalhes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a></div>
+        </div>
+
+        <!-- Card 5: Taxa Conclusão — Slate -->
+        <div class="met met-slate">
+          <div class="mt">
+            <span class="mlbl">Taxa Conclusão</span>
+            <div class="mic mic-s">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+          </div>
+          <div class="mv">88%</div>
+          <div class="mc up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            +3% <span class="vs">vs semana</span>
+          </div>
+          <div class="prsm" style="margin-top:10px;"><div class="prsmf" style="width:88%"></div></div>
+          <div style="height:8px;"></div>
+          <div class="mft"><a>Ver detalhes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TWO COL -->
+    <div class="twoc">
+      <!-- LEFT -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+
+        <!-- AGENDA -->
+        <div class="card">
+          <div class="chdr">
+            <div>
+              <div class="ctit">Agenda de Hoje</div>
+              <div class="cdsc">8 de 12 atendimentos concluídos</div>
+            </div>
+            <a class="lnk">Ver agenda <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+          </div>
+          <div class="cbdy">
+            <div class="aprw"><span>Progresso do dia</span><span>67%</span></div>
+            <div class="prt"><div class="prf" style="width:67%"></div></div>
+          </div>
+          <div class="clist">
+            <div class="ci"><div class="ctime"><div class="hr">08:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#10B981;"></div><div class="cinfo"><div class="cn">Maria Aparecida Santos</div><div class="ct">Consulta de rotina · Hipertensão</div></div><span class="cbg cbg-ok">Concluída</span></div>
+            <div class="ci"><div class="ctime"><div class="hr">08:30</div><div class="dr">45 min</div></div><div class="cbar" style="background:#10B981;"></div><div class="cinfo"><div class="cn">João Carlos Ferreira</div><div class="ct">Retorno · Diabetes tipo 2</div></div><span class="cbg cbg-ok">Concluída</span></div>
+            <div class="ci"><div class="ctime"><div class="hr">09:15</div><div class="dr">30 min</div></div><div class="cbar" style="background:#10B981;"></div><div class="cinfo"><div class="cn">Ana Paula Rodrigues</div><div class="ct">Consulta de rotina · Pré-natal</div></div><span class="cbg cbg-ok">Concluída</span></div>
+            <div class="ci"><div class="ctime"><div class="hr">09:50</div><div class="dr">30 min</div></div><div class="cbar" style="background:#10B981;"></div><div class="cinfo"><div class="cn">Thiago Mendes Costa</div><div class="ct">Retorno · Colesterol alto</div></div><span class="cbg cbg-ok">Concluída</span></div>
+            <div class="ci"><div class="ctime"><div class="hr">10:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#2563EB;"></div><div class="cinfo"><div class="cn">Carlos Eduardo Lima</div><div class="ct">Primeira consulta · Dor lombar</div></div><span class="cbg cbg-i">Em andamento</span></div>
+            <div class="ci"><div class="ctime"><div class="hr">10:30</div><div class="dr">30 min</div></div><div class="cbar" style="background:#D97706;"></div><div class="cinfo"><div class="cn">Fernanda Oliveira Barros</div><div class="ct">Consulta de urgência · Febre alta</div></div><span class="cbg cbg-w">Aguardando</span></div>
+            <div class="ci"><div class="ctime"><div class="hr">11:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#D97706;"></div><div class="cinfo"><div class="cn">Roberto Nascimento Silva</div><div class="ct">Retorno · Hipotireoidismo</div></div><span class="cbg cbg-w">Aguardando</span></div>
+            <div class="ci"><div class="ctime"><div class="hr">11:30</div><div class="dr">45 min</div></div><div class="cbar" style="background:#D97706;"></div><div class="cinfo"><div class="cn">Patrícia Vieira Lima</div><div class="ct">Consulta de rotina · Check-up anual</div></div><span class="cbg cbg-w">Aguardando</span></div>
+            <div class="ci"><div class="ctime"><div class="hr">14:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#7C3AED;"></div><div class="cinfo"><div class="cn">Luciana Costa Martins</div><div class="ct">Consulta de rotina · Check-up</div></div><span class="cbg cbg-n">Agendada</span></div>
+            <div class="ci"><div class="ctime"><div class="hr">14:30</div><div class="dr">45 min</div></div><div class="cbar" style="background:#7C3AED;"></div><div class="cinfo"><div class="cn">Pedro Henrique Alves</div><div class="ct">Primeira consulta · Asma</div></div><span class="cbg cbg-n">Agendada</span></div>
+            <div class="ci"><div class="ctime"><div class="hr">15:30</div><div class="dr">30 min</div></div><div class="cbar" style="background:#7C3AED;"></div><div class="cinfo"><div class="cn">Beatriz Souza Pereira</div><div class="ct">Retorno · Anemia ferropriva</div></div><span class="cbg cbg-n">Agendada</span></div>
+            <div class="ci"><div class="ctime"><div class="hr">16:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#DC2626;"></div><div class="cinfo"><div class="cn">Diego Araújo Melo</div><div class="ct">Retorno · Hipertensão</div></div><span class="cbg cbg-e">Cancelada</span></div>
+          </div>
+        </div>
+
+        <!-- ANALYTICS -->
+          <div class="agrid" style="padding:0;">
+
+            <!-- Fluxo de Pacientes -->
+            <div class="amc" style="display:flex;flex-direction:column;gap:16px;padding:25px;border-radius:20px;">
+              <div>
+                <div class="amtit" style="margin-bottom:2px;">Fluxo de Pacientes</div>
+                <div class="amdsc" style="margin-bottom:0;">Atendimentos por dia da semana</div>
+              </div>
+              <div style="display:flex;gap:12px;flex:1;align-items:flex-end;height:180px;">
+                <!-- Y axis -->
+                <div style="display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end;height:100%;padding-bottom:24px;font-family:var(--font-ui);font-size:12px;color:#888;flex-shrink:0;min-width:18px;">
+                  <span>16</span><span>12</span><span>8</span><span>4</span><span>0</span>
+                </div>
+                <!-- Bars + labels -->
+                <div style="display:flex;gap:12px;flex:1;height:100%;align-items:flex-end;" id="fluxoChart">
+                  <!-- rendered by JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Satisfação NPS -->
+            <div class="amc" style="display:flex;flex-direction:column;gap:16px;padding:25px;border-radius:20px;">
+              <div>
+                <div class="amtit" style="margin-bottom:2px;">Satisfação NPS</div>
+                <div class="amdsc" style="margin-bottom:0;">Medição da satisfação e lealdade dos clientes</div>
+              </div>
+              <!-- Score row -->
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+                <div style="display:flex;align-items:flex-end;gap:8px;">
+                  <span id="npsScore" style="font-family:var(--font-display);font-size:36px;font-weight:800;line-height:1;color:#101828;">50</span>
+                  <span id="npsLabel" style="font-family:var(--font-ui);font-size:15px;font-weight:600;color:#00bc7d;line-height:1.4;padding-bottom:3px;">Muito Bom</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+                  <span style="font-family:var(--font-ui);font-size:12px;color:#94A3B8;">Período: Março 2026</span>
+                  <span style="font-family:var(--font-ui);font-size:12px;font-weight:500;color:#009966;display:flex;align-items:center;gap:4px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    100 respostas
+                  </span>
+                </div>
+              </div>
+              <!-- NPS rows -->
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <!-- Promotores -->
+                <div style="background:rgba(236,253,245,0.5);border:2px solid rgba(164,244,207,0.5);border-radius:14px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                    <span style="font-family:var(--font-ui);font-size:13px;font-weight:600;color:#004f3b;">Promotores</span>
+                    <span style="font-family:var(--font-ui);font-size:11px;color:#007a55;">Notas 9-10 • 65% do total</span>
+                  </div>
+                  <span style="font-family:var(--font-ui);font-size:20px;font-weight:700;color:#009966;">65</span>
+                </div>
+                <!-- Neutros -->
+                <div style="background:rgba(254,252,232,0.5);border:2px solid rgba(255,240,133,0.5);border-radius:14px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <span style="font-family:var(--font-ui);font-size:13px;font-weight:600;color:#733e0a;">Neutros</span>
+                    <span style="font-family:var(--font-ui);font-size:11px;color:#a65f00;">Notas 7-8 • 20% do total</span>
+                  </div>
+                  <span style="font-family:var(--font-ui);font-size:20px;font-weight:700;color:#d08700;">20</span>
+                </div>
+                <!-- Detratores -->
+                <div style="background:rgba(254,242,242,0.5);border:2px solid rgba(255,201,201,0.5);border-radius:14px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>
+                    <span style="font-family:var(--font-ui);font-size:13px;font-weight:600;color:#82181a;">Detratores</span>
+                    <span style="font-family:var(--font-ui);font-size:11px;color:#c10007;">Notas 0-6 • 15% do total</span>
+                  </div>
+                  <span style="font-family:var(--font-ui);font-size:20px;font-weight:700;color:#e7000b;">15</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        <!-- COMUNIDADE -->
+        <div class="card">
+          <div class="chdr" style="padding:14px 18px 12px;">
+            <div>
+              <div class="ctit">Comunidade Médica</div>
+              <div class="cdsc">Discussões e publicações em destaque</div>
+            </div>
+            <a class="lnk">Ver mais <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+          </div>
+          <div class="tabrow">
+            <div class="tab a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Publicações</div>
+            <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>Em Alta</div>
+            <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Suportes</div>
+          </div>
+          <div class="post">
+            <div class="phdr">
+              <div class="pav">CA</div>
+              <div><div style="display:flex;align-items:center;"><span class="pnm">Dr. Carlos Abdala</span><span class="pbdg">Ortopedia</span></div><div class="ptm">Há cerca de 1 hora</div></div>
+            </div>
+            <div class="pbdy">Webinar gratuito: "IA na Medicina — Aplicações Práticas" Data: Próxima quinta, 19h. Tópicos: Assistência IA para notas SOAP · Sugestão de CID-10 baseada em sintomas · Triagem Inteligente · Limites éticos da IA. Inscrições abertas! #ianamedina #medicine #educacaomedica</div>
+            <div class="pacts">
+              <div class="pact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>18</div>
+              <div class="pact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>6</div>
+              <div class="pact ml"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+            </div>
+          </div>
+          <div class="post">
+            <div class="phdr">
+              <div class="pav" style="background:#EDE9FE;color:#7C3AED;">MS</div>
+              <div><div style="display:flex;align-items:center;"><span class="pnm">Dra. Marina Silva</span><span class="pbdg">Ortopedia</span></div><div class="ptm">Há cerca de 3 horas</div></div>
+            </div>
+            <div class="pbdy">Principais interações medicamentosas que todo clínico deve conhecer: 1. Warfarina + AINEs = risco de sangramento 2. IECA + Espironolactona = Hipercalemia 3. Metformina + Contraste Iodado = acidose lática 4. Inibidores + Macrolídeos = rabdomiólise 5. ISRS + Tramadol = síndrome serotoninérgica. Salva vidas!</div>
+            <div class="pacts">
+              <div class="pact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>35</div>
+              <div class="pact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>12</div>
+              <div class="pact ml"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+            </div>
+          </div>
+          <div class="post">
+            <div class="phdr">
+              <div class="pav" style="background:#FEF3C7;color:#92400E;">RF</div>
+              <div><div style="display:flex;align-items:center;"><span class="pnm">Dr. Rafael Fontes</span><span class="pbdg">Ortopedia</span></div><div class="ptm">Há cerca de 1 dia</div></div>
+            </div>
+            <div class="pbdy">Nossa clínica completou a migração para prontuários eletrônicos! 6 meses de trabalho, resultados: 30% menos tempo em documentação, zero perda de prontuários, acesso remoto seguro. Integração com laboratórios #prontuarioseletronicos #transformacaodigital #medicina</div>
+            <div class="pacts">
+              <div class="pact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>22</div>
+              <div class="pact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>4</div>
+              <div class="pact ml"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /left -->
+
+      <!-- RIGHT -->
+      <div class="rcol">
+
+        <!-- PROGRESSO -->
+        <div class="card">
+          <div class="shdr" style="border-bottom:none;padding-bottom:0;">
+            <div class="stit">Progresso e Conquistas</div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="color:var(--text-tertiary);cursor:pointer;"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div style="padding:12px 16px 14px;">
+            <div class="lvlrow">
+              <div style="display:flex;align-items:center;"><span class="lvlpill">7</span><span class="lvlname">Nível 7</span></div>
+              <span class="xplbl">847 XP</span>
+            </div>
+            <div class="xphint">Faltam 153 XP para o próximo nível</div>
+            <div class="prt" style="margin-bottom:10px;"><div class="prf" style="width:85%"></div></div>
+            <div class="s3">
+              <div class="s3b"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="s3n">14</div><div class="s3l">dias seguidos</div></div>
+              <div class="s3b"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-hover)" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><div class="s3n">8</div><div class="s3l">feitos hoje</div></div>
+              <div class="s3b"><svg viewBox="0 0 24 24" fill="none" stroke="var(--info-text)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><div class="s3n">88%</div><div class="s3l">concluído</div></div>
+            </div>
+            <div class="togrow"><span style="font-size:12px;color:var(--text-secondary);">Módulo Atual</span><div class="tog"></div></div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Gestão Avançada</div>
+            <div class="prt" style="margin-bottom:12px;"><div class="prf" style="width:65%"></div></div>
+            <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:8px;">Conquistas Recentes</div>
+            <div class="bconq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>14 dias de sequência consecutiva</div>
+            <div class="bconq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>100 consultas concluídas</div>
+            <div class="bconq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Primeiro paciente SUS atendido</div>
+          </div>
+        </div>
+
+        <!-- AÇÕES -->
+        <div class="card">
+          <div class="shdr" style="border-bottom:none;padding-bottom:4px;">
+            <div class="stit">Ações Rápidas</div>
+          </div>
+          <div class="alist">
+            <div class="ai dk"><div class="aic aic-w"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="atit">Nova Consulta</div><div class="asub">Iniciar atendimento</div></div><div class="ar"><div class="chv"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div></div>
+            <div class="ai"><div class="aic aic-g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div><div><div class="atit">Novo Paciente</div><div class="asub">Cadastrar paciente</div></div><div class="ar"><div class="chv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div></div>
+            <div class="ai"><div class="aic aic-b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><div class="atit">Nova Receita</div><div class="asub">Prescrever medicamento</div></div><div class="ar"><span class="cpill">4</span><div class="chv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div></div>
+            <div class="ai"><div class="aic aic-o"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="9 15 12 12 15 15"/><line x1="12" y1="20" x2="12" y2="12"/></svg></div><div><div class="atit">Emitir Atestado</div><div class="asub">Gerar documento</div></div><div class="ar"><div class="chv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div></div>
+          </div>
+        </div>
+
+        <!-- PENDÊNCIAS -->
+        <div class="card">
+          <div class="shdr">
+            <div class="stit">Pendências</div>
+            <div style="display:flex;align-items:center;gap:6px;"><span class="cpill">3</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="color:var(--text-tertiary);cursor:pointer;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          </div>
+          <div class="pitem"><div class="pdot" style="background:var(--err-text);"></div><div style="flex:1;"><div class="ptit">Nota clínica sem assinatura</div><div class="psub">Carlos Eduardo Lima · 10:00</div></div><span class="pcnt pcnt-r">Urgente</span></div>
+          <div class="pitem"><div class="pdot" style="background:var(--warn-text);"></div><div style="flex:1;"><div class="ptit">Resultado de exame pendente</div><div class="psub">Maria Aparecida Santos</div></div><span class="pcnt">Revisão</span></div>
+          <div class="pitem"><div class="pdot" style="background:var(--warn-text);"></div><div style="flex:1;"><div class="ptit">Receita para renovação</div><div class="psub">João Carlos Ferreira · Metformina</div></div><span class="pcnt">Revisão</span></div>
+        </div>
+
+        <!-- ALERTAS -->
+        <div class="card">
+          <div class="shdr">
+            <div class="stit">Alertas</div>
+            <span class="cpill cpill-r">2</span>
+          </div>
+          <div class="pitem"><div class="pdot" style="background:var(--warn-text);"></div><div style="flex:1;"><div class="ptit">Documentos pendentes de assinatura</div><div class="psub">4 documentos aguardando</div></div><span class="pcnt">4</span></div>
+          <div class="pitem" style="border-bottom:none;"><div class="pdot" style="background:var(--err-text);"></div><div style="flex:1;"><div class="ptit">Consulta cancelada sem remarcação</div><div class="psub">Diego Araújo Melo · 16:00</div></div><span class="pcnt pcnt-r">Ação</span></div>
+        </div>
+
+        <!-- ATIVIDADE -->
+        <div class="card">
+          <div class="shdr"><div class="stit">Atividade Recente</div></div>
+          <div>
+            <div class="aitm"><div class="aico aico-g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/></svg></div><div style="flex:1;"><div class="atxt">Consulta concluída</div><div class="anm">Maria Aparecida Santos</div></div><div class="atm">08:30</div></div>
+            <div class="aitm"><div class="aico aico-g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/></svg></div><div style="flex:1;"><div class="atxt">Consulta concluída</div><div class="anm">João Carlos Ferreira</div></div><div class="atm">09:00</div></div>
+            <div class="aitm"><div class="aico aico-b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16"/></svg></div><div style="flex:1;"><div class="atxt">Receita emitida</div><div class="anm">Ana Paula Rodrigues</div></div><div class="atm">09:50</div></div>
+            <div class="aitm"><div class="aico aico-o"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg></div><div style="flex:1;"><div class="atxt">Nota clínica sem assinatura</div><div class="anm">Carlos Eduardo Lima</div></div><div class="atm">10:05</div></div>
+            <div class="aitm"><div class="aico aico-g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/></svg></div><div style="flex:1;"><div class="atxt">Consulta concluída</div><div class="anm">Thiago Mendes Costa</div></div><div class="atm">10:20</div></div>
+          </div>
+          <div class="vwall"><a>Ver todo histórico <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+        </div>
+
+      </div><!-- /right -->
+    </div><!-- /twoc -->
+  </div><!-- /cnt -->
+
+
+
+</div><!-- /main -->
+
+<script>
+Chart.defaults.font.family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+Chart.defaults.font.size=11;
+
+function sp(id,data,color,fill){
+  const c=document.getElementById(id);
+  if(!c)return;
+  new Chart(c,{type:'line',data:{labels:data.map((_,i)=>i),datasets:[{data,borderColor:color,borderWidth:2,pointRadius:0,tension:.4,fill:true,backgroundColor:fill||color+'20'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false,grace:'15%'}},animation:{duration:800,easing:'easeInOutQuart'}}});
+}
+sp('sp1',[6,8,5,9,7,10,8,11,9,12],'#3B82F6','#DBEAFE');
+sp('sp2',[42,48,55,50,58,52,58],'#10B981','#CCFBEF');
+sp('sp3',[290,305,318,325,330,339,347],'#7C3AED','#EDE9FE');
+sp('sp4',[58,62,65,60,68,70,72],'#D97706','#FDE68A');
+
+// KPI sparklines
+function ksp(id,data,color,fill){
+  const c=document.getElementById(id);
+  if(!c)return;
+  new Chart(c,{type:'line',data:{labels:data.map((_,i)=>i),datasets:[{data,borderColor:color,borderWidth:2,pointRadius:0,tension:.4,fill:true,backgroundColor:fill}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false,grace:'20%'}},animation:{duration:900,easing:'easeInOutQuart'}}});
+}
+ksp('ksp1',[6,8,5,9,7,10,8,11,9,12],'#3B82F6','rgba(219,234,254,0.6)');
+ksp('ksp2',[42,48,55,50,58,52,58],'#10B981','rgba(204,251,239,0.6)');
+ksp('ksp3',[290,305,318,325,330,339,347],'#7C3AED','rgba(237,233,254,0.6)');
+// ksp4 removido (NPS Score card removido)
+
+// Fluxo de Pacientes — barras com cores da marca + hover interativo
+const fluxoData = [
+  {label:'Dom', val:12},
+  {label:'Seg', val:9},
+  {label:'Ter', val:4},
+  {label:'Qua', val:7},
+  {label:'Qui', val:16},
+  {label:'Sex', val:9},
+  {label:'Sab', val:7},
+];
+const BRAND_DEFAULT = () => document.documentElement.getAttribute('data-theme')==='dark' ? '#34D399' : '#0f172a';
+const BRAND_HOVER   = '#10B981';   // emerald-500 — cor da marca
+const BRAND_ACTIVE  = '#059669';   // emerald-600 — pressed
+
+const fluxoEl = document.getElementById('fluxoChart');
+if(fluxoEl) {
+  const maxVal = 16;
+  const allBars = [];
+  let activeBar = null;
+
+  fluxoData.forEach((d, i) => {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:1;height:100%;gap:2px;cursor:pointer;';
+
+    const barWrap = document.createElement('div');
+    barWrap.style.cssText = 'flex:1;width:100%;display:flex;flex-direction:column;justify-content:flex-end;position:relative;';
+
+    // Tooltip
+    const tooltip = document.createElement('div');
+    tooltip.textContent = d.val + ' atend.';
+    tooltip.style.cssText = 'position:absolute;top:-28px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;font-size:11px;font-family:var(--font-ui);font-weight:500;padding:3px 7px;border-radius:6px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.15s;z-index:10;';
+    barWrap.appendChild(tooltip);
+
+    const bar = document.createElement('div');
+    const pct = (d.val / maxVal) * 100;
+    bar.style.cssText = 'width:100%;border-radius:4px 4px 0 0;transition:background 0.18s,transform 0.15s;transform-origin:bottom;';
+    bar.style.height = pct + '%';
+    bar.dataset.bar='1'; bar.style.background = BRAND_DEFAULT();
+    allBars.push({bar, tooltip, wrap, val: d.val});
+
+    barWrap.appendChild(bar);
+
+    const lbl = document.createElement('div');
+    lbl.style.cssText = 'font-family:var(--font-ui);font-size:12px;color:#64748b;text-align:center;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:color 0.15s;';
+    lbl.textContent = d.label;
+
+    // Hover
+    wrap.addEventListener('mouseenter', () => {
+      bar.style.background = BRAND_HOVER;
+      bar.style.transform = 'scaleX(0.85)';
+      tooltip.style.opacity = '1';
+      lbl.style.color = BRAND_HOVER;
+      lbl.style.fontWeight = '600';
+    });
+    wrap.addEventListener('mouseleave', () => {
+      if(activeBar !== bar) {
+        bar.dataset.bar='1'; bar.style.background = BRAND_DEFAULT();
+      }
+      bar.style.transform = 'scaleX(1)';
+      tooltip.style.opacity = '0';
+      lbl.style.color = '#64748b';
+      lbl.style.fontWeight = '400';
+    });
+    // Click: toggle active
+    wrap.addEventListener('click', () => {
+      allBars.forEach(b => { b.bar.dataset.bar='1'; bar.style.background = BRAND_DEFAULT(); });
+      bar.style.background = BRAND_ACTIVE;
+      activeBar = bar;
+    });
+
+    wrap.appendChild(barWrap);
+    wrap.appendChild(lbl);
+    fluxoEl.appendChild(wrap);
+  });
+}
+
+// Donut removido — NPS agora usa layout de cards do Figma
+</script>
+
+
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  // Update bar chart colors on theme change
+  updateFluxoColors();
+}
+
+function updateFluxoColors() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const barColor = isDark ? '#34D399' : '#0f172a';
+  // Atualiza todas as barras do fluxo
+  document.querySelectorAll('#fluxoChart [data-bar]').forEach(b => {
+    if(!b.dataset.active) b.style.background = barColor;
+  });
+}
+</script>
+
+
+<script>
+function toggleSidebar() {
+  const sb = document.querySelector('.sb');
+  sb.classList.toggle('collapsed');
+  // Ajustar ncs-screen se estiver aberto
+  const screen = document.getElementById('ncsScreen');
+  if (screen && screen.classList.contains('open')) {
+    screen.style.left = sb.classList.contains('collapsed') ? '64px' : '268px';
+  }
+  // atualiza gráficos após animação
+  setTimeout(() => {
+    if(window._charts) window._charts.forEach(c => c.resize && c.resize());
+  }, 280);
+}
+</script>
+
+
+<script>
+// Adiciona data-tip em cada .ni com base no texto do label
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.ni').forEach(ni => {
+    // Pega o textContent excluindo o badge/dot
+    const clone = ni.cloneNode(true);
+    clone.querySelectorAll('.nbadge,.ndot').forEach(el => el.remove());
+    const txt = clone.textContent.trim();
+    if(txt) ni.setAttribute('data-tip', txt);
+  });
+});
+</script>
+
+
+
+
+
+<script>
+// ── Pacientes mock ──
+const NC_PTS = [
+  { name:'Maria Aparecida Santos',   cpf:'123.456.789-00', initials:'MA', info:'54 anos · Última consulta: 24/03/2026' },
+  { name:'João Carlos Ferreira',     cpf:'234.567.890-11', initials:'JC', info:'61 anos · Última consulta: 24/03/2026' },
+  { name:'Ana Paula Rodrigues',      cpf:'345.678.901-22', initials:'AP', info:'29 anos · Última consulta: 24/03/2026' },
+  { name:'Carlos Eduardo Lima',      cpf:'456.789.012-33', initials:'CE', info:'38 anos · Consulta hoje' },
+  { name:'Fernanda Oliveira Barros', cpf:'567.890.123-44', initials:'FO', info:'42 anos · Última consulta: 20/03/2026' },
+  { name:'Pedro Henrique Alves',     cpf:'678.901.234-55', initials:'PH', info:'25 anos · Primeira consulta' },
+  { name:'Beatriz Souza Pereira',    cpf:'789.012.345-66', initials:'BS', info:'47 anos · Última consulta: 18/03/2026' },
+];
+
+let ncSelectedPatient = null;
+
+function openNovaConsulta() {
+  const screen = document.getElementById('ncScreen');
+  const fab    = document.getElementById('ncFab');
+  screen.classList.add('open');
+  fab.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('ncSearchInput').focus(), 200);
+}
+
+function closeNovaConsulta() {
+  document.getElementById('ncScreen').classList.remove('open');
+  document.getElementById('ncFab').style.display = 'none';
+  document.body.style.overflow = '';
+  // reset
+  document.getElementById('ncSearchInput').value = '';
+  document.getElementById('ncResultsArea').classList.remove('visible');
+  document.getElementById('ncEmptyArea').classList.remove('visible');
+  document.getElementById('ncResultList').innerHTML = '';
+  document.getElementById('ncBtnContinuar').disabled = true;
+  ncSelectedPatient = null;
+}
+
+// Fechar com Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('ncScreen').classList.contains('open')) {
+    closeNovaConsulta();
+  }
+});
+
+// Tabs NC
+document.querySelectorAll('.nc-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.nc-tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+let ncTimer;
+function ncHandleSearch(val) {
+  clearTimeout(ncTimer);
+  const ra = document.getElementById('ncResultsArea');
+  const ea = document.getElementById('ncEmptyArea');
+  const rl = document.getElementById('ncResultList');
+  const ll = document.getElementById('ncResultLbl');
+  const em = document.getElementById('ncEmptyMsg');
+  const btnC = document.getElementById('ncBtnContinuar');
+
+  if (val.length < 2) {
+    ra.classList.remove('visible');
+    ea.classList.remove('visible');
+    return;
+  }
+
+  ncTimer = setTimeout(() => {
+    const q = val.toLowerCase();
+    const qd = val.replace(/\D/g,'');
+    const found = NC_PTS.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      (qd.length > 0 && p.cpf.replace(/\D/g,'').includes(qd))
+    );
+
+    rl.innerHTML = '';
+    if (!found.length) {
+      ra.classList.remove('visible');
+      em.textContent = 'Nenhum resultado para "' + val + '"';
+      ea.classList.add('visible');
+    } else {
+      ea.classList.remove('visible');
+      ll.textContent = found.length + ' paciente' + (found.length > 1 ? 's' : '') + ' encontrado' + (found.length > 1 ? 's' : '');
+      found.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'nc-result-item';
+        el.innerHTML = `
+          <div class="nc-result-av">${p.initials}</div>
+          <div style="flex:1;min-width:0;">
+            <div class="nc-result-name">${p.name}</div>
+            <div class="nc-result-sub">${p.cpf} · ${p.info}</div>
+          </div>
+          <div class="nc-result-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+        `;
+        el.onclick = () => ncSelectPatient(p, el);
+        rl.appendChild(el);
+      });
+      ra.classList.add('visible');
+    }
+  }, 200);
+}
+
+function ncSelectPatient(p, el) {
+  // highlight selecionado
+  document.querySelectorAll('.nc-result-item').forEach(i => {
+    i.style.background = '';
+    i.style.borderColor = '';
+  });
+  el.style.background = 'var(--badge-bg)';
+  el.style.borderColor = 'var(--brand)';
+  ncSelectedPatient = p;
+  document.getElementById('ncBtnContinuar').disabled = false;
+}
+
+function ncOpenCadastro() {
+  alert('Abrindo cadastro de novo paciente...');
+}
+</script>
+
+
+<script>
+const NC_PATIENTS = [
+  { name: 'Maria Aparecida Santos',   cpf: '123.456.789-00', initials: 'MA', age: '54 anos', last: 'Última consulta: 24/03/2026' },
+  { name: 'João Carlos Ferreira',     cpf: '234.567.890-11', initials: 'JC', age: '61 anos', last: 'Última consulta: 24/03/2026' },
+  { name: 'Ana Paula Rodrigues',      cpf: '345.678.901-22', initials: 'AP', age: '29 anos', last: 'Última consulta: 24/03/2026' },
+  { name: 'Carlos Eduardo Lima',      cpf: '456.789.012-33', initials: 'CE', age: '38 anos', last: 'Em andamento hoje' },
+  { name: 'Fernanda Oliveira Barros', cpf: '567.890.123-44', initials: 'FO', age: '42 anos', last: 'Última consulta: 20/03/2026' },
+  { name: 'Thiago Mendes Costa',      cpf: '678.901.234-55', initials: 'TM', age: '45 anos', last: 'Última consulta: 24/03/2026' },
+  { name: 'Pedro Henrique Alves',     cpf: '789.012.345-66', initials: 'PH', age: '25 anos', last: 'Primeira consulta' },
+  { name: 'Beatriz Souza Pereira',    cpf: '890.123.456-77', initials: 'BS', age: '47 anos', last: 'Última consulta: 18/03/2026' },
+  { name: 'Luciana Costa Martins',    cpf: '901.234.567-88', initials: 'LC', age: '39 anos', last: 'Agendada para hoje' },
+  { name: 'Roberto Nascimento Silva', cpf: '012.345.678-99', initials: 'RN', age: '58 anos', last: 'Última consulta: 15/03/2026' },
+];
+
+let ncSelectedPatient = null;
+
+function openNovaConsulta() {
+  document.getElementById('ncScreen').classList.add('open');
+  document.getElementById('ncAiBtn').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('ncSearchInput').focus(), 200);
+}
+
+function closeNovaConsulta() {
+  document.getElementById('ncScreen').classList.remove('open');
+  document.getElementById('ncAiBtn').classList.remove('visible');
+  document.body.style.overflow = '';
+  resetNcForm();
+}
+
+function resetNcForm() {
+  document.getElementById('ncSearchInput').value = '';
+  document.getElementById('ncDropdown').classList.remove('open');
+  document.getElementById('ncSelectedPatient').classList.remove('visible');
+  document.getElementById('ncContinuarBtn').disabled = true;
+  ncSelectedPatient = null;
+}
+
+function clearPatient() {
+  ncSelectedPatient = null;
+  document.getElementById('ncSelectedPatient').classList.remove('visible');
+  document.getElementById('ncSearchInput').value = '';
+  document.getElementById('ncSearchInput').disabled = false;
+  document.getElementById('ncContinuarBtn').disabled = true;
+  setTimeout(() => document.getElementById('ncSearchInput').focus(), 50);
+}
+
+let ncTimer;
+function handleNcSearch(val) {
+  clearTimeout(ncTimer);
+  const dropdown = document.getElementById('ncDropdown');
+  const list = document.getElementById('ncDropList');
+  const lbl  = document.getElementById('ncDropLabel');
+
+  if (val.length < 2) { dropdown.classList.remove('open'); return; }
+
+  ncTimer = setTimeout(() => {
+    const q = val.toLowerCase();
+    const cpfQ = val.replace(/\D/g, '');
+    const found = NC_PATIENTS.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      (cpfQ.length > 0 && p.cpf.replace(/\D/g, '').includes(cpfQ))
+    );
+
+    list.innerHTML = '';
+    if (found.length === 0) {
+      list.innerHTML = `<div class="nc-drop-empty">Nenhum paciente encontrado para "${val}"</div>`;
+    } else {
+      lbl.textContent = found.length + ' paciente' + (found.length > 1 ? 's' : '') + ' encontrado' + (found.length > 1 ? 's' : '');
+      found.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'nc-drop-item';
+        el.innerHTML = `
+          <div class="nc-drop-av">${p.initials}</div>
+          <div style="flex:1;min-width:0;">
+            <div class="nc-drop-name">${p.name}</div>
+            <div class="nc-drop-info">${p.cpf} · ${p.age} · ${p.last}</div>
+          </div>
+          <div class="nc-drop-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+        `;
+        el.addEventListener('click', () => selectPatient(p));
+        list.appendChild(el);
+      });
+    }
+    dropdown.classList.add('open');
+  }, 200);
+}
+
+function selectPatient(p) {
+  ncSelectedPatient = p;
+  document.getElementById('ncDropdown').classList.remove('open');
+  document.getElementById('ncSearchInput').value = '';
+  document.getElementById('ncSearchInput').disabled = true;
+
+  document.getElementById('ncSelAv').textContent = p.initials;
+  document.getElementById('ncSelName').textContent = p.name;
+  document.getElementById('ncSelInfo').textContent = p.cpf + ' · ' + p.age + ' · ' + p.last;
+  document.getElementById('ncSelectedPatient').classList.add('visible');
+  document.getElementById('ncContinuarBtn').disabled = false;
+}
+
+function handleContinuar() {
+  if (!ncSelectedPatient) return;
+  alert('Iniciando atendimento de: ' + ncSelectedPatient.name);
+  closeNovaConsulta();
+}
+
+function openCadastro() {
+  alert('Abrindo formulário de cadastro de novo paciente...');
+}
+
+// Fechar dropdown ao clicar fora
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('ncSearchWrap');
+  if (wrap && !wrap.contains(e.target)) {
+    const dd = document.getElementById('ncDropdown');
+    if (dd) dd.classList.remove('open');
+  }
+});
+
+// Esc fecha a tela
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('ncScreen').classList.contains('open')) {
+    closeNovaConsulta();
+  }
+});
+</script>
+
+
+<script>
+/* ════════ NOVA CONSULTA — STEPPER JS ════════ */
+
+const NCS_STEPS = [
+  { id: 1, label: 'Paciente',       sub: 'Identificar o paciente',      required: true  },
+  { id: 2, label: 'Queixa',         sub: 'Motivo da consulta',           required: true  },
+  { id: 3, label: 'Notas Clínicas', sub: 'Observações e exame físico',   required: false },
+  { id: 4, label: 'HPM',            sub: 'Histórico patológico',         required: false },
+  { id: 5, label: 'Diagnóstico',    sub: 'CID-10 e conduta',             required: false },
+  { id: 6, label: 'Receita',        sub: 'Medicamentos prescritos',      required: false },
+  { id: 7, label: 'Exames',         sub: 'Solicitação de exames',        required: false },
+];
+
+const NCS_PATIENTS = [
+  { name:'Maria Aparecida Santos',   cpf:'123.456.789-00', initials:'MA', age:'54 anos', last:'Última consulta: 24/03/2026' },
+  { name:'João Carlos Ferreira',     cpf:'234.567.890-11', initials:'JC', age:'61 anos', last:'Última consulta: 24/03/2026' },
+  { name:'Ana Paula Rodrigues',      cpf:'345.678.901-22', initials:'AP', age:'29 anos', last:'Última consulta: 24/03/2026' },
+  { name:'Carlos Eduardo Lima',      cpf:'456.789.012-33', initials:'CE', age:'38 anos', last:'Em andamento hoje' },
+  { name:'Fernanda Oliveira Barros', cpf:'567.890.123-44', initials:'FO', age:'42 anos', last:'Última consulta: 20/03/2026' },
+  { name:'Thiago Mendes Costa',      cpf:'678.901.234-55', initials:'TM', age:'45 anos', last:'Última consulta: 24/03/2026' },
+  { name:'Pedro Henrique Alves',     cpf:'789.012.345-66', initials:'PH', age:'25 anos', last:'Primeira consulta' },
+  { name:'Beatriz Souza Pereira',    cpf:'890.123.456-77', initials:'BS', age:'47 anos', last:'Última consulta: 18/03/2026' },
+  { name:'Luciana Costa Martins',    cpf:'901.234.567-88', initials:'LC', age:'39 anos', last:'Agendada para hoje' },
+  { name:'Roberto Nascimento Silva', cpf:'012.345.678-99', initials:'RN', age:'58 anos', last:'Última consulta: 15/03/2026' },
+];
+
+let ncsStep = 1;
+let ncsPatient = null;
+let ncsDone = new Set();
+let ncsMedCount = 0;
+let ncsExameCount = 0;
+let ncsSearchTimer;
+
+function openNovaConsulta() {
+  ncsStep = 1; ncsPatient = null; ncsDone = new Set();
+  ncsMedCount = 0; ncsExameCount = 0;
+  // Ajustar posição baseada no estado da sidebar
+  const screen = document.getElementById('ncsScreen');
+  const sb     = document.querySelector('.sb');
+  const isCollapsed = sb && sb.classList.contains('collapsed');
+  screen.style.left = isCollapsed ? '64px' : '268px';
+  // Limpar listas dinâmicas
+  const rl = document.getElementById('ncsReceitaList');
+  const el = document.getElementById('ncsExamesList');
+  if(rl) rl.innerHTML = '';
+  if(el) el.innerHTML = '';
+  ncsRenderSteps();
+  ncsShowPane(1);
+  ncsUpdateProgress();
+  document.getElementById('ncsScreen').style.display = 'flex';
+  requestAnimationFrame(() => {
+    document.getElementById('ncsScreen').classList.add('open');
+  });
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => {
+    const inp = document.getElementById('ncsPatInput');
+    if(inp) inp.focus();
+  }, 250);
+}
+
+function closeNcs() {
+  const screen = document.getElementById('ncsScreen');
+  screen.classList.remove('open');
+  setTimeout(() => { screen.style.display = 'none'; }, 230);
+  document.body.style.overflow = '';
+}
+
+function ncsRenderSteps() {
+  const el = document.getElementById('ncsStepsList');
+  if(!el) return;
+  el.innerHTML = NCS_STEPS.map(s => {
+    const isActive = s.id === ncsStep;
+    const isDone   = ncsDone.has(s.id);
+    const cls = isActive ? 'active' : isDone ? 'done' : '';
+    const numHtml = isDone
+      ? `<div class="ncs-step-num"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>`
+      : `<div class="ncs-step-num">${s.id}</div>`;
+    const subText = isDone ? 'Concluído' : s.sub;
+    return `<div class="ncs-step ${cls}" onclick="ncsGoTo(${s.id})">
+      ${numHtml}
+      <div class="ncs-step-info">
+        <div class="ncs-step-label">${s.label}</div>
+        <div class="ncs-step-sub">${subText}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function ncsShowPane(n) {
+  document.querySelectorAll('.ncs-pane').forEach(p => p.classList.remove('active'));
+  const pane = document.getElementById('ncsPane' + n);
+  if(pane) pane.classList.add('active');
+  const titleEl = document.getElementById('ncsTopTitle');
+  const stepEl  = document.getElementById('ncsTopStep');
+  // título removido do topbar
+  // if(titleEl) titleEl.textContent = NCS_STEPS[n-1].label;
+  // if(stepEl)  stepEl.textContent  = `Etapa ${n} de ${NCS_STEPS.length}`;
+  const back = document.getElementById('ncsBtnBack');
+  const next = document.getElementById('ncsBtnNext');
+  if(back) back.disabled = n === 1;
+  if(next) {
+    if(n === NCS_STEPS.length) {
+      next.classList.add('finish');
+      next.innerHTML = 'Finalizar consulta <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15"><polyline points="20 6 9 17 4 12"/></svg>';
+    } else {
+      next.classList.remove('finish');
+      next.innerHTML = 'Continuar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>';
+    }
+    next.disabled = (n === 1 && !ncsPatient);
+  }
+  const content = document.querySelector('.ncs-content');
+  if(content) content.scrollTop = 0;
+}
+
+function ncsNext() {
+  if(ncsStep === 1 && !ncsPatient) return;
+  ncsDone.add(ncsStep);
+  if(ncsStep === NCS_STEPS.length) { ncsFinish(); return; }
+  ncsStep++;
+  ncsRenderSteps();
+  ncsShowPane(ncsStep);
+  ncsUpdateProgress();
+}
+
+function ncsBack() {
+  if(ncsStep <= 1) return;
+  ncsStep--;
+  ncsRenderSteps();
+  ncsShowPane(ncsStep);
+  ncsUpdateProgress();
+}
+
+function ncsGoTo(n) {
+  if(n > ncsStep && !ncsDone.has(n-1) && n > 1) return;
+  ncsStep = n;
+  ncsRenderSteps();
+  ncsShowPane(n);
+  ncsUpdateProgress();
+}
+
+function ncsUpdateProgress() {
+  const pct = Math.round((ncsDone.size / NCS_STEPS.length) * 100);
+  const pctEl   = document.getElementById('ncsProgPct');
+  const fillEl  = document.getElementById('ncsProgFill');
+  if(pctEl)  pctEl.textContent  = pct + '%';
+  if(fillEl) fillEl.style.width = pct + '%';
+}
+
+function ncsFinish() {
+  const name = ncsPatient ? ncsPatient.name : 'paciente';
+  alert('Consulta finalizada com sucesso para ' + name + '!\nProntuário salvo.');
+  closeNcs();
+}
+
+function ncsPatSearch(val) {
+  clearTimeout(ncsSearchTimer);
+  const drop = document.getElementById('ncsPatDrop');
+  const list = document.getElementById('ncsPatDropList');
+  const lbl  = document.getElementById('ncsPatDropLbl');
+  if(!drop) return;
+  if(val.length < 2) { drop.classList.remove('open'); return; }
+  ncsSearchTimer = setTimeout(() => {
+    const q    = val.toLowerCase();
+    const cpfQ = val.replace(/[^0-9]/g, '');
+    const found = NCS_PATIENTS.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      (cpfQ.length > 0 && p.cpf.replace(/[^0-9]/g,'').includes(cpfQ))
+    );
+    list.innerHTML = '';
+    if(!found.length) {
+      list.innerHTML = '<div class="ncs-drop-empty">Nenhum resultado encontrado</div>';
+    } else {
+      if(lbl) lbl.textContent = found.length + ' paciente' + (found.length > 1 ? 's' : '') + ' encontrado' + (found.length > 1 ? 's' : '');
+      found.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'ncs-drop-item';
+        el.innerHTML = `<div class="ncs-drop-av">${p.initials}</div><div style="flex:1;min-width:0;"><div class="ncs-drop-name">${p.name}</div><div class="ncs-drop-info">${p.cpf} · ${p.age} · ${p.last}</div></div><div style="color:var(--text-tertiary);margin-left:auto;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="9 18 15 12 9 6"/></svg></div>`;
+        el.onclick = () => ncsSelectPatient(p);
+        list.appendChild(el);
+      });
+    }
+    drop.classList.add('open');
+  }, 200);
+}
+
+function ncsSelectPatient(p) {
+  ncsPatient = p;
+  const drop  = document.getElementById('ncsPatDrop');
+  const input = document.getElementById('ncsPatInput');
+  const card  = document.getElementById('ncsPatCard');
+  if(drop)  drop.classList.remove('open');
+  if(input) { input.value = ''; input.disabled = true; }
+  const av   = document.getElementById('ncsPatAv');
+  const name = document.getElementById('ncsPatName');
+  const info = document.getElementById('ncsPatInfo');
+  if(av)   av.textContent   = p.initials;
+  if(name) name.textContent = p.name;
+  if(info) info.textContent = p.cpf + ' · ' + p.age + ' · ' + p.last;
+  if(card) card.classList.add('visible');
+  const next = document.getElementById('ncsBtnNext');
+  if(next) next.disabled = false;
+}
+
+function ncsClearPatient() {
+  ncsPatient = null;
+  const card  = document.getElementById('ncsPatCard');
+  const input = document.getElementById('ncsPatInput');
+  const next  = document.getElementById('ncsBtnNext');
+  if(card)  card.classList.remove('visible');
+  if(input) { input.disabled = false; input.value = ''; setTimeout(() => input.focus(), 50); }
+  if(next)  next.disabled = true;
+}
+
+function ncsToggleChip(btn, targetId) {
+  btn.classList.toggle('selected');
+  const ta   = document.getElementById(targetId);
+  if(!ta) return;
+  const chip = btn.textContent.trim();
+  if(btn.classList.contains('selected')) {
+    ta.value = ta.value ? ta.value + ', ' + chip : chip;
+  } else {
+    ta.value = ta.value.replace(new RegExp(',?\s*' + chip + ',?\s*'), ' ').trim().replace(/,\s*$/, '');
+  }
+}
+
+function ncsSelectChip(btn, group) {
+  btn.closest('.ncs-chips').querySelectorAll('.ncs-chip').forEach(c => c.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function ncsAddMed() {
+  ncsMedCount++;
+  const id = 'ncsMed' + ncsMedCount;
+  const h = `<div class="ncs-item" id="${id}">
+    <button class="ncs-item-del" onclick="document.getElementById('${id}').remove()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+    </button>
+    <div class="ncs-item-row" style="margin-bottom:8px;">
+      <div><div class="ncs-sub-label">Medicamento</div><input class="ncs-sub-input" placeholder="Nome do medicamento"/></div>
+      <div><div class="ncs-sub-label">Dosagem</div><input class="ncs-sub-input" placeholder="Ex: 500mg"/></div>
+    </div>
+    <div class="ncs-item-row cols3">
+      <div><div class="ncs-sub-label">Frequência</div><input class="ncs-sub-input" placeholder="Ex: 8/8h"/></div>
+      <div><div class="ncs-sub-label">Duração</div><input class="ncs-sub-input" placeholder="Ex: 7 dias"/></div>
+      <div><div class="ncs-sub-label">Via</div><input class="ncs-sub-input" placeholder="Ex: VO"/></div>
+    </div>
+  </div>`;
+  const list = document.getElementById('ncsReceitaList');
+  if(list) list.insertAdjacentHTML('beforeend', h);
+}
+
+function ncsAddExame(nome) {
+  ncsExameCount++;
+  const id = 'ncsExame' + ncsExameCount;
+  const val = nome || '';
+  const h = `<div class="ncs-item" id="${id}">
+    <button class="ncs-item-del" onclick="document.getElementById('${id}').remove()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+    </button>
+    <div class="ncs-item-row">
+      <div><div class="ncs-sub-label">Exame</div><input class="ncs-sub-input" value="${val}" placeholder="Nome do exame"/></div>
+      <div><div class="ncs-sub-label">Indicação / Obs.</div><input class="ncs-sub-input" placeholder="Motivo ou instrução especial"/></div>
+    </div>
+  </div>`;
+  const list = document.getElementById('ncsExamesList');
+  if(list) list.insertAdjacentHTML('beforeend', h);
+}
+
+function ncsAddExameChip(btn, nome) {
+  if(nome === 'Outros') { ncsAddExame(); return; }
+  ncsAddExame(nome);
+  btn.classList.add('selected');
+  btn.disabled = true;
+}
+
+// Fechar dropdown ao clicar fora
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('ncsPatWrap');
+  if(wrap && !wrap.contains(e.target)) {
+    const dd = document.getElementById('ncsPatDrop');
+    if(dd) dd.classList.remove('open');
+  }
+});
+
+// ESC fecha a tela
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') {
+    const screen = document.getElementById('ncsScreen');
+    if(screen && screen.classList.contains('open')) closeNcs();
+  }
+});
+
+// ── SOAP Tab switch ──
+function ncsSoapTab(btn, id) {
+  document.querySelectorAll('.ncs-soap-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.ncs-soap-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const pane = document.getElementById('ncsSoap-' + id);
+  if (pane) pane.classList.add('active');
+}
+
+// ── SOAP: adicionar exame trazido ──
+function ncsSoapAddExame() {
+  const inp  = document.getElementById('ncsSoapExames');
+  const list = document.getElementById('ncsSoapExamesList');
+  if (!inp || !inp.value.trim()) return;
+  const val = inp.value.trim();
+  const id  = 'soapEx' + Date.now();
+  const el  = document.createElement('div');
+  el.className = 'ncs-item';
+  el.id = id;
+  el.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:8px 12px;';
+  el.innerHTML = `<span style="font-family:var(--font-ui);font-size:13px;color:var(--text-primary);">${val}</span>
+    <button onclick="document.getElementById('${id}').remove()" style="background:none;border:none;cursor:pointer;color:var(--text-tertiary);padding:2px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>`;
+  list.appendChild(el);
+  inp.value = '';
+  inp.focus();
+}
+
+// ── Pular etapa ──
+function ncsSkip() {
+  if (ncsStep === NCS_STEPS.length) return;
+  ncsStep++;
+  ncsRenderSteps();
+  ncsShowPane(ncsStep);
+  ncsUpdateProgress();
+}
+
+// ── ncsShowPane: atualizar visibilidade dos botões Pular / Finalizar / Continuar ──
+const _origNcsShowPane = ncsShowPane;
+ncsShowPane = function(n) {
+  _origNcsShowPane(n);
+  const skip   = document.getElementById('ncsBtnSkip');
+  const finish = document.getElementById('ncsBtnFinish');
+  const next   = document.getElementById('ncsBtnNext');
+  if (!skip || !finish || !next) return;
+  const isLast = n === NCS_STEPS.length;
+  // Pular: ocultar na última etapa
+  skip.style.display   = isLast ? 'none' : '';
+  skip.disabled        = n === 1 && !ncsPatient;
+  // Finalizar: sempre visível (exceto pane 1 sem paciente)
+  finish.style.display = '';
+  finish.disabled      = (n === 1 && !ncsPatient);
+  // Continuar: ocultar na última etapa
+  next.style.display   = isLast ? 'none' : '';
+};
+
+
+// ── Calcular IMC automaticamente ──
+function calcIMC() {
+  const peso   = parseFloat(document.getElementById('svPeso')?.value);
+  const altura = parseFloat(document.getElementById('svAltura')?.value);
+  const imc    = document.getElementById('svIMC');
+  if (!imc) return;
+  if (peso > 0 && altura > 0) {
+    const h = altura / 100;
+    const val = (peso / (h * h)).toFixed(1);
+    imc.value = val;
+    // Classificação
+    const cls = val < 18.5 ? 'Abaixo' : val < 25 ? 'Normal' : val < 30 ? 'Sobrepeso' : 'Obesidade';
+    imc.title = cls;
+    imc.style.color = val < 18.5 ? '#D97706' : val < 25 ? '#10B981' : val < 30 ? '#F59E0B' : '#EF4444';
+  } else {
+    imc.value = '--';
+    imc.style.color = '';
+  }
+}
+
+
+// ── HMP Tab switch ──
+function ncsHmpTab(btn, id) {
+  document.querySelectorAll('#ncsHmpTabs .ncs-soap-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#ncsPane4 .ncs-soap-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const pane = document.getElementById('ncsHmp-' + id);
+  if (pane) pane.classList.add('active');
+}
+
+// ── HMP Add item ──
+function hmpAdd(section) {
+  const listEl  = document.getElementById('hmpList-' + section);
+  const emptyEl = document.getElementById('hmpEmpty-' + section);
+  if (!listEl) return;
+
+  let text = '', badge = '';
+
+  if (section === 'doencas') {
+    const inp = document.getElementById('hmpDoencaInput');
+    if (!inp?.value.trim()) return;
+    text = inp.value.trim(); inp.value = '';
+  } else if (section === 'cirurgias') {
+    const inp = document.getElementById('hmpCirurgiaInput');
+    const ano = document.getElementById('hmpCirurgiaAno');
+    if (!inp?.value.trim()) return;
+    text = inp.value.trim();
+    if (ano?.value.trim()) badge = ano.value.trim();
+    inp.value = ''; if (ano) ano.value = '';
+  } else if (section === 'internacoes') {
+    const inp = document.getElementById('hmpInternacaoInput');
+    if (!inp?.value.trim()) return;
+    text = inp.value.trim(); inp.value = '';
+  } else if (section === 'alergias') {
+    const inp = document.getElementById('hmpAlergiaInput');
+    const reac = document.getElementById('hmpAlergiaReacao');
+    const sev  = document.getElementById('hmpAlergiaSeveridade');
+    if (!inp?.value.trim()) return;
+    text = inp.value.trim();
+    if (reac?.value.trim()) text += ' — ' + reac.value.trim();
+    if (sev?.value) badge = sev.value;
+    inp.value = ''; if (reac) reac.value = ''; if (sev) sev.value = '';
+  } else if (section === 'meds') {
+    const inp  = document.getElementById('hmpMedInput');
+    const dos  = document.getElementById('hmpMedDosagem');
+    const freq = document.getElementById('hmpMedFreq');
+    if (!inp?.value.trim()) return;
+    text = inp.value.trim();
+    const extra = [dos?.value.trim(), freq?.value.trim()].filter(Boolean).join(' · ');
+    if (extra) badge = extra;
+    inp.value = ''; if (dos) dos.value = ''; if (freq) freq.value = '';
+  } else if (section === 'familiar') {
+    const par  = document.getElementById('hmpFamiliarParentesco');
+    const cond = document.getElementById('hmpFamiliarCondicao');
+    if (!cond?.value.trim()) return;
+    text = (par?.value ? par.value + ': ' : '') + cond.value.trim();
+    if (par) par.value = ''; if (cond) cond.value = '';
+  }
+
+  if (!text) return;
+
+  const id = 'hmpItem' + Date.now();
+  const badgeHtml = badge ? `<span class="ncs-hmp-item-badge">${badge}</span>` : '';
+  const el = document.createElement('div');
+  el.className = 'ncs-hmp-item';
+  el.id = id;
+  el.innerHTML = `<span class="ncs-hmp-item-text">${text}</span>${badgeHtml}<button class="ncs-hmp-item-del" onclick="document.getElementById('${id}').remove(); hmpCheckEmpty('${section}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  listEl.appendChild(el);
+  if (emptyEl) emptyEl.style.display = 'none';
+}
+
+function hmpCheckEmpty(section) {
+  const listEl  = document.getElementById('hmpList-' + section);
+  const emptyEl = document.getElementById('hmpEmpty-' + section);
+  if (listEl && emptyEl && listEl.children.length === 0) {
+    emptyEl.style.display = '';
+  }
+}
+
+</script>
+
+<!-- ══ NOVA CONSULTA — STEPPER FLOW ══ -->
+<div class="ncs-screen" id="ncsScreen">
+
+  <!-- ── Stepper Sidebar ── -->
+  <aside class="ncs-sidebar">
+    <div class="ncs-sb-head">
+      <div class="ncs-sb-title" style="margin-top:0;">Nova Consulta</div>
+      <div class="ncs-sb-subtitle">Fluxo clínico estruturado</div>
+    </div>
+
+    <div class="ncs-steps" id="ncsStepsList">
+      <!-- Steps rendered by JS -->
+    </div>
+
+    <div class="ncs-sb-progress">
+      <div class="ncs-sb-prog-row">
+        <span class="ncs-sb-prog-label">Progresso</span>
+        <span class="ncs-sb-prog-pct" id="ncsProgPct">0%</span>
+      </div>
+      <div class="ncs-sb-prog-track">
+        <div class="ncs-sb-prog-fill" id="ncsProgFill" style="width:0%"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main content ── -->
+  <div class="ncs-main">
+
+    <!-- Topbar -->
+    <header class="ncs-topbar">
+      <div style="flex:1"></div>
+      <button class="ncs-topbar-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="9" x2="21" y2="9"/></svg>
+        Modelos
+      </button>
+      <button class="ncs-topbar-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        Wizard
+      </button>
+      <button class="ncs-topbar-close" onclick="closeNcs()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </header>
+
+    <!-- Scroll content -->
+    <div class="ncs-content">
+
+      <!-- ── STEP 1: PACIENTE ── -->
+      <div class="ncs-pane active" id="ncsPane1">
+        <div class="ncs-pane-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="ncs-pane-title">Selecionar Paciente</div>
+        <div class="ncs-pane-sub">Busque pelo nome ou CPF do paciente para iniciar o atendimento</div>
+
+        <!-- Paciente selecionado -->
+        <div class="ncs-patient-card" id="ncsPatCard">
+          <div class="ncs-pat-av" id="ncsPatAv"></div>
+          <div style="flex:1;min-width:0;">
+            <div class="ncs-pat-name" id="ncsPatName"></div>
+            <div class="ncs-pat-info" id="ncsPatInfo"></div>
+          </div>
+          <button class="ncs-pat-clear" onclick="ncsClearPatient()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <div class="ncs-field">
+          <div class="ncs-label">
+            <div class="ncs-label-text">Paciente <span class="req">*</span></div>
+            <button class="ncs-label-action" onclick="alert('Abrindo cadastro de paciente...')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              + Criar Paciente
+            </button>
+          </div>
+          <div class="ncs-hint">Digite o nome ou CPF para buscar (mín. 2 caracteres)</div>
+          <div class="ncs-input-wrap" id="ncsPatWrap">
+            <svg class="ncs-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input id="ncsPatInput" class="ncs-input with-icon" type="text" placeholder="Buscar por nome ou CPF (min. 2 caracteres)" oninput="ncsPatSearch(this.value)" autocomplete="off"/>
+            <div class="ncs-dropdown" id="ncsPatDrop">
+              <div class="ncs-drop-lbl" id="ncsPatDropLbl">Resultados</div>
+              <div id="ncsPatDropList"></div>
+            </div>
+          </div>
+          <button class="ncs-link-cadastrar" onclick="alert('Abrindo formulário de cadastro...')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Cadastrar novo paciente
+          </button>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: QUEIXA ── -->
+      <div class="ncs-pane" id="ncsPane2">
+        <div class="ncs-pane-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="ncs-pane-title">Queixa Principal</div>
+        <div class="ncs-pane-sub">Descreva o motivo principal da consulta de hoje</div>
+        <div class="ncs-field">
+          <div class="ncs-label"><div class="ncs-label-text">Queixa <span class="req">*</span></div></div>
+          <div class="ncs-hint">Descreva brevemente o sintoma ou motivo da visita</div>
+          <textarea id="ncsQueixa" class="ncs-textarea" placeholder="Ex: Paciente refere dor de cabeça há 3 dias, acompanhada de febre..."></textarea>
+          <div class="ncs-chips" id="ncsQueixaChips">
+            <button class="ncs-chip" onclick="ncsToggleChip(this, 'ncsQueixa')">Dor</button>
+            <button class="ncs-chip" onclick="ncsToggleChip(this, 'ncsQueixa')">Febre</button>
+            <button class="ncs-chip" onclick="ncsToggleChip(this, 'ncsQueixa')">Retorno</button>
+            <button class="ncs-chip" onclick="ncsToggleChip(this, 'ncsQueixa')">Exame</button>
+            <button class="ncs-chip" onclick="ncsToggleChip(this, 'ncsQueixa')">Náusea</button>
+            <button class="ncs-chip" onclick="ncsToggleChip(this, 'ncsQueixa')">Tosse</button>
+            <button class="ncs-chip" onclick="ncsToggleChip(this, 'ncsQueixa')">Outros</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: NOTAS CLÍNICAS ── -->
+      <div class="ncs-pane" id="ncsPane3">
+        <div class="ncs-pane-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="ncs-pane-title">Notas Clínicas</div>
+        <div class="ncs-pane-sub">Registro estruturado no formato SOAP</div>
+
+        <!-- SOAP tabs -->
+        <div class="ncs-soap-tabs" id="ncsSoapTabs">
+          <button class="ncs-soap-tab active" onclick="ncsSoapTab(this,'S')">Subjetivo</button>
+          <button class="ncs-soap-tab" onclick="ncsSoapTab(this,'O')">Objetivo</button>
+          <button class="ncs-soap-tab" onclick="ncsSoapTab(this,'A')">Avaliação</button>
+          <button class="ncs-soap-tab" onclick="ncsSoapTab(this,'P')">Plano</button>
+        </div>
+
+        <!-- S — Subjetivo -->
+        <div class="ncs-soap-pane active" id="ncsSoap-S">
+          <div class="ncs-soap-section-title">S — Subjetivo</div>
+          <div class="ncs-soap-section-desc">História da doença atual, sintomas, queixas do paciente</div>
+          <textarea id="ncsSoapS" class="ncs-textarea large" placeholder="Paciente relata início dos sintomas há __ dias. Refere __, associado a __. Nega __."></textarea>
+          <div class="ncs-soap-divider"></div>
+          <div class="ncs-soap-exames-row">
+            <div class="ncs-soap-exames-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><circle cx="12" cy="10" r="3"/></svg>
+              <strong>Exames e Imagens do Paciente</strong>
+              <span class="ncs-soap-badge">(trazidos na consulta)</span>
+            </div>
+            <div class="ncs-input-wrap" style="flex:1;">
+              <input id="ncsSoapExames" class="ncs-input" type="text" placeholder="Ex: RX tornozelo, RM ombro, US joelho..."/>
+              <button class="ncs-soap-add-btn" onclick="ncsSoapAddExame()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Adicionar
+              </button>
+            </div>
+            <div class="ncs-item-list" id="ncsSoapExamesList" style="margin-top:10px;"></div>
+          </div>
+        </div>
+
+        <!-- O — Objetivo -->
+        <div class="ncs-soap-pane" id="ncsSoap-O">
+          <div class="ncs-soap-section-title">O — Objetivo</div>
+          <div class="ncs-soap-section-desc">Exame físico, sinais vitais e achados objetivos</div>
+
+          <!-- Card Sinais Vitais -->
+          <div class="ncs-sv-card">
+            <div class="ncs-sv-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <span class="ncs-sv-title">Sinais Vitais</span>
+            </div>
+            <div class="ncs-sv-grid">
+              <!-- Row 1 -->
+              <div class="ncs-sv-field">
+                <label class="ncs-sv-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                  PA (mmHg)
+                </label>
+                <input class="ncs-sv-input" type="text" placeholder="120/80" id="svPA"/>
+              </div>
+              <div class="ncs-sv-field">
+                <label class="ncs-sv-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  FC (bpm)
+                </label>
+                <input class="ncs-sv-input" type="number" placeholder="72" id="svFC"/>
+              </div>
+              <div class="ncs-sv-field">
+                <label class="ncs-sv-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+                  Temp (°C)
+                </label>
+                <input class="ncs-sv-input" type="number" step="0.1" placeholder="36.5" id="svTemp"/>
+              </div>
+              <div class="ncs-sv-field">
+                <label class="ncs-sv-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M17 8C8 10 5.9 16.17 3.82 20.33c.9.72 2.18 1.24 3.18.5C8 20 8.5 19 9 18c.5-1 1.5-1.5 2.5-1.5S13.5 17 14 18c.5 1 1 2 1.82 2.33a4.8 4.8 0 0 0 3.18-.5C17.1 16.17 15 10 17 8z"/></svg>
+                  FR (irpm)
+                </label>
+                <input class="ncs-sv-input" type="number" placeholder="16" id="svFR"/>
+              </div>
+              <!-- Row 2 -->
+              <div class="ncs-sv-field">
+                <label class="ncs-sv-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 5v7l4 2"/></svg>
+                  SpO2 (%)
+                </label>
+                <input class="ncs-sv-input" type="number" placeholder="98" id="svSpO2"/>
+              </div>
+              <div class="ncs-sv-field">
+                <label class="ncs-sv-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M3 6l3 1m0 0l-3 9a5 5 0 0 0 6.027 3M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5 5 0 0 0 6.027 3M18 7l3 9m-3-9l-6-2M6 5l6-2 6 2"/></svg>
+                  Peso (kg)
+                </label>
+                <input class="ncs-sv-input" type="number" step="0.1" placeholder="70" id="svPeso" oninput="calcIMC()"/>
+              </div>
+              <div class="ncs-sv-field">
+                <label class="ncs-sv-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  Altura (cm)
+                </label>
+                <input class="ncs-sv-input" type="number" placeholder="170" id="svAltura" oninput="calcIMC()"/>
+              </div>
+              <div class="ncs-sv-field">
+                <label class="ncs-sv-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+                  IMC
+                </label>
+                <input class="ncs-sv-input" type="text" placeholder="--" id="svIMC" readonly style="background:var(--bg-subtle,#F1F5F9);color:var(--text-tertiary);"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exame físico livre -->
+          <div class="ncs-field" style="margin-top:16px;">
+            <div class="ncs-label"><div class="ncs-label-text">Exame Físico</div></div>
+            <textarea id="ncsSoapO" class="ncs-textarea" placeholder="Achados ao exame físico, ausculta, palpação, ausência de alterações relevantes..."></textarea>
+          </div>
+        </div>
+
+        <!-- A — Avaliação -->
+        <div class="ncs-soap-pane" id="ncsSoap-A">
+          <div class="ncs-soap-section-title">A — Avaliação</div>
+          <div class="ncs-soap-section-desc">Impressão diagnóstica e raciocínio clínico</div>
+          <textarea id="ncsSoapA" class="ncs-textarea large" placeholder="Hipótese diagnóstica principal. Diagnósticos diferenciais a considerar."></textarea>
+        </div>
+
+        <!-- P — Plano -->
+        <div class="ncs-soap-pane" id="ncsSoap-P">
+          <div class="ncs-soap-section-title">P — Plano</div>
+          <div class="ncs-soap-section-desc">Conduta terapêutica, orientações e encaminhamentos</div>
+          <textarea id="ncsSoapP" class="ncs-textarea large" placeholder="Conduta: ...&#10;Medicamentos: ...&#10;Orientações ao paciente: ...&#10;Encaminhamentos: ...&#10;Retorno em: ..."></textarea>
+        </div>
+
+      </div>
+
+      <!-- ── STEP 4: HPM ── -->
+      <div class="ncs-pane" id="ncsPane4">
+        <div class="ncs-pane-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <div class="ncs-pane-title">História Médica Pregressa</div>
+        <div class="ncs-pane-sub">Registre o histórico completo do paciente</div>
+
+        <!-- HMP tabs -->
+        <div class="ncs-soap-tabs" id="ncsHmpTabs">
+          <button class="ncs-soap-tab active" onclick="ncsHmpTab(this,'doencas')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Doenças
+          </button>
+          <button class="ncs-soap-tab" onclick="ncsHmpTab(this,'cirurgias')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            Cirurgias
+          </button>
+          <button class="ncs-soap-tab" onclick="ncsHmpTab(this,'alergias')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Alergias
+          </button>
+          <button class="ncs-soap-tab" onclick="ncsHmpTab(this,'meds')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M18.5 2h-13A1.5 1.5 0 0 0 4 3.5v17A1.5 1.5 0 0 0 5.5 22h13a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 18.5 2z"/><line x1="12" y1="7" x2="12" y2="17"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            Meds
+          </button>
+          <button class="ncs-soap-tab" onclick="ncsHmpTab(this,'familiar')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Familiar
+          </button>
+          <button class="ncs-soap-tab" onclick="ncsHmpTab(this,'social')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Social
+          </button>
+        </div>
+
+        <!-- ── DOENÇAS ── -->
+        <div class="ncs-soap-pane active" id="ncsHmp-doencas">
+          <div class="ncs-hmp-input-row">
+            <div class="ncs-input-wrap" style="flex:1;">
+              <input class="ncs-input" type="text" id="hmpDoencaInput" placeholder="Ex: Hipertensão arterial sistêmica, Diabetes mellitus tipo 2..."/>
+            </div>
+            <button class="ncs-soap-add-btn" onclick="hmpAdd('doencas')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Adicionar
+            </button>
+          </div>
+          <div class="ncs-hmp-list" id="hmpList-doencas"></div>
+          <div class="ncs-hmp-empty" id="hmpEmpty-doencas">Nenhuma doença crônica registrada. Nega comorbidades.</div>
+        </div>
+
+        <!-- ── CIRURGIAS ── -->
+        <div class="ncs-soap-pane" id="ncsHmp-cirurgias">
+          <div class="ncs-hmp-input-row">
+            <div class="ncs-input-wrap" style="flex:1;">
+              <input class="ncs-input" type="text" id="hmpCirurgiaInput" placeholder="Ex: Apendicectomia, Colecistectomia..."/>
+            </div>
+            <div class="ncs-input-wrap" style="width:160px;">
+              <input class="ncs-input" type="text" id="hmpCirurgiaAno" placeholder="Ano (ex: 2019)"/>
+            </div>
+            <button class="ncs-soap-add-btn" onclick="hmpAdd('cirurgias')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Adicionar
+            </button>
+          </div>
+          <div class="ncs-hmp-list" id="hmpList-cirurgias"></div>
+          <div class="ncs-hmp-empty" id="hmpEmpty-cirurgias">Nenhuma cirurgia prévia. Nega procedimentos cirúrgicos anteriores.</div>
+
+          <div class="ncs-hmp-subsection">
+            <div class="ncs-hmp-sub-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              Internações
+            </div>
+            <div class="ncs-hmp-input-row">
+              <div class="ncs-input-wrap" style="flex:1;">
+                <input class="ncs-input" type="text" id="hmpInternacaoInput" placeholder="Ex: Pneumonia (2019), UTI pós-operatório..."/>
+              </div>
+              <button class="ncs-soap-add-btn" onclick="hmpAdd('internacoes')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Adicionar
+              </button>
+            </div>
+            <div class="ncs-hmp-list" id="hmpList-internacoes"></div>
+          </div>
+        </div>
+
+        <!-- ── ALERGIAS ── -->
+        <div class="ncs-soap-pane" id="ncsHmp-alergias">
+          <div class="ncs-hmp-input-row">
+            <div class="ncs-input-wrap" style="flex:2;">
+              <input class="ncs-input" type="text" id="hmpAlergiaInput" placeholder="Alérgeno (ex: Dipirona, Penicilina...)"/>
+            </div>
+            <div class="ncs-input-wrap" style="flex:1.5;">
+              <input class="ncs-input" type="text" id="hmpAlergiaReacao" placeholder="Reação (ex: urticária, anafilaxia...)"/>
+            </div>
+            <select class="ncs-input" id="hmpAlergiaSeveridade" style="width:110px;flex-shrink:0;cursor:pointer;">
+              <option value="">Gravidade</option>
+              <option value="Leve">Leve</option>
+              <option value="Moderada">Moderada</option>
+              <option value="Grave">Grave</option>
+            </select>
+            <button class="ncs-soap-add-btn" onclick="hmpAdd('alergias')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Adicionar
+            </button>
+          </div>
+          <div class="ncs-hmp-list" id="hmpList-alergias"></div>
+          <div class="ncs-hmp-empty" id="hmpEmpty-alergias">Nenhuma alergia registrada. Nega alergias medicamentosas e alimentares.</div>
+        </div>
+
+        <!-- ── MEDS ── -->
+        <div class="ncs-soap-pane" id="ncsHmp-meds">
+          <div class="ncs-hmp-input-row">
+            <div class="ncs-input-wrap" style="flex:2.5;">
+              <input class="ncs-input" type="text" id="hmpMedInput" placeholder="Medicamento (ex: Losartana)"/>
+            </div>
+            <div class="ncs-input-wrap" style="flex:1;">
+              <input class="ncs-input" type="text" id="hmpMedDosagem" placeholder="Dosagem (ex: 50mg)"/>
+            </div>
+            <div class="ncs-input-wrap" style="flex:1;">
+              <input class="ncs-input" type="text" id="hmpMedFreq" placeholder="Frequência (1x/dia)"/>
+            </div>
+            <button class="ncs-soap-add-btn" onclick="hmpAdd('meds')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Adicionar
+            </button>
+          </div>
+          <div class="ncs-hmp-list" id="hmpList-meds"></div>
+          <div class="ncs-hmp-empty" id="hmpEmpty-meds">Nenhum medicamento em uso contínuo.</div>
+        </div>
+
+        <!-- ── FAMILIAR ── -->
+        <div class="ncs-soap-pane" id="ncsHmp-familiar">
+          <div class="ncs-hmp-input-row">
+            <select class="ncs-input" id="hmpFamiliarParentesco" style="width:160px;flex-shrink:0;cursor:pointer;">
+              <option value="">Parentesco...</option>
+              <option>Pai</option><option>Mãe</option><option>Avô paterno</option>
+              <option>Avó paterna</option><option>Avô materno</option><option>Avó materna</option>
+              <option>Irmão/Irmã</option><option>Filho/Filha</option><option>Tio/Tia</option>
+            </select>
+            <div class="ncs-input-wrap" style="flex:1;">
+              <input class="ncs-input" type="text" id="hmpFamiliarCondicao" placeholder="Condição (ex: HAS, DM2, Câncer de mama)"/>
+            </div>
+            <button class="ncs-soap-add-btn" onclick="hmpAdd('familiar')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Adicionar
+            </button>
+          </div>
+          <div class="ncs-hmp-list" id="hmpList-familiar"></div>
+          <div class="ncs-hmp-empty" id="hmpEmpty-familiar">Nenhum antecedente familiar relevante registrado.</div>
+        </div>
+
+        <!-- ── SOCIAL ── -->
+        <div class="ncs-soap-pane" id="ncsHmp-social">
+          <div class="ncs-hmp-social-grid">
+            <!-- Tabagismo -->
+            <div class="ncs-hmp-social-card">
+              <div class="ncs-hmp-social-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="1.5" width="15" height="15"><path d="M18 12h2a2 2 0 0 1 0 4h-2"/><path d="M2 12h16v4H2z"/><path d="M7 12V7a3 3 0 0 1 6 0"/><line x1="22" y1="12" x2="22" y2="16"/></svg>
+                Tabagismo
+              </div>
+              <select class="ncs-input" id="hmpTabagismo">
+                <option>Nunca fumou</option>
+                <option>Ex-tabagista</option>
+                <option>Tabagista ativo</option>
+              </select>
+            </div>
+            <!-- Etilismo -->
+            <div class="ncs-hmp-social-card">
+              <div class="ncs-hmp-social-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="1.5" width="15" height="15"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 4 2 7 5 7s5-3 5-7"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+                Etilismo
+              </div>
+              <select class="ncs-input" id="hmpEtilismo">
+                <option>Não consome</option>
+                <option>Consumo eventual</option>
+                <option>Consumo regular</option>
+                <option>Consumo abusivo</option>
+              </select>
+            </div>
+            <!-- Atividade Física -->
+            <div class="ncs-hmp-social-card">
+              <div class="ncs-hmp-social-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1.5" width="15" height="15"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Atividade Física
+              </div>
+              <input class="ncs-input" type="text" id="hmpAtividade" placeholder="Ex: Caminhada 3x/semana, 30min"/>
+            </div>
+            <!-- Ocupação -->
+            <div class="ncs-hmp-social-card">
+              <div class="ncs-hmp-social-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="1.5" width="15" height="15"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><polyline points="16 21 12 17 8 21"/><polyline points="12 17V3"/></svg>
+                Ocupação
+              </div>
+              <input class="ncs-input" type="text" id="hmpOcupacao" placeholder="Profissão atual"/>
+            </div>
+          </div>
+
+          <!-- Hist. Ginecológica -->
+          <details class="ncs-hmp-details">
+            <summary class="ncs-hmp-details-summary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              <span>História Ginecológica / Obstétrica</span>
+              <span class="ncs-hmp-opt">(quando aplicável)</span>
+            </summary>
+            <div class="ncs-hmp-gino-grid">
+              <div class="ncs-field">
+                <div class="ncs-label"><div class="ncs-label-text">Menarca</div></div>
+                <input class="ncs-input" type="text" placeholder="Ex: 12 anos"/>
+              </div>
+              <div class="ncs-field">
+                <div class="ncs-label"><div class="ncs-label-text">Menopausa</div></div>
+                <input class="ncs-input" type="text" placeholder="Ex: 51 anos / em curso"/>
+              </div>
+              <div class="ncs-field">
+                <div class="ncs-label"><div class="ncs-label-text">Gestações (G) / Partos (P) / Abortos (A)</div></div>
+                <input class="ncs-input" type="text" placeholder="Ex: G2P2A0"/>
+              </div>
+              <div class="ncs-field">
+                <div class="ncs-label"><div class="ncs-label-text">Método contraceptivo</div></div>
+                <input class="ncs-input" type="text" placeholder="Ex: ACO, DIU, preservativo..."/>
+              </div>
+            </div>
+          </details>
+
+          <!-- Observações adicionais -->
+          <div class="ncs-field" style="margin-top:16px;">
+            <div class="ncs-label">
+              <div class="ncs-label-text">Observações Adicionais</div>
+            </div>
+            <div class="ncs-hint">Informações complementares relevantes</div>
+            <textarea id="hmpObsAdicionais" class="ncs-textarea" placeholder="Outras informações relevantes sobre o histórico do paciente..."></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── STEP 5: DIAGNÓSTICO ── -->
+      <div class="ncs-pane" id="ncsPane5">
+        <div class="ncs-pane-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="ncs-pane-title">Diagnóstico</div>
+        <div class="ncs-pane-sub">Registre o diagnóstico clínico com código CID ou descrição livre</div>
+        <div class="ncs-field">
+          <div class="ncs-label"><div class="ncs-label-text">Busca por CID-10</div></div>
+          <div class="ncs-hint">Digite o código ou descrição para buscar</div>
+          <div class="ncs-input-wrap">
+            <svg class="ncs-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input id="ncsCid" class="ncs-input with-icon" type="text" placeholder="Ex: J11 — Gripe, M54.5 — Lombalgias..."/>
+          </div>
+        </div>
+        <div class="ncs-field">
+          <div class="ncs-label"><div class="ncs-label-text">Diagnóstico descritivo</div></div>
+          <textarea id="ncsDiagDesc" class="ncs-textarea large" placeholder="Descreva o diagnóstico, conduta e plano terapêutico..."></textarea>
+        </div>
+        <div class="ncs-field">
+          <div class="ncs-label"><div class="ncs-label-text">Tipo de diagnóstico</div></div>
+          <div class="ncs-chips">
+            <button class="ncs-chip" onclick="ncsSelectChip(this, 'diagTipo')">Definitivo</button>
+            <button class="ncs-chip" onclick="ncsSelectChip(this, 'diagTipo')">Presuntivo</button>
+            <button class="ncs-chip" onclick="ncsSelectChip(this, 'diagTipo')">Diferencial</button>
+            <button class="ncs-chip" onclick="ncsSelectChip(this, 'diagTipo')">Sem diagnóstico</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 6: RECEITA ── -->
+      <div class="ncs-pane" id="ncsPane6">
+        <div class="ncs-pane-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6m-3-3v6m9-6a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+        </div>
+        <div class="ncs-pane-title">Receita Médica</div>
+        <div class="ncs-pane-sub">Adicione os medicamentos prescritos para este atendimento</div>
+        <div class="ncs-item-list" id="ncsReceitaList"></div>
+        <button class="ncs-add-btn" onclick="ncsAddMed()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar medicamento
+        </button>
+      </div>
+
+      <!-- ── STEP 7: EXAMES ── -->
+      <div class="ncs-pane" id="ncsPane7">
+        <div class="ncs-pane-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+        </div>
+        <div class="ncs-pane-title">Solicitação de Exames</div>
+        <div class="ncs-pane-sub">Solicite os exames complementares necessários para este atendimento</div>
+        <div class="ncs-field">
+          <div class="ncs-label"><div class="ncs-label-text">Sugestões rápidas</div></div>
+          <div class="ncs-chips">
+            <button class="ncs-chip" onclick="ncsAddExameChip(this, 'Hemograma completo')">Hemograma</button>
+            <button class="ncs-chip" onclick="ncsAddExameChip(this, 'Raio-X de tórax')">Raio-X</button>
+            <button class="ncs-chip" onclick="ncsAddExameChip(this, 'Ultrassom abdominal')">Ultrassom</button>
+            <button class="ncs-chip" onclick="ncsAddExameChip(this, 'Glicemia em jejum')">Glicemia</button>
+            <button class="ncs-chip" onclick="ncsAddExameChip(this, 'Urina tipo I')">Urina I</button>
+            <button class="ncs-chip" onclick="ncsAddExameChip(this, 'Outros')">Outros</button>
+          </div>
+        </div>
+        <div class="ncs-item-list" id="ncsExamesList"></div>
+        <button class="ncs-add-btn" onclick="ncsAddExame()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar exame
+        </button>
+      </div>
+
+    </div><!-- /ncs-content -->
+
+    <!-- Footer -->
+    <footer class="ncs-footer">
+      <!-- Esquerda: Voltar -->
+      <button class="ncs-btn-back" id="ncsBtnBack" onclick="ncsBack()" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="11 18 5 12 11 6"/></svg>
+        Voltar
+      </button>
+      <!-- Direita: Pular + Finalizar + Continuar -->
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="ncs-btn-skip" id="ncsBtnSkip" onclick="ncsSkip()">
+          Pular etapa
+        </button>
+        <button class="ncs-btn-finish" id="ncsBtnFinish" onclick="ncsFinish()" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Finalizar consulta
+        </button>
+        <button class="ncs-btn-next" id="ncsBtnNext" onclick="ncsNext()">
+          Continuar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </button>
+      </div>
+    </footer>
+
+  </div><!-- /ncs-main -->
+</div>
+
+</body>
+</html>
