@@ -3032,6 +3032,475 @@ body.sb-collapsed .ncs-screen {
 /* Para textarea a posição é relativa ao wrapper */
 .rx-ac-wrap { position: relative; }
 
+
+/* ── Sidebar Accordion ── */
+
+/* Chevron no item pai */
+.ni-chevron {
+  flex-shrink: 0;
+  transition: transform .22s cubic-bezier(.4,0,.2,1);
+  color: #64748B;
+}
+.ni-accordion.open .ni-chevron {
+  transform: rotate(180deg);
+}
+/* Quando sidebar colapsada, esconder chevron */
+.sb.collapsed .ni-chevron { display: none; }
+
+/* Subitens container */
+.ni-sub { display: none; flex-direction: column; padding: 2px 0 4px; }
+.ni-sub.open { display: flex; }
+
+/* Sub item */
+.ni-sub-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px 7px 38px;
+  border-radius: 8px;
+  margin: 1px 8px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748B;
+  transition: background .15s, color .15s;
+  position: static;
+}
+.ni-sub-item svg {
+  width: 14px; height: 14px; flex-shrink: 0;
+  color: #64748B;
+}
+.ni-sub-item:hover {
+  background: rgba(255,255,255,0.06);
+  color: #94A3B8;
+}
+.ni-sub-item.active {
+  background: rgba(16,185,129,0.12);
+  color: #F1F5F9;
+}
+.ni-sub-item.active svg { color: #10B981; }
+
+/* Ocultar subitens quando sidebar colapsada */
+.sb.collapsed 
+
+/* Linha de acento à esquerda dos subitens */
+
+
+
+/* Garantir ausência de linhas verticais nos subitens */
+.ni-sub-item { border-left: none !important; }
+
+
+
+/* ══════════════════════════════════
+   SIDEBAR ACCORDION — versão final
+   ══════════════════════════════════ */
+.ni-chevron {
+  flex-shrink: 0;
+  margin-left: auto;
+  transition: transform .22s ease;
+  color: #64748B;
+}
+.ni-accordion.open .ni-chevron { transform: rotate(180deg); }
+.sb.collapsed .ni-chevron      { display: none; }
+
+/* Fechado por padrão */
+.ni-sub {
+  display: none;
+  flex-direction: column;
+  padding: 2px 0 6px;
+}
+.ni-sub.open { display: flex; }
+.sb.collapsed .ni-sub { display: none !important; }
+
+.ni-sub-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px 7px 40px;
+  border-radius: 8px;
+  margin: 1px 8px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748B;
+  transition: background .15s, color .15s;
+}
+.ni-sub-item svg {
+  width: 14px; height: 14px;
+  flex-shrink: 0;
+  color: #64748B;
+}
+.ni-sub-item:hover {
+  background: rgba(255,255,255,0.06);
+  color: #CBD5E1;
+}
+.ni-sub-item:hover svg { color: #94A3B8; }
+.ni-sub-item.active {
+  background: rgba(16,185,129,0.14);
+  color: #F1F5F9;
+}
+.ni-sub-item.active svg { color: #10B981; }
+
+
+/* ══════════════════════════════════════════════════════
+   VISUALIZAR AGENDA — Full screen overlay
+   ══════════════════════════════════════════════════════ */
+
+.agv-screen {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  left: 268px;
+  z-index: 9000;
+  display: none;
+  flex-direction: column;
+  background: var(--bg-page, #F8FAFC);
+  opacity: 0;
+  transition: opacity .2s, left .28s cubic-bezier(.4,0,.2,1);
+}
+.agv-screen.open { display: flex; opacity: 1; }
+.sb.collapsed ~ .agv-screen { left: 64px; }
+
+/* ── Topbar ── */
+.agv-topbar {
+  background: #fff;
+  border-bottom: 1px solid #E2E8F0;
+  padding: 0 28px;
+  flex-shrink: 0;
+}
+[data-theme="dark"] .agv-topbar { background: #1E293B; border-color: #334155; }
+
+.agv-breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 0 0;
+  font-family: var(--font-ui); font-size: 12px; color: var(--text-tertiary);
+}
+.agv-breadcrumb-link {
+  background: none; border: none; cursor: pointer; color: var(--text-tertiary);
+  font-family: var(--font-ui); font-size: 12px; padding: 0;
+  transition: color .15s;
+}
+.agv-breadcrumb-link:hover { color: var(--brand); }
+
+.agv-topbar-title-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 0 14px;
+}
+.agv-page-title {
+  font-family: var(--font-display); font-size: 22px; font-weight: var(--fw-bold);
+  color: var(--text-primary); margin: 0;
+}
+.agv-page-sub {
+  font-family: var(--font-ui); font-size: 12px; color: var(--text-tertiary); margin: 2px 0 0;
+}
+.agv-topbar-actions { display: flex; align-items: center; gap: 8px; }
+
+.agv-btn-ghost {
+  width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center;
+  background: none; border: none; cursor: pointer; border-radius: 8px;
+  color: var(--text-tertiary); transition: background .15s, color .15s;
+}
+.agv-btn-ghost:hover { background: var(--bg-subtle); color: var(--text-primary); }
+.agv-divider-v { width: 1px; height: 20px; background: var(--border, #E2E8F0); margin: 0 4px; }
+[data-theme="dark"] .agv-divider-v { background: #334155; }
+
+.agv-btn-secondary {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 34px; padding: 0 14px; border-radius: 8px;
+  border: 1px solid var(--border, #E2E8F0); background: #fff;
+  font-family: var(--font-ui); font-size: 13px; font-weight: var(--fw-medium);
+  color: var(--text-secondary); cursor: pointer; transition: background .15s;
+}
+.agv-btn-secondary:hover { background: var(--bg-subtle); }
+[data-theme="dark"] .agv-btn-secondary { background: #1E293B; border-color: #334155; color: #94A3B8; }
+
+.agv-btn-primary {
+  display: inline-flex; align-items: center; gap: 7px;
+  height: 36px; padding: 0 16px; border-radius: 9px;
+  background: #0F172A; color: #fff; border: none;
+  font-family: var(--font-ui); font-size: 13px; font-weight: var(--fw-semibold);
+  cursor: pointer; transition: background .15s;
+}
+.agv-btn-primary:hover { background: #1E293B; }
+[data-theme="dark"] .agv-btn-primary { background: #334155; }
+
+/* ── Filter bar ── */
+.agv-filterbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 28px; background: #fff;
+  border-bottom: 1px solid #E2E8F0; flex-shrink: 0; gap: 16px; flex-wrap: wrap;
+}
+[data-theme="dark"] .agv-filterbar { background: #1E293B; border-color: #334155; }
+
+.agv-filter-chips { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.agv-fchip {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 28px; padding: 0 12px; border-radius: 99px;
+  border: 1.5px solid var(--border, #E2E8F0); background: #fff;
+  font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-medium);
+  color: var(--text-secondary); cursor: pointer; transition: all .15s;
+}
+.agv-fchip.active { border-color: currentColor; }
+.agv-fchip-blue.active  { color:#3B82F6; background:rgba(59,130,246,0.06); border-color:#3B82F6; }
+.agv-fchip-green.active { color:#10B981; background:rgba(16,185,129,0.06); border-color:#10B981; }
+.agv-fchip-red.active   { color:#EF4444; background:rgba(239,68,68,0.06);  border-color:#EF4444; }
+.agv-fchip-purple.active{ color:#8B5CF6; background:rgba(139,92,246,0.06); border-color:#8B5CF6; }
+.agv-fchip:hover { border-color: #CBD5E1; }
+.agv-fchip-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.agv-fchip-more {
+  height: 28px; padding: 0 12px; border-radius: 99px;
+  border: 1px solid var(--border); background: transparent;
+  font-family: var(--font-ui); font-size: 12px; color: var(--text-tertiary); cursor: pointer;
+}
+[data-theme="dark"] .agv-fchip { background: #1E293B; border-color: #334155; color: #94A3B8; }
+
+/* View controls */
+.agv-view-controls { display: flex; align-items: center; gap: 8px; }
+.agv-view-tabs {
+  display: flex; align-items: center;
+  border: 1px solid var(--border, #E2E8F0); border-radius: 9px; overflow: hidden;
+  background: #fff;
+}
+[data-theme="dark"] .agv-view-tabs { background: #1E293B; border-color: #334155; }
+.agv-view-tab {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 32px; padding: 0 12px; border: none; background: transparent;
+  font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-medium);
+  color: var(--text-tertiary); cursor: pointer; transition: background .15s, color .15s;
+  border-right: 1px solid var(--border, #E2E8F0);
+}
+.agv-view-tab:last-child { border-right: none; }
+.agv-view-tab:hover { background: var(--bg-subtle); color: var(--text-secondary); }
+.agv-view-tab.active { background: #0F172A; color: #fff; }
+[data-theme="dark"] .agv-view-tab { border-right-color: #334155; }
+[data-theme="dark"] .agv-view-tab.active { background: #334155; }
+
+.agv-btn-filter {
+  width: auto; padding: 0 12px; gap: 6px; height: 32px;
+  border: 1px solid var(--border, #E2E8F0); border-radius: 8px;
+  font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+}
+.agv-search-inline {
+  display: flex; align-items: center; gap: 7px;
+  height: 32px; padding: 0 12px; border-radius: 8px;
+  border: 1px solid var(--border, #E2E8F0); background: #fff;
+  transition: border-color .15s, box-shadow .15s;
+  color: var(--text-tertiary);
+}
+.agv-search-inline:focus-within { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
+[data-theme="dark"] .agv-search-inline { background: #0F172A; border-color: #475569; }
+.agv-search-input {
+  border: none; outline: none; background: transparent;
+  font-family: var(--font-ui); font-size: 12px; color: var(--text-primary); width: 110px;
+}
+.agv-search-input::placeholder { color: var(--text-tertiary); }
+
+/* ── Body 2 colunas ── */
+.agv-body {
+  display: flex; flex: 1; overflow: hidden;
+}
+
+/* ── Sidebar esquerda ── */
+.agv-sidebar {
+  width: 300px; min-width: 300px;
+  border-right: 1px solid #E2E8F0;
+  display: flex; flex-direction: column;
+  overflow-y: auto; background: #fff;
+  gap: 0;
+}
+[data-theme="dark"] .agv-sidebar { background: #1E293B; border-color: #334155; }
+
+.agv-cal-card, .agv-stats-card, .agv-proximos-card { padding: 20px; border-bottom: 1px solid #E2E8F0; }
+[data-theme="dark"] .agv-cal-card, [data-theme="dark"] .agv-stats-card, [data-theme="dark"] .agv-proximos-card { border-color: #334155; }
+
+/* Mini calendário */
+.agv-cal-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+}
+.agv-cal-month {
+  font-family: var(--font-ui); font-size: 14px; font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.agv-cal-nav { display: flex; gap: 2px; }
+.agv-cal-nav button {
+  width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--border, #E2E8F0);
+  background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary); transition: background .15s;
+}
+.agv-cal-nav button:hover { background: var(--bg-subtle); }
+[data-theme="dark"] .agv-cal-nav button { background: #1E293B; border-color: #334155; }
+
+.agv-cal-weekdays {
+  display: grid; grid-template-columns: repeat(7,1fr);
+  text-align: center; margin-bottom: 6px;
+}
+.agv-cal-weekdays span {
+  font-family: var(--font-ui); font-size: 11px; font-weight: var(--fw-semibold);
+  color: var(--text-tertiary); padding: 4px 0;
+}
+.agv-cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
+.agv-cal-day {
+  aspect-ratio: 1; border-radius: 7px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-medium);
+  color: var(--text-secondary); cursor: pointer; transition: background .12s, color .12s;
+  position: relative;
+}
+.agv-cal-day:hover { background: var(--bg-subtle); color: var(--text-primary); }
+.agv-cal-day.today {
+  background: #0F172A; color: #fff; font-weight: var(--fw-bold);
+}
+.agv-cal-day.selected {
+  background: var(--brand); color: #fff;
+}
+.agv-cal-day.has-events::after {
+  content: ''; position: absolute; bottom: 3px;
+  width: 4px; height: 4px; border-radius: 50%; background: var(--brand);
+}
+.agv-cal-day.today.has-events::after { background: #fff; }
+.agv-cal-day.other-month { color: var(--text-tertiary); opacity: .45; }
+[data-theme="dark"] .agv-cal-day.today { background: #334155; }
+
+/* Stats */
+.agv-stats-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.agv-stats-date { font-family: var(--font-ui); font-size: 14px; font-weight: var(--fw-semibold); color: var(--text-primary); }
+.agv-stats-today {
+  display: inline-flex; align-items: center; height: 22px; padding: 0 10px; border-radius: 99px;
+  background: var(--bg-subtle, #F1F5F9); font-family: var(--font-ui); font-size: 11px;
+  font-weight: var(--fw-semibold); color: var(--text-secondary);
+}
+[data-theme="dark"] .agv-stats-today { background: #334155; color: #94A3B8; }
+.agv-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.agv-stat-box {
+  background: var(--bg-subtle, #F8FAFC); border: 1px solid var(--border, #E2E8F0);
+  border-radius: 10px; padding: 14px; text-align: center;
+}
+[data-theme="dark"] .agv-stat-box { background: #0F172A; border-color: #334155; }
+.agv-stat-box-green { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.2); }
+.agv-stat-num { font-family: var(--font-display); font-size: 28px; font-weight: var(--fw-bold); color: var(--text-primary); }
+.agv-stat-green { color: var(--brand); }
+.agv-stat-lbl { font-family: var(--font-ui); font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+/* Próximos */
+.agv-proximos-header {
+  display: flex; align-items: center; gap: 7px; margin-bottom: 12px;
+  font-family: var(--font-ui); font-size: 13px; font-weight: var(--fw-semibold); color: var(--text-primary);
+}
+.agv-proximos-list { display: flex; flex-direction: column; gap: 6px; }
+.agv-proximo-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 9px;
+  background: var(--bg-subtle, #F8FAFC); border: 1px solid var(--border, #E2E8F0);
+}
+[data-theme="dark"] .agv-proximo-item { background: #0F172A; border-color: #334155; }
+.agv-proximo-time { font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-bold); color: var(--text-primary); min-width: 36px; }
+.agv-proximo-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.agv-proximo-name { font-family: var(--font-ui); font-size: 12px; color: var(--text-secondary); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.agv-proximos-empty { font-family: var(--font-ui); font-size: 12px; color: var(--text-tertiary); font-style: italic; text-align: center; padding: 12px; }
+
+/* Sidebar footer */
+.agv-sb-footer { padding: 16px 20px; display: flex; flex-direction: column; gap: 4px; margin-top: auto; }
+.agv-sb-link {
+  display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px;
+  background: none; border: none; cursor: pointer;
+  font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-medium);
+  color: var(--text-tertiary); transition: background .15s, color .15s; text-align: left;
+}
+.agv-sb-link:hover { background: var(--bg-subtle); color: var(--text-secondary); }
+[data-theme="dark"] .agv-sb-link:hover { background: #334155; }
+
+/* ── Content área direita ── */
+.agv-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* Nav de data */
+.agv-date-nav {
+  display: flex; align-items: center; gap: 10px;
+  padding: 16px 24px 12px; flex-shrink: 0;
+}
+.agv-date-btn {
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1px solid var(--border, #E2E8F0); background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary); cursor: pointer; transition: background .15s;
+}
+.agv-date-btn:hover { background: var(--bg-subtle); }
+[data-theme="dark"] .agv-date-btn { background: #1E293B; border-color: #334155; }
+.agv-date-display {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--font-ui); font-size: 14px; font-weight: var(--fw-semibold);
+  color: var(--text-primary); padding: 0 10px;
+}
+.agv-today-btn {
+  height: 32px; padding: 0 14px; border-radius: 8px;
+  border: 1px solid var(--border, #E2E8F0); background: #fff;
+  font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-medium);
+  color: var(--text-secondary); cursor: pointer; transition: background .15s;
+  margin-left: 4px;
+}
+.agv-today-btn:hover { background: var(--bg-subtle); }
+[data-theme="dark"] .agv-today-btn { background: #1E293B; border-color: #334155; }
+
+/* Lista de agendamentos */
+.agv-list-area { flex: 1; overflow-y: auto; padding: 0 24px 24px; }
+.agv-list-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%; gap: 8px; color: var(--text-tertiary);
+}
+.agv-list-empty-icon {
+  width: 56px; height: 56px; border-radius: 14px;
+  background: var(--bg-subtle, #F1F5F9);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 4px;
+}
+.agv-list-empty-icon svg { width: 24px; height: 24px; }
+.agv-list-empty-title { font-family: var(--font-ui); font-size: 15px; font-weight: var(--fw-semibold); color: var(--text-primary); }
+.agv-list-empty-sub { font-family: var(--font-ui); font-size: 13px; color: var(--text-tertiary); }
+[data-theme="dark"] .agv-list-empty-icon { background: #334155; }
+
+/* Item da lista de agendamentos */
+.agv-appt-group-label {
+  font-family: var(--font-ui); font-size: 11px; font-weight: var(--fw-semibold);
+  color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .06em;
+  padding: 14px 0 6px;
+}
+.agv-appt-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; border-radius: 12px;
+  background: #fff; border: 1px solid var(--border, #E2E8F0);
+  margin-bottom: 8px; cursor: pointer; transition: box-shadow .15s, border-color .15s;
+}
+.agv-appt-item:hover { border-color: #CBD5E1; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+[data-theme="dark"] .agv-appt-item { background: #1E293B; border-color: #334155; }
+[data-theme="dark"] .agv-appt-item:hover { border-color: #475569; }
+
+.agv-appt-time { min-width: 50px; text-align: right; }
+.agv-appt-time-hr { font-family: var(--font-ui); font-size: 14px; font-weight: var(--fw-bold); color: var(--text-primary); }
+.agv-appt-time-dur { font-family: var(--font-ui); font-size: 11px; color: var(--text-tertiary); }
+.agv-appt-bar { width: 3px; height: 36px; border-radius: 99px; flex-shrink: 0; }
+.agv-appt-info { flex: 1; min-width: 0; }
+.agv-appt-name { font-family: var(--font-ui); font-size: 14px; font-weight: var(--fw-semibold); color: var(--text-primary); }
+.agv-appt-type { font-family: var(--font-ui); font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+.agv-appt-badge {
+  display: inline-flex; align-items: center; height: 22px; padding: 0 10px; border-radius: 99px;
+  font-family: var(--font-ui); font-size: 11px; font-weight: var(--fw-semibold); flex-shrink: 0;
+}
+.agv-badge-ok      { background: rgba(16,185,129,0.1);  color: #059669; }
+.agv-badge-wait    { background: rgba(59,130,246,0.1);  color: #2563EB; }
+.agv-badge-cancel  { background: rgba(239,68,68,0.1);   color: #DC2626; }
+.agv-badge-conf    { background: rgba(139,92,246,0.1);  color: #7C3AED; }
+[data-theme="dark"] .agv-badge-ok    { background: #064E3B; color: #34D399; }
+[data-theme="dark"] .agv-badge-wait  { background: #1E3A5F; color: #60A5FA; }
+[data-theme="dark"] .agv-badge-cancel{ background: #7F1D1D; color: #F87171; }
+.agv-appt-dots {
+  width: 28px; height: 28px; border-radius: 7px; border: none; background: none;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-tertiary); cursor: pointer; opacity: 0; transition: opacity .15s, background .12s;
+}
+.agv-appt-item:hover .agv-appt-dots { opacity: 1; }
+.agv-appt-dots:hover { background: var(--bg-subtle); color: var(--text-primary); }
+
 </style>
 </head>
 <body>
@@ -3048,7 +3517,32 @@ body.sb-collapsed .ncs-screen {
     <div class="ngl">Principal</div>
     <div class="ni a" data-tip="Visão geral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="ni-txt">Visão geral</span><span class="ndot"></span></div>
     <div class="ngl">Clínico</div>
-    <div class="ni" data-tip="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="ni-txt">Agenda</span><span class="nbadge">3</span></div>
+    <div class="ni ni-accordion" id="niAgenda" data-tip="Agenda" onclick="toggleAccordion('niAgenda')" style="justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="ni-txt">Agenda</span>
+        <span class="nbadge">3</span>
+      </div>
+      <svg class="ni-chevron ni-txt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="ni-sub" id="niAgendaSub">
+      <div class="ni-sub-item" onclick="event.stopPropagation();openAgendaView()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Visualizar Agenda</span>
+      </div>
+      <div class="ni-sub-item active" onclick="event.stopPropagation();openNovaConsulta()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="14"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
+        <span>Nova Consulta</span>
+      </div>
+      <div class="ni-sub-item" onclick="event.stopPropagation()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <span>Procedimento</span>
+      </div>
+      <div class="ni-sub-item" onclick="event.stopPropagation()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        <span>Telemedicina</span>
+      </div>
+    </div>
     <div class="ni" data-tip="Pacientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="ni-txt">Pacientes</span></div>
     <div class="ni" data-tip="Registros Clínicos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span class="ni-txt">Registros Clínicos</span></div>
     <div class="ni" data-tip="Fisioterapia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg><span class="ni-txt">Fisioterapia</span></div>
@@ -5483,6 +5977,301 @@ document.addEventListener('click', e => {
   }
 });
 
+
+// ── Sidebar Accordion ──
+function toggleAccordion(itemId) {
+  const item = document.getElementById(itemId);
+  const sub  = document.getElementById(itemId + 'Sub');
+  if (!item || !sub) return;
+
+  const isOpen = item.classList.contains('open');
+
+  // Fechar todos os outros acordeões
+  document.querySelectorAll('.ni-accordion.open').forEach(el => {
+    if (el.id !== itemId) {
+      el.classList.remove('open');
+      const s = document.getElementById(el.id + 'Sub');
+      if (s) s.classList.remove('open');
+    }
+  });
+
+  item.classList.toggle('open', !isOpen);
+  sub.classList.toggle('open', !isOpen);
+}
+
+// Abrir accordion da Agenda por padrão
+document.addEventListener('DOMContentLoaded', () => {
+  toggleAccordion('niAgenda');
+});
+// Fallback caso DOMContentLoaded já tenha disparado
+if (document.readyState !== 'loading') {
+  setTimeout(() => {
+    const agenda = document.getElementById('niAgenda');
+    if (agenda && !agenda.classList.contains('open')) toggleAccordion('niAgenda');
+  }, 50);
+}
+
+
+// ══════════════════════════════════════════════════════════
+// VISUALIZAR AGENDA
+// ══════════════════════════════════════════════════════════
+
+const AGV_MONTHS = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const AGV_MONTHS_SHORT = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const AGV_WEEKDAYS = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+// Pacientes mock para a agenda
+const AGV_APPOINTMENTS = [
+  { date:'2026-03-26', time:'08:00', dur:'30 min', name:'Maria Aparecida Santos', type:'Consulta de rotina · Hipertensão', status:'done',   color:'#10B981' },
+  { date:'2026-03-26', time:'08:30', dur:'45 min', name:'João Carlos Ferreira',   type:'Retorno · Diabetes tipo 2',        status:'done',   color:'#10B981' },
+  { date:'2026-03-26', time:'09:15', dur:'30 min', name:'Ana Paula Rodrigues',    type:'Consulta de rotina · Pré-natal',   status:'done',   color:'#10B981' },
+  { date:'2026-03-26', time:'10:00', dur:'30 min', name:'Carlos Eduardo Lima',    type:'Urgência · Dor torácica',          status:'cancel', color:'#EF4444' },
+  { date:'2026-03-26', time:'10:30', dur:'30 min', name:'Beatriz Santos Oliveira',type:'Consulta · Check-up',              status:'wait',   color:'#3B82F6' },
+  { date:'2026-03-26', time:'11:00', dur:'45 min', name:'Roberto Alves Mendes',   type:'Retorno · Hipertensão',            status:'conf',   color:'#8B5CF6' },
+  { date:'2026-03-26', time:'14:00', dur:'30 min', name:'Fernanda Costa Silva',   type:'Consulta · Rotina',                status:'wait',   color:'#3B82F6' },
+  { date:'2026-03-26', time:'14:30', dur:'45 min', name:'Marcos Vinícius Souza',  type:'Telemedicina · Acompanhamento',    status:'conf',   color:'#8B5CF6' },
+  { date:'2026-03-26', time:'15:15', dur:'30 min', name:'Lucia Aparecida Torres', type:'Retorno · Diabetes',               status:'wait',   color:'#3B82F6' },
+  { date:'2026-03-26', time:'16:00', dur:'30 min', name:'Pedro Henrique Dias',    type:'Consulta · Lombalgia',             status:'wait',   color:'#3B82F6' },
+  { date:'2026-03-26', time:'16:30', dur:'45 min', name:'Juliana Freitas Neto',   type:'Urgência · Febre alta',            status:'wait',   color:'#EF4444' },
+  { date:'2026-03-26', time:'17:15', dur:'30 min', name:'Antônio Carlos Ramos',   type:'Retorno · Pós-operatório',         status:'wait',   color:'#10B981' },
+];
+
+let agvCurrentDate = new Date(2026, 2, 26); // março 2026
+let agvCalYear  = 2026;
+let agvCalMonth = 2; // 0-indexed
+
+function openAgendaView() {
+  const screen = document.getElementById('agvScreen');
+  const sb = document.querySelector('.sb');
+  if (screen) {
+    screen.style.left = sb?.classList.contains('collapsed') ? '64px' : '268px';
+    screen.classList.add('open');
+  }
+  agvRenderCal();
+  agvRenderList();
+  agvRenderProximos();
+  agvUpdateSubtitle();
+}
+
+function closeAgendaView() {
+  const screen = document.getElementById('agvScreen');
+  if (screen) screen.classList.remove('open');
+}
+
+function agvUpdateSubtitle() {
+  const sub = document.getElementById('agvSubtitle');
+  if (!sub) return;
+  const days = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+  const d = agvCurrentDate;
+  sub.textContent = `Gerencie seus agendamentos · ${days[d.getDay()]}, ${d.getDate()} de ${AGV_MONTHS[d.getMonth()]}`;
+}
+
+// ── Mini calendário ──
+function agvRenderCal() {
+  const grid  = document.getElementById('agvCalGrid');
+  const label = document.getElementById('agvCalMonth');
+  if (!grid || !label) return;
+
+  label.textContent = `${AGV_MONTHS[agvCalMonth]} ${agvCalYear}`;
+  grid.innerHTML = '';
+
+  const firstDay = new Date(agvCalYear, agvCalMonth, 1).getDay();
+  const daysInMonth = new Date(agvCalYear, agvCalMonth + 1, 0).getDate();
+  const daysInPrev  = new Date(agvCalYear, agvCalMonth, 0).getDate();
+  const today = new Date(2026, 2, 26);
+
+  // Dias do mês anterior
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const d = document.createElement('div');
+    d.className = 'agv-cal-day other-month';
+    d.textContent = daysInPrev - i;
+    grid.appendChild(d);
+  }
+  // Dias do mês atual
+  for (let d = 1; d <= daysInMonth; d++) {
+    const el = document.createElement('div');
+    const thisDate = new Date(agvCalYear, agvCalMonth, d);
+    let cls = 'agv-cal-day';
+    if (thisDate.toDateString() === today.toDateString()) cls += ' today';
+    if (thisDate.toDateString() === agvCurrentDate.toDateString()) cls += ' selected';
+    // Has events
+    const dateStr = `${agvCalYear}-${String(agvCalMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    if (AGV_APPOINTMENTS.some(a => a.date === dateStr)) cls += ' has-events';
+    el.className = cls;
+    el.textContent = d;
+    el.addEventListener('click', () => {
+      agvCurrentDate = thisDate;
+      agvRenderCal();
+      agvRenderList();
+      agvRenderProximos();
+      agvUpdateDateLabel();
+      agvUpdateSubtitle();
+    });
+    grid.appendChild(el);
+  }
+  // Dias do próximo mês
+  const totalCells = firstDay + daysInMonth;
+  const remaining  = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+  for (let d = 1; d <= remaining; d++) {
+    const el = document.createElement('div');
+    el.className = 'agv-cal-day other-month';
+    el.textContent = d;
+    grid.appendChild(el);
+  }
+}
+
+function agvCalNav(dir) {
+  agvCalMonth += dir;
+  if (agvCalMonth > 11) { agvCalMonth = 0; agvCalYear++; }
+  if (agvCalMonth < 0)  { agvCalMonth = 11; agvCalYear--; }
+  agvRenderCal();
+}
+
+function agvUpdateDateLabel() {
+  const d = agvCurrentDate;
+  const label = document.getElementById('agvDateLabel');
+  const statsDate = document.getElementById('agvStatsDate');
+  if (label) label.textContent = `${d.getDate()} ${AGV_MONTHS_SHORT[d.getMonth()]} ${d.getFullYear()}`;
+  if (statsDate) statsDate.textContent = `${d.getDate()} de ${AGV_MONTHS[d.getMonth()]}`;
+}
+
+function agvDateNav(dir) {
+  agvCurrentDate.setDate(agvCurrentDate.getDate() + dir);
+  agvCalYear  = agvCurrentDate.getFullYear();
+  agvCalMonth = agvCurrentDate.getMonth();
+  agvRenderCal();
+  agvRenderList();
+  agvRenderProximos();
+  agvUpdateDateLabel();
+  agvUpdateSubtitle();
+}
+
+function agvGoToday() {
+  agvCurrentDate = new Date(2026, 2, 26);
+  agvCalYear = 2026; agvCalMonth = 2;
+  agvRenderCal();
+  agvRenderList();
+  agvRenderProximos();
+  agvUpdateDateLabel();
+  agvUpdateSubtitle();
+}
+
+// ── Lista de agendamentos ──
+function agvRenderList() {
+  const area = document.getElementById('agvListArea');
+  if (!area) return;
+
+  const d = agvCurrentDate;
+  const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const appts = AGV_APPOINTMENTS.filter(a => a.date === dateStr);
+
+  if (!appts.length) {
+    area.innerHTML = `
+      <div class="agv-list-empty">
+        <div class="agv-list-empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="agv-list-empty-title">Nenhum agendamento</div>
+        <div class="agv-list-empty-sub">Não há agendamentos para ${d.getDate()} de ${AGV_MONTHS[d.getMonth()]}</div>
+      </div>`;
+    return;
+  }
+
+  // Agrupar por período
+  const manha  = appts.filter(a => parseInt(a.time) < 12);
+  const tarde  = appts.filter(a => parseInt(a.time) >= 12);
+
+  area.innerHTML = '';
+
+  const statusMap = {
+    done:   { cls:'agv-badge-ok',     label:'Concluída'  },
+    wait:   { cls:'agv-badge-wait',   label:'Aguardando' },
+    cancel: { cls:'agv-badge-cancel', label:'Cancelada'  },
+    conf:   { cls:'agv-badge-conf',   label:'Confirmado' },
+  };
+
+  const renderGroup = (label, items) => {
+    if (!items.length) return;
+    const grp = document.createElement('div');
+    grp.className = 'agv-appt-group-label';
+    grp.textContent = label;
+    area.appendChild(grp);
+    items.forEach(a => {
+      const st = statusMap[a.status] || statusMap.wait;
+      const el = document.createElement('div');
+      el.className = 'agv-appt-item';
+      el.innerHTML = `
+        <div class="agv-appt-time">
+          <div class="agv-appt-time-hr">${a.time}</div>
+          <div class="agv-appt-time-dur">${a.dur}</div>
+        </div>
+        <div class="agv-appt-bar" style="background:${a.color};"></div>
+        <div class="agv-appt-info">
+          <div class="agv-appt-name">${a.name}</div>
+          <div class="agv-appt-type">${a.type}</div>
+        </div>
+        <span class="agv-appt-badge ${st.cls}">${st.label}</span>
+        <button class="agv-appt-dots" title="Opções" onclick="event.stopPropagation();agendaOpenMenu(event,'${a.name.replace(/'/g,"\'")}','${a.time}','${a.type.replace(/'/g,"\'")}','${st.label}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+        </button>`;
+      area.appendChild(el);
+    });
+  };
+
+  renderGroup('Manhã', manha);
+  renderGroup('Tarde', tarde);
+
+  // Atualizar stats
+  const total = appts.length;
+  const conf  = appts.filter(a => a.status === 'done' || a.status === 'conf').length;
+  const statTotal = document.getElementById('agvStatTotal');
+  const statConf  = document.getElementById('agvStatConf');
+  if (statTotal) statTotal.textContent = total;
+  if (statConf)  statConf.textContent  = conf;
+}
+
+// ── Próximos horários ──
+function agvRenderProximos() {
+  const list = document.getElementById('agvProximosList');
+  if (!list) return;
+  const d = agvCurrentDate;
+  const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const upcoming = AGV_APPOINTMENTS
+    .filter(a => a.date === dateStr && a.status === 'wait')
+    .slice(0, 4);
+
+  if (!upcoming.length) {
+    list.innerHTML = '<div class="agv-proximos-empty">Nenhum agendamento para este dia</div>';
+    return;
+  }
+  list.innerHTML = '';
+  upcoming.forEach(a => {
+    const el = document.createElement('div');
+    el.className = 'agv-proximo-item';
+    el.innerHTML = `
+      <span class="agv-proximo-time">${a.time}</span>
+      <span class="agv-proximo-dot" style="background:${a.color};"></span>
+      <span class="agv-proximo-name">${a.name}</span>`;
+    list.appendChild(el);
+  });
+}
+
+function agvSetView(view, btn) {
+  document.querySelectorAll('.agv-view-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// Sincronizar com o toggleSidebar
+const _origToggle = toggleSidebar;
+toggleSidebar = function() {
+  _origToggle();
+  const sb = document.querySelector('.sb');
+  const agvScreen = document.getElementById('agvScreen');
+  if (agvScreen?.classList.contains('open')) {
+    agvScreen.style.left = sb?.classList.contains('collapsed') ? '64px' : '268px';
+  }
+};
+
 </script>
 
 <!-- ══ NOVA CONSULTA — STEPPER FLOW ══ -->
@@ -6480,6 +7269,184 @@ document.addEventListener('click', e => {
       </button>
     </div>
   </div>
+</div>
+
+
+<!-- ══ VISUALIZAR AGENDA ══ -->
+<div class="agv-screen" id="agvScreen">
+
+  <!-- Topbar -->
+  <header class="agv-topbar">
+    <div class="agv-breadcrumb">
+      <button class="agv-breadcrumb-link" onclick="closeAgendaView()">Dashboard</button>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="9 18 15 12 9 6"/></svg>
+      <span>Agenda</span>
+    </div>
+    <div class="agv-topbar-title-row">
+      <div>
+        <h1 class="agv-page-title">Agenda</h1>
+        <p class="agv-page-sub" id="agvSubtitle">Gerencie seus agendamentos</p>
+      </div>
+      <div class="agv-topbar-actions">
+        <button class="agv-btn-ghost" title="Buscar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+        <button class="agv-btn-ghost" title="Notificações">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
+        <div class="agv-divider-v"></div>
+        <button class="agv-btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Sem Sync
+        </button>
+        <button class="agv-btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+          Atualizar
+        </button>
+        <button class="agv-btn-primary" onclick="openNovaConsulta();closeAgendaView()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Novo Agendamento
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Filter chips + view controls -->
+  <div class="agv-filterbar">
+    <div class="agv-filter-chips">
+      <button class="agv-fchip agv-fchip-blue active">
+        <span class="agv-fchip-dot" style="background:#3B82F6;"></span>
+        Consulta
+      </button>
+      <button class="agv-fchip agv-fchip-green">
+        <span class="agv-fchip-dot" style="background:#10B981;"></span>
+        Retorno
+      </button>
+      <button class="agv-fchip agv-fchip-red">
+        <span class="agv-fchip-dot" style="background:#EF4444;"></span>
+        Urgência
+      </button>
+      <button class="agv-fchip agv-fchip-purple">
+        <span class="agv-fchip-dot" style="background:#8B5CF6;"></span>
+        Telemedicina
+      </button>
+      <button class="agv-fchip-more">+4 mais</button>
+    </div>
+    <div class="agv-view-controls">
+      <div class="agv-view-tabs">
+        <button class="agv-view-tab" onclick="agvSetView('dia',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Dia
+        </button>
+        <button class="agv-view-tab" onclick="agvSetView('semana',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Semana
+        </button>
+        <button class="agv-view-tab" onclick="agvSetView('mes',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Mês
+        </button>
+        <button class="agv-view-tab active" onclick="agvSetView('lista',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Lista
+        </button>
+      </div>
+      <button class="agv-btn-ghost agv-btn-filter">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Filtros
+      </button>
+      <div class="agv-search-inline">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" placeholder="Buscar... (/)" class="agv-search-input"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body: 2 colunas -->
+  <div class="agv-body">
+
+    <!-- Coluna esquerda: mini calendário + stats -->
+    <div class="agv-sidebar">
+
+      <!-- Mini calendário -->
+      <div class="agv-cal-card">
+        <div class="agv-cal-header">
+          <span class="agv-cal-month" id="agvCalMonth">março 2026</span>
+          <div class="agv-cal-nav">
+            <button onclick="agvCalNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="15 18 9 12 15 6"/></svg></button>
+            <button onclick="agvCalNav(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="9 18 15 12 9 6"/></svg></button>
+          </div>
+        </div>
+        <div class="agv-cal-weekdays">
+          <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+        </div>
+        <div class="agv-cal-grid" id="agvCalGrid"></div>
+      </div>
+
+      <!-- Stats do dia -->
+      <div class="agv-stats-card">
+        <div class="agv-stats-header">
+          <span class="agv-stats-date" id="agvStatsDate">26 de março</span>
+          <span class="agv-stats-today">Hoje</span>
+        </div>
+        <div class="agv-stats-row">
+          <div class="agv-stat-box">
+            <div class="agv-stat-num" id="agvStatTotal">12</div>
+            <div class="agv-stat-lbl">Total</div>
+          </div>
+          <div class="agv-stat-box agv-stat-box-green">
+            <div class="agv-stat-num agv-stat-green" id="agvStatConf">8</div>
+            <div class="agv-stat-lbl">Confirmados</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Próximos horários -->
+      <div class="agv-proximos-card">
+        <div class="agv-proximos-header">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Próximos Horários
+        </div>
+        <div id="agvProximosList" class="agv-proximos-list"></div>
+      </div>
+
+      <!-- Footer links -->
+      <div class="agv-sb-footer">
+        <button class="agv-sb-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          Configurar Agenda
+        </button>
+        <button class="agv-sb-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Sincronizar Google Calendar
+        </button>
+      </div>
+    </div>
+
+    <!-- Coluna direita: lista de agendamentos -->
+    <div class="agv-content">
+
+      <!-- Nav de data -->
+      <div class="agv-date-nav">
+        <button class="agv-date-btn" onclick="agvDateNav(-1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="agv-date-display">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span id="agvDateLabel">26 Mar 2026</span>
+        </div>
+        <button class="agv-date-btn" onclick="agvDateNav(1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <button class="agv-today-btn" onclick="agvGoToday()">Hoje</button>
+      </div>
+
+      <!-- Lista de agendamentos -->
+      <div class="agv-list-area" id="agvListArea"></div>
+
+    </div>
+  </div>
+
 </div>
 
 </body>
