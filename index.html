@@ -405,7 +405,7 @@ body{
 
 /* CONSULT LIST */
 .clist{display:flex;flex-direction:column;}
-.ci{display:flex;align-items:center;gap:12px;padding:12px 22px;border-bottom:1px solid rgba(0,0,0,0.04);cursor:pointer;transition:background .15s;}
+.ci{display:flex;align-items:center;gap:12px;padding:12px 22px;border-bottom:1px solid rgba(0,0,0,0.04);cursor:default;transition:background .15s;position:relative;}
 .ci:last-child{border-bottom:none;}
 .ci:hover{background:#F9F9F9;}
 .ctime .hr{font-family:var(--font-ui);font-size:var(--text-sm);font-weight:var(--fw-semibold);}
@@ -1036,8 +1036,9 @@ body.sb-collapsed .ncs-screen {
 .ncs-soap-tab:last-child { border-right: none; }
 .ncs-soap-tab:hover { background: var(--bg-subtle, #F1F5F9); color: var(--text-secondary, #475569); }
 .ncs-soap-tab.active {
-  background: var(--text-primary, #0F172A);
+  background: var(--brand, #10B981);
   color: #fff;
+  border: 1.5px solid var(--brand, #10B981);
   font-weight: var(--fw-semibold, 600);
 }
 
@@ -1369,13 +1370,7 @@ body.sb-collapsed .ncs-screen {
   padding: 16px;
 }
 
-/* HMP tab aba ativa: borda brand */
-#ncsHmpTabs .ncs-soap-tab.active {
-  background: transparent;
-  color: var(--brand, #10B981);
-  border: 1.5px solid var(--brand, #10B981);
-  font-weight: 600;
-}
+/* HMP tab: herda .ncs-soap-tab.active (verde por padrão) */
 
 
 /* ── 3-column layout adjustments ── */
@@ -1457,6 +1452,1586 @@ body.sb-collapsed .ncs-screen {
   box-sizing: border-box;
 }
 
+
+/* ══════════════════════════════════════════
+   DIAGNÓSTICO — Pane 5
+   ══════════════════════════════════════════ */
+
+.ncs-diag-section {
+  margin-bottom: 24px;
+}
+
+/* Label topo (CIDs frequentes) */
+.ncs-diag-label {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: var(--fw-medium);
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+}
+
+/* Chips frequentes */
+.ncs-diag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ncs-diag-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 99px;
+  border: 1px solid var(--border, #E2E8F0);
+  background: #fff;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+  white-space: nowrap;
+}
+.ncs-diag-chip:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+  background: rgba(16,185,129,0.04);
+}
+.ncs-diag-chip.selected {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+[data-theme="dark"] .ncs-diag-chip {
+  background: #1E293B;
+  border-color: #334155;
+  color: #94A3B8;
+}
+[data-theme="dark"] .ncs-diag-chip:hover {
+  border-color: #34D399;
+  color: #34D399;
+}
+
+/* Titles */
+.ncs-diag-title {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+.ncs-diag-sublabel {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+}
+
+/* Select wrapper — posição relativa para o picker */
+.ncs-diag-select-wrap {
+  position: relative;
+}
+
+/* Botão que abre o picker */
+.ncs-diag-select-btn {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border, #E2E8F0);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: border-color .15s, box-shadow .15s;
+  gap: 10px;
+}
+.ncs-diag-select-btn:hover { border-color: #CBD5E1; }
+.ncs-diag-select-btn.open {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
+}
+[data-theme="dark"] .ncs-diag-select-btn {
+  background: #0F172A;
+  border-color: #475569;
+}
+[data-theme="dark"] .ncs-diag-select-btn.open {
+  border-color: #34D399;
+  box-shadow: 0 0 0 3px rgba(52,211,153,0.12);
+}
+
+.ncs-diag-select-placeholder {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ncs-diag-select-value {
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ncs-diag-chevron {
+  width: 16px;
+  height: 16px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  transition: transform .2s;
+}
+.ncs-diag-select-btn.open .ncs-diag-chevron {
+  transform: rotate(180deg);
+}
+
+/* Picker dropdown */
+.ncs-diag-picker {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  background: #fff;
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  z-index: 200;
+  display: none;
+  overflow: hidden;
+  max-height: 320px;
+}
+.ncs-diag-picker.open { display: flex; flex-direction: column; }
+[data-theme="dark"] .ncs-diag-picker {
+  background: #1E293B;
+  border-color: #334155;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+}
+
+/* Search row dentro do picker */
+.ncs-diag-picker-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border, #E2E8F0);
+  flex-shrink: 0;
+}
+[data-theme="dark"] .ncs-diag-picker-search { border-color: #334155; }
+.ncs-diag-picker-search svg { color: var(--text-tertiary); flex-shrink: 0; }
+.ncs-diag-picker-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--text-primary);
+  background: transparent;
+}
+.ncs-diag-picker-input::placeholder { color: var(--text-tertiary); }
+
+/* Lista de resultados */
+.ncs-diag-picker-list {
+  overflow-y: auto;
+  flex: 1;
+}
+.ncs-diag-picker-group-label {
+  padding: 8px 16px 4px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.ncs-diag-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background .12s;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.ncs-diag-picker-item:last-child { border-bottom: none; }
+.ncs-diag-picker-item:hover { background: var(--bg-subtle, #F8FAFC); }
+[data-theme="dark"] .ncs-diag-picker-item:hover { background: #334155; }
+.ncs-diag-picker-item.selected { background: rgba(16,185,129,0.06); }
+
+/* Radio circle */
+.ncs-diag-radio {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--border-strong, #CBD5E1);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s;
+}
+.ncs-diag-picker-item.selected .ncs-diag-radio {
+  border-color: var(--brand);
+  background: var(--brand);
+}
+.ncs-diag-picker-item.selected .ncs-diag-radio::after {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* CID code badge */
+.ncs-diag-code {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: var(--bg-subtle, #F1F5F9);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: var(--fw-bold);
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  min-width: 46px;
+  justify-content: center;
+}
+[data-theme="dark"] .ncs-diag-code { background: #334155; color: #94A3B8; }
+
+.ncs-diag-item-info { flex: 1; min-width: 0; }
+.ncs-diag-item-name {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ncs-diag-item-cat {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 1px;
+}
+
+/* Tag do CID selecionado (principal) */
+.ncs-diag-selected-tag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(16,185,129,0.06);
+  border: 1px solid rgba(16,185,129,0.2);
+}
+[data-theme="dark"] .ncs-diag-selected-tag { background: #064E3B; border-color: rgba(52,211,153,0.2); }
+.ncs-diag-tag-code {
+  display: inline-flex;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: var(--brand);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  align-items: center;
+  flex-shrink: 0;
+}
+.ncs-diag-tag-name {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  color: var(--ok-text, #15803D);
+  flex: 1;
+}
+[data-theme="dark"] .ncs-diag-tag-name { color: #34D399; }
+.ncs-diag-tag-del {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-tertiary); padding: 2px;
+  border-radius: 4px; transition: background .12s;
+}
+.ncs-diag-tag-del:hover { background: rgba(0,0,0,0.06); }
+.ncs-diag-tag-del svg { width: 13px; height: 13px; display: block; }
+
+/* Secundários: lista de tags */
+.ncs-diag-sec-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+.ncs-diag-sec-tag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  background: var(--bg-subtle, #F8FAFC);
+  border: 1px solid var(--border, #E2E8F0);
+}
+[data-theme="dark"] .ncs-diag-sec-tag { background: #1E293B; border-color: #334155; }
+.ncs-diag-sec-tag-code {
+  display: inline-flex;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 5px;
+  background: var(--bg-subtle, #E2E8F0);
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  align-items: center;
+  flex-shrink: 0;
+}
+[data-theme="dark"] .ncs-diag-sec-tag-code { background: #334155; color: #94A3B8; }
+.ncs-diag-sec-tag-name {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+
+/* ══════════════════════════════════════════
+   RECEITA MÉDICA — Pane 6
+   ══════════════════════════════════════════ */
+
+/* Form card com borda dashed */
+.rx-form-card {
+  background: #fff;
+  border: 1.5px dashed var(--border, #E2E8F0);
+  border-radius: 16px;
+  padding: 20px 24px 24px;
+  margin-bottom: 24px;
+}
+[data-theme="dark"] .rx-form-card { background: #1E293B; border-color: #334155; }
+
+.rx-form-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border, #E2E8F0);
+}
+[data-theme="dark"] .rx-form-header { border-color: #334155; }
+
+/* Labels */
+.rx-label {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-secondary);
+  margin-bottom: 3px;
+}
+.rx-req { color: var(--err-text, #DC2626); }
+.rx-sublabel {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+}
+.rx-field { display: flex; flex-direction: column; gap: 0; margin-bottom: 16px; }
+
+/* Input padrão */
+.rx-input {
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border, #E2E8F0);
+  background: #fff;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+  width: 100%;
+}
+.rx-input::placeholder { color: var(--text-tertiary); font-size: 13px; }
+.rx-input:hover { border-color: #CBD5E1; }
+.rx-input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(16,185,129,0.12); }
+[data-theme="dark"] .rx-input { background: #0F172A; border-color: #475569; color: #F1F5F9; }
+
+/* Campo busca medicamento */
+.rx-med-search-wrap { position: relative; }
+.rx-med-search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border, #E2E8F0);
+  background: #fff;
+  transition: border-color .15s, box-shadow .15s;
+}
+.rx-med-search-row:focus-within {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
+}
+[data-theme="dark"] .rx-med-search-row { background: #0F172A; border-color: #475569; }
+.rx-search-ico { width: 15px; height: 15px; color: var(--text-tertiary); flex-shrink: 0; }
+.rx-med-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--text-primary);
+  background: transparent;
+}
+.rx-med-input::placeholder { color: var(--text-tertiary); font-size: 13px; }
+
+/* Badge RENAME */
+.rx-rename-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: var(--bg-subtle, #F1F5F9);
+  border: 1px solid var(--border, #E2E8F0);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  color: var(--text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background .15s;
+}
+.rx-rename-badge:hover { background: var(--border); }
+
+.rx-med-clear {
+  width: 22px; height: 22px;
+  background: none; border: none; cursor: pointer;
+  color: var(--text-tertiary); padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; transition: background .12s;
+  flex-shrink: 0;
+}
+.rx-med-clear:hover { background: var(--bg-subtle); color: var(--text-primary); }
+.rx-med-clear svg { width: 14px; height: 14px; }
+
+/* Tags do med selecionado */
+.rx-med-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.rx-med-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 99px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: var(--fw-medium);
+  cursor: default;
+}
+.rx-med-tag-dose { background: var(--brand); color: #fff; }
+.rx-med-tag-tipo { background: var(--bg-subtle, #F1F5F9); color: var(--text-secondary); border: 1px solid var(--border); }
+[data-theme="dark"] .rx-med-tag-tipo { background: #334155; border-color: #475569; color: #94A3B8; }
+
+/* Dropdown medicamentos */
+.rx-med-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  background: #fff;
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  z-index: 200;
+  display: none;
+  overflow: hidden;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.rx-med-dropdown.open { display: block; }
+[data-theme="dark"] .rx-med-dropdown { background: #1E293B; border-color: #334155; box-shadow: 0 8px 32px rgba(0,0,0,0.45); }
+
+.rx-med-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  transition: background .12s;
+}
+.rx-med-item:last-child { border-bottom: none; }
+.rx-med-item:hover { background: var(--bg-subtle, #F8FAFC); }
+[data-theme="dark"] .rx-med-item:hover { background: #334155; }
+
+.rx-med-item-ico {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--bg-subtle, #F1F5F9);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+}
+.rx-med-item-ico svg { width: 14px; height: 14px; }
+[data-theme="dark"] .rx-med-item-ico { background: #334155; }
+
+.rx-med-item-body { flex: 1; min-width: 0; }
+.rx-med-item-name {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.rx-med-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  line-height: 1;
+}
+.rx-med-badge-dose  { background: var(--brand); color: #fff; }
+.rx-med-badge-list  { background: #10B981; color: #fff; }
+.rx-med-badge-lista { background: #EF4444; color: #fff; }
+.rx-med-badge-cmed  { background: var(--bg-subtle, #F1F5F9); color: var(--text-secondary); border: 1px solid var(--border); font-weight: 500; }
+.rx-med-badge-farmacia { background: rgba(16,185,129,0.12); color: var(--brand); border: 1px solid rgba(16,185,129,0.3); }
+[data-theme="dark"] .rx-med-badge-cmed { background: #334155; border-color: #475569; }
+
+.rx-med-item-sub {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.rx-med-item-price { color: var(--text-secondary); font-weight: 500; }
+
+.rx-med-item-rename {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: var(--bg-subtle, #F1F5F9);
+  border: 1px solid var(--border);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  align-self: center;
+}
+[data-theme="dark"] .rx-med-item-rename { background: #334155; border-color: #475569; }
+
+/* Row 3 colunas */
+.rx-row3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+/* Chips pequenos */
+.rx-chips-sm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.rx-chip-sm {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 11px;
+  border-radius: 99px;
+  border: 1px solid var(--border, #E2E8F0);
+  background: #fff;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.rx-chip-sm:hover { border-color: var(--brand); color: var(--brand); background: rgba(16,185,129,0.04); }
+.rx-chip-sm.selected { background: var(--brand); border-color: var(--brand); color: #fff; }
+[data-theme="dark"] .rx-chip-sm { background: #1E293B; border-color: #334155; color: #94A3B8; }
+[data-theme="dark"] .rx-chip-sm:hover { border-color: #34D399; color: #34D399; }
+
+/* Botão adicionar medicamento */
+.rx-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 10px;
+  background: #0F172A;
+  color: #fff;
+  border: none;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+  transition: background .15s, transform .12s;
+  margin-top: 16px;
+}
+.rx-add-btn svg { width: 14px; height: 14px; }
+.rx-add-btn:hover { background: #1E293B; }
+.rx-add-btn:active { transform: scale(.98); }
+[data-theme="dark"] .rx-add-btn { background: #334155; }
+[data-theme="dark"] .rx-add-btn:hover { background: #475569; }
+
+/* Lista de prescritos */
+.rx-list-section { display: flex; flex-direction: column; gap: 0; }
+.rx-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.rx-list-title {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.rx-print-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #E2E8F0);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background .15s;
+}
+.rx-print-btn:hover { background: var(--bg-subtle); }
+[data-theme="dark"] .rx-print-btn { border-color: #334155; color: #94A3B8; }
+
+.rx-list { display: flex; flex-direction: column; gap: 8px; }
+
+/* Item prescrito */
+.rx-prescribed-item {
+  background: #fff;
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 12px;
+  padding: 14px 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+[data-theme="dark"] .rx-prescribed-item { background: #1E293B; border-color: #334155; }
+.rx-pi-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rx-pi-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #0F172A;
+  flex-shrink: 0;
+}
+[data-theme="dark"] .rx-pi-dot { background: #94A3B8; }
+.rx-pi-name {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.rx-pi-details {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  padding-left: 18px;
+}
+.rx-pi-instr {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-style: italic;
+  padding-left: 18px;
+}
+.rx-pi-del {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: none; border: none; cursor: pointer;
+  color: var(--err-text, #DC2626);
+  padding: 3px; border-radius: 4px;
+  transition: background .12s;
+  opacity: .6;
+}
+.rx-pi-del:hover { opacity: 1; background: rgba(220,38,38,0.08); }
+.rx-pi-del svg { width: 13px; height: 13px; display: block; }
+
+/* Empty state */
+.rx-empty { display: flex; flex-direction: column; align-items: stretch; text-align: center; padding: 4px 0 8px; width: 100%; }
+.rx-empty-title { font-family: var(--font-ui); font-size: 15px; font-weight: var(--fw-semibold); color: var(--text-primary); margin-bottom: 4px; }
+.rx-empty-sub { font-family: var(--font-ui); font-size: 13px; color: var(--text-tertiary); }
+
+
+.rx-empty-add-btn {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 20px; width: 100%; height: 48px;
+  border-radius: 12px; border: 1.5px dashed var(--border-strong, #CBD5E1);
+  background: transparent; font-family: var(--font-ui); font-size: 14px;
+  font-weight: var(--fw-medium); color: var(--text-secondary);
+  cursor: pointer; justify-content: center; transition: border-color .15s, color .15s, background .15s;
+}
+.rx-empty-add-btn svg { width: 14px; height: 14px; }
+.rx-empty-add-btn:hover { border-color: var(--brand); color: var(--brand); background: rgba(16,185,129,0.03); }
+[data-theme="dark"] .rx-empty-add-btn { border-color: #475569; color: #94A3B8; }
+[data-theme="dark"] .rx-empty-add-btn:hover { border-color: #34D399; color: #34D399; }
+.rx-add-another-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  width: 100%; height: 40px; border-radius: 10px; margin-top: 8px;
+  border: 1.5px dashed var(--border-strong, #CBD5E1); background: transparent;
+  cursor: pointer; font-family: var(--font-ui); font-size: 13px;
+  font-weight: var(--fw-medium); color: var(--text-tertiary);
+  justify-content: center; transition: border-color .15s, color .15s;
+}
+.rx-add-another-btn:hover { border-color: var(--brand); color: var(--brand); }
+[data-theme="dark"] .rx-add-another-btn { border-color: #475569; color: #64748B; }
+[data-theme="dark"] .rx-add-another-btn:hover { border-color: #34D399; color: #34D399; }
+
+
+/* ── Select de sugestões rápidas ── */
+.rx-select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 38px;
+  padding: 0 36px 0 12px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #E2E8F0);
+  background: var(--bg-subtle, #F8FAFC);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: var(--fw-medium);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.rx-select:hover { border-color: #CBD5E1; color: var(--text-secondary); }
+.rx-select:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(16,185,129,0.1); color: var(--text-primary); }
+[data-theme="dark"] .rx-select {
+  background-color: #1E293B;
+  border-color: #334155;
+  color: #64748B;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+
+
+/* ── Autocomplete inline dropdown ── */
+.rx-ac-wrap {
+  position: relative;
+}
+.rx-ac-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  background: #fff;
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+  z-index: 300;
+  overflow: hidden;
+  padding: 4px 0;
+}
+.rx-ac-dropdown.open { display: block; }
+[data-theme="dark"] .rx-ac-dropdown {
+  background: #1E293B;
+  border-color: #334155;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+.rx-ac-label {
+  padding: 6px 12px 4px;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.rx-ac-item {
+  padding: 8px 14px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background .12s, color .12s;
+}
+.rx-ac-item:hover {
+  background: var(--bg-subtle, #F8FAFC);
+  color: var(--brand);
+}
+.rx-ac-item.hidden { display: none; }
+[data-theme="dark"] .rx-ac-item { color: #94A3B8; }
+[data-theme="dark"] .rx-ac-item:hover { background: #334155; color: #34D399; }
+
+
+/* ══════════════════════════════════════
+   PANE 1 — Busca de Paciente melhorada
+   ══════════════════════════════════════ */
+
+.p1-search-wrap { position: relative; }
+
+.p1-search-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border, #E2E8F0);
+  background: #fff;
+  transition: border-color .15s, box-shadow .15s;
+}
+.p1-search-row:focus-within {
+  border-color: var(--brand, #10B981);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
+}
+[data-theme="dark"] .p1-search-row { background: #0F172A; border-color: #475569; }
+[data-theme="dark"] .p1-search-row:focus-within { border-color: #34D399; box-shadow: 0 0 0 3px rgba(52,211,153,0.12); }
+
+.p1-search-ico { width: 16px; height: 16px; color: var(--text-tertiary); flex-shrink: 0; }
+.p1-search-input {
+  flex: 1; border: none; outline: none;
+  font-family: var(--font-ui); font-size: 14px; color: var(--text-primary); background: transparent;
+}
+.p1-search-input::placeholder { color: var(--text-tertiary); font-size: 13px; }
+
+.p1-clear-btn {
+  width: 24px; height: 24px; background: none; border: none; cursor: pointer;
+  color: var(--text-tertiary); padding: 0; border-radius: 6px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; transition: background .12s;
+}
+.p1-clear-btn:hover { background: var(--bg-subtle); color: var(--text-primary); }
+.p1-clear-btn svg { width: 13px; height: 13px; }
+
+/* Dropdown */
+.p1-dropdown {
+  position: absolute;
+  top: calc(100% + 6px); left: 0; right: 0;
+  background: #fff;
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  z-index: 200; display: none; overflow: hidden;
+  max-height: 320px; overflow-y: auto;
+}
+.p1-dropdown.open { display: block; }
+[data-theme="dark"] .p1-dropdown { background: #1E293B; border-color: #334155; box-shadow: 0 8px 32px rgba(0,0,0,0.45); }
+
+.p1-drop-header {
+  padding: 10px 16px 6px;
+  font-family: var(--font-ui); font-size: 10px; font-weight: var(--fw-semibold);
+  color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .08em;
+  border-bottom: 1px solid var(--border, #E2E8F0);
+}
+[data-theme="dark"] .p1-drop-header { border-color: #334155; }
+
+/* Item de resultado */
+.p1-result-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; cursor: pointer; transition: background .12s;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.p1-result-item:last-child { border-bottom: none; }
+.p1-result-item:hover { background: var(--bg-subtle, #F8FAFC); }
+[data-theme="dark"] .p1-result-item:hover { background: #334155; }
+
+.p1-result-av {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--badge-bg, #D1FAE5); color: var(--badge-text, #047857);
+  font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-bold);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+[data-theme="dark"] .p1-result-av { background: #064E3B; color: #34D399; }
+
+.p1-result-body { flex: 1; min-width: 0; }
+.p1-result-name {
+  font-family: var(--font-ui); font-size: 14px; font-weight: var(--fw-semibold);
+  color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.p1-result-info {
+  font-family: var(--font-ui); font-size: 12px; color: var(--text-tertiary); margin-top: 2px;
+}
+.p1-result-arrow { color: var(--text-tertiary); flex-shrink: 0; }
+.p1-result-arrow svg { width: 14px; height: 14px; display: block; }
+
+/* Empty / not found */
+.p1-not-found {
+  padding: 16px;
+  text-align: center;
+}
+.p1-not-found-text {
+  font-family: var(--font-ui); font-size: 13px; color: var(--text-tertiary); margin-bottom: 12px;
+}
+.p1-create-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  height: 38px; padding: 0 18px; border-radius: 9px;
+  border: 1.5px dashed var(--brand, #10B981);
+  background: rgba(16,185,129,0.04);
+  font-family: var(--font-ui); font-size: 13px; font-weight: var(--fw-semibold);
+  color: var(--brand, #10B981); cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.p1-create-btn:hover { background: rgba(16,185,129,0.10); }
+.p1-create-btn svg { width: 13px; height: 13px; }
+[data-theme="dark"] .p1-create-btn { border-color: #34D399; color: #34D399; background: rgba(52,211,153,0.06); }
+
+/* Botão "Cadastrar novo paciente" centralizado */
+.p1-cadastrar-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  height: 36px; padding: 0 16px; border-radius: 9px;
+  background: none; border: none; cursor: pointer;
+  font-family: var(--font-ui); font-size: 13px; font-weight: var(--fw-medium);
+  color: var(--text-tertiary); transition: color .15s, background .15s;
+  border: 1px solid var(--border, #E2E8F0);
+}
+.p1-cadastrar-btn:hover { color: var(--brand); border-color: var(--brand); background: rgba(16,185,129,0.04); }
+[data-theme="dark"] .p1-cadastrar-btn { border-color: #334155; color: #64748B; }
+[data-theme="dark"] .p1-cadastrar-btn:hover { border-color: #34D399; color: #34D399; }
+
+
+/* ══════════════════════════════════════════
+   EXAMES — Pane 7
+   ══════════════════════════════════════════ */
+
+.ex-row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Urgência badge no item da lista */
+.ex-urgencia-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 5px;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  flex-shrink: 0;
+}
+.ex-urgencia-rotina    { background: var(--bg-subtle,#F1F5F9); color: var(--text-secondary); }
+.ex-urgencia-urgente   { background: #FEF3C7; color: #D97706; }
+.ex-urgencia-emergencia{ background: #FEE2E2; color: #DC2626; }
+[data-theme="dark"] .ex-urgencia-rotina { background: #334155; color: #94A3B8; }
+[data-theme="dark"] .ex-urgencia-urgente { background: #92400E; color: #FBBF24; }
+[data-theme="dark"] .ex-urgencia-emergencia { background: #7F1D1D; color: #F87171; }
+
+.ex-tipo-badge {
+  display: inline-flex; align-items: center;
+  height: 20px; padding: 0 8px; border-radius: 5px;
+  font-family: var(--font-ui); font-size: 10px; font-weight: var(--fw-medium);
+  background: var(--bg-subtle,#F1F5F9); color: var(--text-tertiary);
+}
+[data-theme="dark"] .ex-tipo-badge { background: #334155; color: #64748B; }
+
+/* Seção Imagens Médicas */
+.ex-images-section {
+  margin-top: 24px;
+  border: 1px solid var(--border,#E2E8F0);
+  border-radius: 14px;
+  overflow: hidden;
+}
+[data-theme="dark"] .ex-images-section { border-color: #334155; }
+
+.ex-images-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--bg-subtle,#F8FAFC);
+  border-bottom: 1px solid var(--border,#E2E8F0);
+}
+[data-theme="dark"] .ex-images-header { background: #1E293B; border-color: #334155; }
+
+.ex-images-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--text-secondary);
+}
+.ex-images-title {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.ex-images-sub {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+.ex-register-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 14px; border-radius: 8px;
+  border: 1px solid var(--border,#E2E8F0); background: #fff;
+  font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-medium);
+  color: var(--text-secondary); cursor: pointer; transition: background .15s; white-space: nowrap;
+  flex-shrink: 0;
+}
+.ex-register-btn:hover { background: var(--bg-subtle); }
+[data-theme="dark"] .ex-register-btn { background: #1E293B; border-color: #334155; color: #94A3B8; }
+[data-theme="dark"] .ex-register-btn:hover { background: #334155; }
+
+.ex-images-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 32px 20px; gap: 4px;
+  color: var(--text-tertiary);
+}
+.ex-images-empty svg { opacity: .3; margin-bottom: 6px; }
+.ex-images-empty-title {
+  font-family: var(--font-ui); font-size: 13px; color: var(--text-tertiary);
+}
+
+
+/* ══════════════════════════════════════════
+   EXAMES — Pane 7
+   ══════════════════════════════════════════ */
+
+.ex-row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Urgência badge no item da lista */
+.ex-urgencia-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 5px;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  flex-shrink: 0;
+}
+.ex-urgencia-rotina    { background: var(--bg-subtle,#F1F5F9); color: var(--text-secondary); }
+.ex-urgencia-urgente   { background: #FEF3C7; color: #D97706; }
+.ex-urgencia-emergencia{ background: #FEE2E2; color: #DC2626; }
+[data-theme="dark"] .ex-urgencia-rotina { background: #334155; color: #94A3B8; }
+[data-theme="dark"] .ex-urgencia-urgente { background: #92400E; color: #FBBF24; }
+[data-theme="dark"] .ex-urgencia-emergencia { background: #7F1D1D; color: #F87171; }
+
+.ex-tipo-badge {
+  display: inline-flex; align-items: center;
+  height: 20px; padding: 0 8px; border-radius: 5px;
+  font-family: var(--font-ui); font-size: 10px; font-weight: var(--fw-medium);
+  background: var(--bg-subtle,#F1F5F9); color: var(--text-tertiary);
+}
+[data-theme="dark"] .ex-tipo-badge { background: #334155; color: #64748B; }
+
+/* Seção Imagens Médicas */
+.ex-images-section {
+  margin-top: 24px;
+  border: 1px solid var(--border,#E2E8F0);
+  border-radius: 14px;
+  overflow: hidden;
+}
+[data-theme="dark"] .ex-images-section { border-color: #334155; }
+
+.ex-images-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--bg-subtle,#F8FAFC);
+  border-bottom: 1px solid var(--border,#E2E8F0);
+}
+[data-theme="dark"] .ex-images-header { background: #1E293B; border-color: #334155; }
+
+.ex-images-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--text-secondary);
+}
+.ex-images-title {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.ex-images-sub {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+.ex-register-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 14px; border-radius: 8px;
+  border: 1px solid var(--border,#E2E8F0); background: #fff;
+  font-family: var(--font-ui); font-size: 12px; font-weight: var(--fw-medium);
+  color: var(--text-secondary); cursor: pointer; transition: background .15s; white-space: nowrap;
+  flex-shrink: 0;
+}
+.ex-register-btn:hover { background: var(--bg-subtle); }
+[data-theme="dark"] .ex-register-btn { background: #1E293B; border-color: #334155; color: #94A3B8; }
+[data-theme="dark"] .ex-register-btn:hover { background: #334155; }
+
+.ex-images-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 32px 20px; gap: 4px;
+  color: var(--text-tertiary);
+}
+.ex-images-empty svg { opacity: .3; margin-bottom: 6px; }
+.ex-images-empty-title {
+  font-family: var(--font-ui); font-size: 13px; color: var(--text-tertiary);
+}
+
+
+/* ══════════════════════════════════════
+   Custom Select — Exames (Tipo / Urgência)
+   ══════════════════════════════════════ */
+
+.ex-select-wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* Botão trigger */
+.ex-select-btn {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border, #E2E8F0);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  text-align: left;
+  transition: border-color .15s, box-shadow .15s;
+}
+.ex-select-btn:hover { border-color: #CBD5E1; }
+.ex-select-btn.open {
+  border-color: var(--brand, #10B981);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
+}
+[data-theme="dark"] .ex-select-btn { background: #0F172A; border-color: #475569; color: #F1F5F9; }
+[data-theme="dark"] .ex-select-btn.open { border-color: #34D399; box-shadow: 0 0 0 3px rgba(52,211,153,0.12); }
+
+.ex-select-chevron {
+  width: 15px; height: 15px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  transition: transform .2s;
+}
+.ex-select-btn.open .ex-select-chevron { transform: rotate(180deg); }
+
+/* Dropdown */
+.ex-select-drop {
+  display: none;
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0; right: 0;
+  background: #fff;
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+  z-index: 300;
+  overflow: hidden;
+  padding: 4px 0;
+}
+.ex-select-drop.open { display: block; }
+[data-theme="dark"] .ex-select-drop {
+  background: #1E293B;
+  border-color: #334155;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+
+/* Item */
+.ex-select-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  transition: background .12s, color .12s;
+  border-radius: 0;
+}
+.ex-select-item:hover {
+  background: var(--bg-subtle, #F8FAFC);
+  color: var(--text-primary);
+}
+[data-theme="dark"] .ex-select-item { color: #94A3B8; }
+[data-theme="dark"] .ex-select-item:hover { background: #334155; color: #F1F5F9; }
+
+/* Check icon — oculto por padrão, visível no ativo */
+.ex-check {
+  width: 14px; height: 14px;
+  color: var(--brand, #10B981);
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity .15s;
+}
+.ex-select-item.active .ex-check { opacity: 1; }
+.ex-select-item.active {
+  color: var(--text-primary);
+  font-weight: var(--fw-semibold);
+}
+[data-theme="dark"] .ex-select-item.active { color: #F1F5F9; }
+
+
+/* ── Toast notifications ── */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--border, #E2E8F0);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  pointer-events: all;
+  min-width: 280px;
+  max-width: 380px;
+  animation: toastIn .3s cubic-bezier(.34,1.56,.64,1) forwards;
+  position: relative;
+  overflow: hidden;
+}
+.toast.leaving {
+  animation: toastOut .25s ease-in forwards;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(40px) scale(0.95); }
+  to   { opacity: 1; transform: translateX(0)    scale(1);    }
+}
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0)    scale(1);    max-height: 80px; margin-bottom: 0; }
+  to   { opacity: 0; transform: translateX(40px) scale(0.95); max-height: 0;    margin-bottom: -10px; }
+}
+/* Progress bar */
+.toast-progress {
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 3px;
+  border-radius: 0 0 0 12px;
+  animation: toastProgress 4s linear forwards;
+}
+@keyframes toastProgress {
+  from { width: 100%; }
+  to   { width: 0%;   }
+}
+/* Variantes */
+.toast-success {
+  border-left: 4px solid #10B981;
+}
+.toast-success .toast-progress { background: #10B981; }
+.toast-success .toast-ico { color: #10B981; }
+
+.toast-error {
+  border-left: 4px solid #EF4444;
+}
+.toast-error .toast-progress { background: #EF4444; }
+.toast-error .toast-ico { color: #EF4444; }
+
+.toast-ico {
+  width: 20px; height: 20px; flex-shrink: 0;
+}
+.toast-ico svg { width: 20px; height: 20px; display: block; }
+
+.toast-body { flex: 1; min-width: 0; }
+.toast-title {
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.toast-sub {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+.toast-close {
+  width: 20px; height: 20px;
+  background: none; border: none; cursor: pointer;
+  color: var(--text-tertiary); padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; transition: background .12s; flex-shrink: 0;
+}
+.toast-close:hover { background: var(--bg-subtle); }
+.toast-close svg { width: 12px; height: 12px; }
+
+[data-theme="dark"] .toast {
+  background: #1E293B;
+  border-color: #334155;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+[data-theme="dark"] .toast-title { color: #F1F5F9; }
+[data-theme="dark"] .toast-close:hover { background: #334155; }
+
+
+/* ── Agenda Context Menu ── */
+.agenda-menu {
+  position: fixed;
+  background: #fff;
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  z-index: 8000;
+  display: none;
+  min-width: 200px;
+  overflow: hidden;
+  animation: menuIn .15s cubic-bezier(.2,0,.13,1.5) forwards;
+}
+@keyframes menuIn {
+  from { opacity:0; transform:scale(0.95) translateY(-4px); }
+  to   { opacity:1; transform:scale(1)    translateY(0);    }
+}
+.agenda-menu.open { display: block; }
+[data-theme="dark"] .agenda-menu { background: #1E293B; border-color: #334155; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+
+.agenda-menu-header {
+  padding: 12px 16px 10px;
+}
+.agenda-menu-name {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.agenda-menu-info {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+.agenda-menu-divider {
+  height: 1px;
+  background: var(--border, #E2E8F0);
+  margin: 2px 0;
+}
+[data-theme="dark"] .agenda-menu-divider { background: #334155; }
+
+.agenda-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  text-align: left;
+  transition: background .12s, color .12s;
+}
+.agenda-menu-item svg { width: 15px; height: 15px; flex-shrink: 0; }
+.agenda-menu-item:hover { background: var(--bg-subtle, #F8FAFC); color: var(--text-primary); }
+[data-theme="dark"] .agenda-menu-item { color: #94A3B8; }
+[data-theme="dark"] .agenda-menu-item:hover { background: #334155; color: #F1F5F9; }
+
+.agenda-menu-danger { color: #DC2626 !important; }
+.agenda-menu-danger:hover { background: #FEF2F2 !important; color: #DC2626 !important; }
+[data-theme="dark"] .agenda-menu-danger { color: #F87171 !important; }
+[data-theme="dark"] .agenda-menu-danger:hover { background: rgba(220,38,38,0.12) !important; color: #F87171 !important; }
+
+/* ── Modal de Confirmação ── */
+.confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 90000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+  animation: fadeIn .15s ease;
+}
+.confirm-backdrop.open { display: flex; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+.confirm-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 28px 24px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  animation: modalIn .2s cubic-bezier(.34,1.56,.64,1) forwards;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+}
+@keyframes modalIn {
+  from { opacity:0; transform:scale(0.92) translateY(8px); }
+  to   { opacity:1; transform:scale(1)    translateY(0);   }
+}
+[data-theme="dark"] .confirm-modal { background: #1E293B; }
+
+.confirm-icon-wrap {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: #FEF2F2;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+[data-theme="dark"] .confirm-icon-wrap { background: rgba(220,38,38,0.15); }
+
+.confirm-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.confirm-desc {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--text-tertiary);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 300px;
+}
+.confirm-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+.confirm-btn-cancel {
+  flex: 1;
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid var(--border, #E2E8F0);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background .15s;
+}
+.confirm-btn-cancel:hover { background: var(--bg-subtle); }
+[data-theme="dark"] .confirm-btn-cancel { border-color: #334155; color: #94A3B8; }
+
+.confirm-btn-danger {
+  flex: 1;
+  height: 42px;
+  border-radius: 10px;
+  border: none;
+  background: #DC2626;
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  transition: background .15s, transform .12s;
+}
+.confirm-btn-danger:hover { background: #B91C1C; }
+.confirm-btn-danger:active { transform: scale(.98); }
+
+
+/* ── Botão 3 pontos na agenda ── */
+.ci-dots-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: none; cursor: pointer;
+  border-radius: 8px;
+  color: var(--text-tertiary);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s, background .12s, color .12s;
+}
+.ci:hover .ci-dots-btn {
+  opacity: 1;
+  pointer-events: all;
+}
+.ci-dots-btn:hover { background: var(--bg-subtle, #F1F5F9); color: var(--text-primary); }
+[data-theme="dark"] .ci-dots-btn:hover { background: #334155; color: #F1F5F9; }
+.ci-dots-btn svg { width: 15px; height: 15px; display: block; }
+
+/* Smart AC dropdown posicionado dentro de rx-ac-wrap */
+.smart-ac-drop {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  z-index: 400;
+}
+/* Para textarea a posição é relativa ao wrapper */
+.rx-ac-wrap { position: relative; }
+
 </style>
 </head>
 <body>
@@ -1515,7 +3090,7 @@ body.sb-collapsed .ncs-screen {
 </aside>
 
 <!-- MAIN -->
-<div class="main" style="position:relative;">
+<div class="main">
 
 
   <header class="topbar">
@@ -1731,18 +3306,18 @@ body.sb-collapsed .ncs-screen {
             <div class="prt"><div class="prf" style="width:67%"></div></div>
           </div>
           <div class="clist">
-            <div class="ci"><div class="ctime"><div class="hr">08:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#10B981;"></div><div class="cinfo"><div class="cn">Maria Aparecida Santos</div><div class="ct">Consulta de rotina · Hipertensão</div></div><span class="cbg cbg-ok">Concluída</span></div>
-            <div class="ci"><div class="ctime"><div class="hr">08:30</div><div class="dr">45 min</div></div><div class="cbar" style="background:#10B981;"></div><div class="cinfo"><div class="cn">João Carlos Ferreira</div><div class="ct">Retorno · Diabetes tipo 2</div></div><span class="cbg cbg-ok">Concluída</span></div>
-            <div class="ci"><div class="ctime"><div class="hr">09:15</div><div class="dr">30 min</div></div><div class="cbar" style="background:#10B981;"></div><div class="cinfo"><div class="cn">Ana Paula Rodrigues</div><div class="ct">Consulta de rotina · Pré-natal</div></div><span class="cbg cbg-ok">Concluída</span></div>
-            <div class="ci"><div class="ctime"><div class="hr">09:50</div><div class="dr">30 min</div></div><div class="cbar" style="background:#10B981;"></div><div class="cinfo"><div class="cn">Thiago Mendes Costa</div><div class="ct">Retorno · Colesterol alto</div></div><span class="cbg cbg-ok">Concluída</span></div>
-            <div class="ci"><div class="ctime"><div class="hr">10:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#2563EB;"></div><div class="cinfo"><div class="cn">Carlos Eduardo Lima</div><div class="ct">Primeira consulta · Dor lombar</div></div><span class="cbg cbg-i">Em andamento</span></div>
-            <div class="ci"><div class="ctime"><div class="hr">10:30</div><div class="dr">30 min</div></div><div class="cbar" style="background:#D97706;"></div><div class="cinfo"><div class="cn">Fernanda Oliveira Barros</div><div class="ct">Consulta de urgência · Febre alta</div></div><span class="cbg cbg-w">Aguardando</span></div>
-            <div class="ci"><div class="ctime"><div class="hr">11:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#D97706;"></div><div class="cinfo"><div class="cn">Roberto Nascimento Silva</div><div class="ct">Retorno · Hipotireoidismo</div></div><span class="cbg cbg-w">Aguardando</span></div>
-            <div class="ci"><div class="ctime"><div class="hr">11:30</div><div class="dr">45 min</div></div><div class="cbar" style="background:#D97706;"></div><div class="cinfo"><div class="cn">Patrícia Vieira Lima</div><div class="ct">Consulta de rotina · Check-up anual</div></div><span class="cbg cbg-w">Aguardando</span></div>
-            <div class="ci"><div class="ctime"><div class="hr">14:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#7C3AED;"></div><div class="cinfo"><div class="cn">Luciana Costa Martins</div><div class="ct">Consulta de rotina · Check-up</div></div><span class="cbg cbg-n">Agendada</span></div>
-            <div class="ci"><div class="ctime"><div class="hr">14:30</div><div class="dr">45 min</div></div><div class="cbar" style="background:#7C3AED;"></div><div class="cinfo"><div class="cn">Pedro Henrique Alves</div><div class="ct">Primeira consulta · Asma</div></div><span class="cbg cbg-n">Agendada</span></div>
-            <div class="ci"><div class="ctime"><div class="hr">15:30</div><div class="dr">30 min</div></div><div class="cbar" style="background:#7C3AED;"></div><div class="cinfo"><div class="cn">Beatriz Souza Pereira</div><div class="ct">Retorno · Anemia ferropriva</div></div><span class="cbg cbg-n">Agendada</span></div>
-            <div class="ci"><div class="ctime"><div class="hr">16:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#DC2626;"></div><div class="cinfo"><div class="cn">Diego Araújo Melo</div><div class="ct">Retorno · Hipertensão</div></div><span class="cbg cbg-e">Cancelada</span></div>
+            <div class="ci"><div class="ctime"><div class="hr">08:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#10B981;"></div><div class="cinfo"><div class="cn">Maria Aparecida Santos</div><div class="ct">Consulta de rotina · Hipertensão</div></div><span class="cbg cbg-ok">Concluída</span><button class="ci-dots-btn" onclick="event.stopPropagation();agendaOpenMenu(event,'Maria Aparecida Santos','08:00','Consulta de rotina · Hipertensão','Concluída')" title="Opções"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div>
+            <div class="ci"><div class="ctime"><div class="hr">08:30</div><div class="dr">45 min</div></div><div class="cbar" style="background:#10B981;"></div><div class="cinfo"><div class="cn">João Carlos Ferreira</div><div class="ct">Retorno · Diabetes tipo 2</div></div><span class="cbg cbg-ok">Concluída</span><button class="ci-dots-btn" onclick="event.stopPropagation();agendaOpenMenu(event,'João Carlos Ferreira','08:30','Retorno · Diabetes tipo 2','Concluída')" title="Opções"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div>
+            <div class="ci"><div class="ctime"><div class="hr">09:15</div><div class="dr">30 min</div></div><div class="cbar" style="background:#10B981;"></div><div class="cinfo"><div class="cn">Ana Paula Rodrigues</div><div class="ct">Consulta de rotina · Pré-natal</div></div><span class="cbg cbg-ok">Concluída</span><button class="ci-dots-btn" onclick="event.stopPropagation();agendaOpenMenu(event,'Ana Paula Rodrigues','09:15','Consulta de rotina · Pré-natal','Concluída')" title="Opções"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div>
+            <div class="ci"><div class="ctime"><div class="hr">09:50</div><div class="dr">30 min</div></div><div class="cbar" style="background:#10B981;"></div><div class="cinfo"><div class="cn">Thiago Mendes Costa</div><div class="ct">Retorno · Colesterol alto</div></div><span class="cbg cbg-ok">Concluída</span><button class="ci-dots-btn" onclick="event.stopPropagation();agendaOpenMenu(event,'Thiago Mendes Costa','09:50','Retorno · Colesterol alto','Concluída')" title="Opções"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div>
+            <div class="ci"><div class="ctime"><div class="hr">10:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#2563EB;"></div><div class="cinfo"><div class="cn">Carlos Eduardo Lima</div><div class="ct">Primeira consulta · Dor lombar</div></div><span class="cbg cbg-i">Em andamento</span><button class="ci-dots-btn" onclick="event.stopPropagation();agendaOpenMenu(event,'Carlos Eduardo Lima','10:00','Primeira consulta · Dor lombar','Em andamento')" title="Opções"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div>
+            <div class="ci"><div class="ctime"><div class="hr">10:30</div><div class="dr">30 min</div></div><div class="cbar" style="background:#D97706;"></div><div class="cinfo"><div class="cn">Fernanda Oliveira Barros</div><div class="ct">Consulta de urgência · Febre alta</div></div><span class="cbg cbg-w">Aguardando</span><button class="ci-dots-btn" onclick="event.stopPropagation();agendaOpenMenu(event,'Fernanda Oliveira Barros','10:30','Consulta de urgência · Febre alta','Aguardando')" title="Opções"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div>
+            <div class="ci"><div class="ctime"><div class="hr">11:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#D97706;"></div><div class="cinfo"><div class="cn">Roberto Nascimento Silva</div><div class="ct">Retorno · Hipotireoidismo</div></div><span class="cbg cbg-w">Aguardando</span><button class="ci-dots-btn" onclick="event.stopPropagation();agendaOpenMenu(event,'Roberto Nascimento Silva','11:00','Retorno · Hipotireoidismo','Aguardando')" title="Opções"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div>
+            <div class="ci"><div class="ctime"><div class="hr">11:30</div><div class="dr">45 min</div></div><div class="cbar" style="background:#D97706;"></div><div class="cinfo"><div class="cn">Patrícia Vieira Lima</div><div class="ct">Consulta de rotina · Check-up anual</div></div><span class="cbg cbg-w">Aguardando</span><button class="ci-dots-btn" onclick="event.stopPropagation();agendaOpenMenu(event,'Patrícia Vieira Lima','11:30','Consulta de rotina · Check-up anual','Aguardando')" title="Opções"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div>
+            <div class="ci"><div class="ctime"><div class="hr">14:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#7C3AED;"></div><div class="cinfo"><div class="cn">Luciana Costa Martins</div><div class="ct">Consulta de rotina · Check-up</div></div><span class="cbg cbg-n">Agendada</span><button class="ci-dots-btn" onclick="event.stopPropagation();agendaOpenMenu(event,'Luciana Costa Martins','14:00','Consulta de rotina · Check-up','Agendada')" title="Opções"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div>
+            <div class="ci"><div class="ctime"><div class="hr">14:30</div><div class="dr">45 min</div></div><div class="cbar" style="background:#7C3AED;"></div><div class="cinfo"><div class="cn">Pedro Henrique Alves</div><div class="ct">Primeira consulta · Asma</div></div><span class="cbg cbg-n">Agendada</span><button class="ci-dots-btn" onclick="event.stopPropagation();agendaOpenMenu(event,'Pedro Henrique Alves','14:30','Primeira consulta · Asma','Agendada')" title="Opções"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div>
+            <div class="ci"><div class="ctime"><div class="hr">15:30</div><div class="dr">30 min</div></div><div class="cbar" style="background:#7C3AED;"></div><div class="cinfo"><div class="cn">Beatriz Souza Pereira</div><div class="ct">Retorno · Anemia ferropriva</div></div><span class="cbg cbg-n">Agendada</span><button class="ci-dots-btn" onclick="event.stopPropagation();agendaOpenMenu(event,'Beatriz Souza Pereira','15:30','Retorno · Anemia ferropriva','Agendada')" title="Opções"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div>
+            <div class="ci"><div class="ctime"><div class="hr">16:00</div><div class="dr">30 min</div></div><div class="cbar" style="background:#DC2626;"></div><div class="cinfo"><div class="cn">Diego Araújo Melo</div><div class="ct">Retorno · Hipertensão</div></div><span class="cbg cbg-e">Cancelada</span><button class="ci-dots-btn" onclick="event.stopPropagation();agendaOpenMenu(event,'Diego Araújo Melo','16:00','Retorno · Hipertensão','Cancelada')" title="Opções"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div>
           </div>
         </div>
 
@@ -2519,18 +4094,71 @@ function ncsUpdateProgress() {
 }
 
 function ncsFinish() {
-  const name = ncsPatient ? ncsPatient.name : 'paciente';
-  alert('Consulta finalizada com sucesso para ' + name + '!\nProntuário salvo.');
+  const patient = ncsPatient;
+  const name    = patient ? patient.name : 'paciente';
+
+  // 1. Fechar tela Nova Consulta
   closeNcs();
+
+  // 2. Atualizar item na agenda: primeiro "Aguardando" → "Concluída"
+  // Buscar o item da agenda pelo nome do paciente
+  const agendaItems = document.querySelectorAll('.ci');
+  let updated = false;
+  agendaItems.forEach(item => {
+    const cnEl = item.querySelector('.cn');
+    if (!updated && cnEl && patient && cnEl.textContent.trim() === patient.name) {
+      const badge = item.querySelector('[class*="cbg"]');
+      if (badge) {
+        badge.className = 'cbg cbg-ok';
+        badge.textContent = 'Concluída';
+        updated = true;
+      }
+    }
+  });
+
+  // 3. Se não encontrou pelo nome, marcar o primeiro "Aguardando"
+  if (!updated) {
+    const aguardando = document.querySelector('.cbg-w');
+    if (aguardando) {
+      aguardando.className = 'cbg cbg-ok';
+      aguardando.textContent = 'Concluída';
+    }
+  }
+
+  // 4. Atualizar contador da agenda
+  const concluidas = document.querySelectorAll('.cbg-ok').length;
+  const total      = document.querySelectorAll('.ci').length;
+  const cdscEl     = document.querySelector('.cdsc');
+  if (cdscEl) cdscEl.textContent = `${concluidas} de ${total} atendimentos concluídos`;
+
+  // 5. Atualizar barra de progresso da agenda
+  const progFill = document.querySelector('.prt + div .aprgf, .prt ~ div[style*="background:#10B981"]');
+  const pct = Math.round((concluidas / total) * 100);
+  document.querySelectorAll('.aprg').forEach(bar => {
+    const fill = bar.querySelector('[style*="background:#10B981"], [class*="aprgf"]');
+    if (fill) fill.style.width = pct + '%';
+  });
+
+  // 6. Toast de sucesso
+  setTimeout(() => {
+    showToast({
+      title: 'Consulta salva com sucesso!',
+      sub:   patient ? `Atendimento de ${name} finalizado e salvo.` : 'Prontuário salvo com sucesso.',
+      type:  'success',
+      duration: 5000,
+    });
+  }, 350); // pequeno delay para a tela fechar primeiro
 }
 
 function ncsPatSearch(val) {
   clearTimeout(ncsSearchTimer);
-  const drop = document.getElementById('ncsPatDrop');
-  const list = document.getElementById('ncsPatDropList');
-  const lbl  = document.getElementById('ncsPatDropLbl');
-  if(!drop) return;
-  if(val.length < 2) { drop.classList.remove('open'); return; }
+  const drop  = document.getElementById('ncsPatDrop');
+  const list  = document.getElementById('ncsPatDropList');
+  const lbl   = document.getElementById('ncsPatDropLbl');
+  const clear = document.getElementById('p1ClearBtn');
+  if (!drop) return;
+  if (clear) clear.style.display = val.length > 0 ? 'flex' : 'none';
+  if (val.length < 2) { drop.classList.remove('open'); return; }
   ncsSearchTimer = setTimeout(() => {
     const q    = val.toLowerCase();
     const cpfQ = val.replace(/[^0-9]/g, '');
@@ -2539,20 +4167,44 @@ function ncsPatSearch(val) {
       (cpfQ.length > 0 && p.cpf.replace(/[^0-9]/g,'').includes(cpfQ))
     );
     list.innerHTML = '';
-    if(!found.length) {
-      list.innerHTML = '<div class="ncs-drop-empty">Nenhum resultado encontrado</div>';
+
+    if (!found.length) {
+      if (lbl) lbl.textContent = 'Nenhum resultado';
+      list.innerHTML = `
+        <div class="p1-not-found">
+          <div class="p1-not-found-text">Nenhum paciente encontrado para "<strong>${val}</strong>"</div>
+          <button class="p1-create-btn" onclick="alert('Abrindo cadastro para: ${val}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            + Criar paciente "${val}"
+          </button>
+        </div>`;
     } else {
-      if(lbl) lbl.textContent = found.length + ' paciente' + (found.length > 1 ? 's' : '') + ' encontrado' + (found.length > 1 ? 's' : '');
+      if (lbl) lbl.textContent = found.length + ' paciente' + (found.length > 1 ? 's' : '') + ' encontrado' + (found.length > 1 ? 's' : '');
       found.forEach(p => {
         const el = document.createElement('div');
-        el.className = 'ncs-drop-item';
-        el.innerHTML = `<div class="ncs-drop-av">${p.initials}</div><div style="flex:1;min-width:0;"><div class="ncs-drop-name">${p.name}</div><div class="ncs-drop-info">${p.cpf} · ${p.age} · ${p.last}</div></div><div style="color:var(--text-tertiary);margin-left:auto;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="9 18 15 12 9 6"/></svg></div>`;
-        el.onclick = () => ncsSelectPatient(p);
+        el.className = 'p1-result-item';
+        el.innerHTML = `
+          <div class="p1-result-av">${p.initials}</div>
+          <div class="p1-result-body">
+            <div class="p1-result-name">${p.name}</div>
+            <div class="p1-result-info">${p.cpf} · ${p.age} · ${p.last}</div>
+          </div>
+          <div class="p1-result-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>`;
+        el.addEventListener('click', () => ncsSelectPatient(p));
         list.appendChild(el);
       });
     }
     drop.classList.add('open');
-  }, 200);
+  }, 180);
+}
+
+function p1ClearSearch() {
+  const input = document.getElementById('ncsPatInput');
+  const drop  = document.getElementById('ncsPatDrop');
+  const clear = document.getElementById('p1ClearBtn');
+  if (input) { input.value = ''; input.focus(); }
+  if (drop)  drop.classList.remove('open');
+  if (clear) clear.style.display = 'none';
 }
 
 function ncsSelectPatient(p) {
@@ -2647,10 +4299,9 @@ function ncsAddExameChip(btn, nome) {
 
 // Fechar dropdown ao clicar fora
 document.addEventListener('click', e => {
-  const wrap = document.getElementById('ncsPatWrap');
-  if(wrap && !wrap.contains(e.target)) {
+  if (!e.target.closest('#ncsPatWrap')) {
     const dd = document.getElementById('ncsPatDrop');
-    if(dd) dd.classList.remove('open');
+    if (dd) dd.classList.remove('open');
   }
 });
 
@@ -2819,6 +4470,1019 @@ function hmpCheckEmpty(section) {
   }
 }
 
+
+// ══════════════════════════════════════
+// DIAGNÓSTICO — CID-10 Picker
+// ══════════════════════════════════════
+
+const DIAG_CID_LIST = [
+  { code:'J06.9', name:'Infecção aguda das vias aéreas superiores', cat:'Doenças do aparelho respiratório' },
+  { code:'J11',   name:'Influenza devida a vírus não identificado', cat:'Doenças do aparelho respiratório' },
+  { code:'I10',   name:'Hipertensão essencial (primária)',          cat:'Doenças do aparelho circulatório' },
+  { code:'E11',   name:'Diabetes mellitus tipo 2',                  cat:'Doenças endócrinas, nutricionais e metabólicas' },
+  { code:'M54.5', name:'Dor lombar baixa',                          cat:'Doenças do sistema osteomuscular' },
+  { code:'M17',   name:'Gonartrose',                                cat:'Doenças do sistema osteomuscular' },
+  { code:'M75.1', name:'Síndrome do manguito rotador',              cat:'Doenças do sistema osteomuscular' },
+  { code:'M54.2', name:'Cervicalgia',                               cat:'Doenças do sistema osteomuscular' },
+  { code:'M25.5', name:'Dor articular',                             cat:'Doenças do sistema osteomuscular' },
+  { code:'M20.1', name:'Hallux valgus (adquirido)',                 cat:'Doenças do sistema osteomuscular' },
+  { code:'M77.1', name:'Epicondilite lateral',                      cat:'Doenças do sistema osteomuscular' },
+  { code:'M65.4', name:'Tenossinovite de De Quervain',              cat:'Doenças do sistema osteomuscular' },
+  { code:'S82',   name:'Fratura da perna',                          cat:'Lesões, envenenamentos e causas externas' },
+  { code:'M51',   name:'Transtornos dos discos intervertebrais',    cat:'Doenças do sistema osteomuscular' },
+  { code:'Z00.0', name:'Exame médico geral',                        cat:'Fatores que influenciam o estado de saúde' },
+  { code:'K21.0', name:'Doença do refluxo gastroesofágico',         cat:'Doenças do aparelho digestivo' },
+  { code:'F41.1', name:'Transtorno de ansiedade generalizada',      cat:'Transtornos mentais e comportamentais' },
+  { code:'N39.0', name:'Infecção do trato urinário',                cat:'Doenças do aparelho geniturinário' },
+  { code:'L50.0', name:'Urticária alérgica',                        cat:'Doenças da pele' },
+  { code:'G44.2', name:'Cefaleia tensional',                        cat:'Doenças do sistema nervoso' },
+];
+
+let diagPrincipalSelected = null;
+let diagSecSelected = [];
+let diagPickerTimer;
+
+function diagRenderList(listId, items, context) {
+  const el = document.getElementById(listId);
+  if (!el) return;
+  el.innerHTML = '';
+
+  if (!items.length) {
+    el.innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--font-ui);font-size:13px;color:var(--text-tertiary);">Nenhum resultado encontrado</div>';
+    return;
+  }
+
+  const label = document.createElement('div');
+  label.className = 'ncs-diag-picker-group-label';
+  label.textContent = items.length === DIAG_CID_LIST.length ? 'CIDs mais comuns' : 'Resultados';
+  el.appendChild(label);
+
+  items.forEach(item => {
+    const isSelected = context === 'principal'
+      ? diagPrincipalSelected?.code === item.code
+      : diagSecSelected.some(s => s.code === item.code);
+
+    const div = document.createElement('div');
+    div.className = 'ncs-diag-picker-item' + (isSelected ? ' selected' : '');
+    div.innerHTML = `
+      <div class="ncs-diag-radio"></div>
+      <span class="ncs-diag-code">${item.code}</span>
+      <div class="ncs-diag-item-info">
+        <div class="ncs-diag-item-name">${item.name}</div>
+        <div class="ncs-diag-item-cat">${item.cat}</div>
+      </div>`;
+    div.addEventListener('click', () => diagSelectItem(item, context));
+    el.appendChild(div);
+  });
+}
+
+function diagTogglePicker(context) {
+  const btn    = document.getElementById(context === 'principal' ? 'diagPrincipalBtn' : 'diagSecBtn');
+  const picker = document.getElementById(context === 'principal' ? 'diagPrincipalPicker' : 'diagSecPicker');
+  const input  = document.getElementById(context === 'principal' ? 'diagPrincipalSearch' : 'diagSecSearch');
+  const listId = context === 'principal' ? 'diagPrincipalList' : 'diagSecList';
+  const isOpen = picker.classList.contains('open');
+
+  // Fechar todos
+  document.querySelectorAll('.ncs-diag-picker').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.ncs-diag-select-btn').forEach(b => b.classList.remove('open'));
+
+  if (!isOpen) {
+    picker.classList.add('open');
+    btn.classList.add('open');
+    if (input) { input.value = ''; input.focus(); }
+    diagRenderList(listId, DIAG_CID_LIST, context);
+  }
+}
+
+function diagFilter(context, q) {
+  const listId = context === 'principal' ? 'diagPrincipalList' : 'diagSecList';
+  const filtered = q.trim().length < 1
+    ? DIAG_CID_LIST
+    : DIAG_CID_LIST.filter(item =>
+        item.code.toLowerCase().includes(q.toLowerCase()) ||
+        item.name.toLowerCase().includes(q.toLowerCase()) ||
+        item.cat.toLowerCase().includes(q.toLowerCase())
+      );
+  diagRenderList(listId, filtered, context);
+}
+
+function diagSelectItem(item, context) {
+  if (context === 'principal') {
+    diagPrincipalSelected = item;
+    // Atualizar botão
+    const span = document.getElementById('diagPrincipalText');
+    if (span) {
+      span.className = 'ncs-diag-select-value';
+      span.textContent = item.code + ' — ' + item.name;
+    }
+    // Mostrar tag selecionada
+    const tag = document.getElementById('diagPrincipalTag');
+    if (tag) {
+      tag.style.display = 'flex';
+      tag.innerHTML = `
+        <span class="ncs-diag-tag-code">${item.code}</span>
+        <span class="ncs-diag-tag-name">${item.name}</span>
+        <button class="ncs-diag-tag-del" onclick="diagClearPrincipal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>`;
+    }
+    // Também marcar chip frequente se corresponder
+    document.querySelectorAll('.ncs-diag-chip').forEach(c => {
+      if (c.textContent.trim().startsWith(item.code)) c.classList.add('selected');
+      else c.classList.remove('selected');
+    });
+  } else {
+    if (!diagSecSelected.some(s => s.code === item.code)) {
+      diagSecSelected.push(item);
+      diagRenderSecTags();
+    }
+  }
+  // Fechar picker
+  document.querySelectorAll('.ncs-diag-picker').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.ncs-diag-select-btn').forEach(b => b.classList.remove('open'));
+}
+
+function diagClearPrincipal() {
+  diagPrincipalSelected = null;
+  const span = document.getElementById('diagPrincipalText');
+  if (span) { span.className = 'ncs-diag-select-placeholder'; span.textContent = 'Buscar CID-10...'; }
+  const tag = document.getElementById('diagPrincipalTag');
+  if (tag) tag.style.display = 'none';
+  document.querySelectorAll('.ncs-diag-chip').forEach(c => c.classList.remove('selected'));
+}
+
+function diagRenderSecTags() {
+  const wrap = document.getElementById('diagSecTags');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  diagSecSelected.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'ncs-diag-sec-tag';
+    div.innerHTML = `
+      <span class="ncs-diag-sec-tag-code">${item.code}</span>
+      <span class="ncs-diag-sec-tag-name">${item.name}</span>
+      <button class="ncs-diag-tag-del" onclick="diagRemoveSec(${i})">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>`;
+    wrap.appendChild(div);
+  });
+  // Atualizar placeholder do botão
+  const span = document.getElementById('diagSecText');
+  if (span) {
+    span.className = diagSecSelected.length ? 'ncs-diag-select-value' : 'ncs-diag-select-placeholder';
+    span.textContent = diagSecSelected.length
+      ? `+ Adicionar outro diagnóstico secundário...`
+      : 'Adicionar diagnóstico secundário...';
+  }
+}
+
+function diagRemoveSec(i) {
+  diagSecSelected.splice(i, 1);
+  diagRenderSecTags();
+}
+
+function diagSelectChip(btn, context) {
+  // Extrair o código do texto do chip
+  const text  = btn.textContent.trim();
+  const code  = text.split(' ')[0];
+  const found = DIAG_CID_LIST.find(c => c.code === code);
+  if (found) diagSelectItem(found, context);
+  else { // chip sem match exato — usar texto como CID
+    diagSelectItem({ code, name: text.replace(code + ' ', ''), cat: '' }, context);
+  }
+}
+
+// Fechar pickers ao clicar fora
+document.addEventListener('click', e => {
+  if (!e.target.closest('.ncs-diag-select-wrap')) {
+    document.querySelectorAll('.ncs-diag-picker').forEach(p => p.classList.remove('open'));
+    document.querySelectorAll('.ncs-diag-select-btn').forEach(b => b.classList.remove('open'));
+  }
+});
+
+
+// ══════════════════════════════════════
+// RECEITA MÉDICA — Pane 6
+// ══════════════════════════════════════
+
+const RX_MEDS = [
+  { name:'Dipirona',           dose:'500 mg/mL', tipo:'Básico',  pmc:'R$ 12,00', badges:['farmacia'], farmacia:'Farmácia Popular R$ 3,00' },
+  { name:'Dipropionato de betametasona + ácido salicílico', dose:'0,64mg+30mg', tipo:'Básico', pmc:'R$ 30,00', badges:['lista-a'] },
+  { name:'Dipropionato de betametasona + ácido salicílico', dose:'200 mcg/dose', tipo:'Básico', pmc:'R$ 30,00', badges:['lista-a'] },
+  { name:'Amoxicilina',        dose:'500 mg',    tipo:'Básico',  pmc:'R$ 18,00', badges:[] },
+  { name:'Losartana',          dose:'50 mg',     tipo:'Básico',  pmc:'R$ 14,00', badges:['farmacia'], farmacia:'Farmácia Popular R$ 0,00' },
+  { name:'Metformina',         dose:'850 mg',    tipo:'Básico',  pmc:'R$ 16,00', badges:['farmacia'], farmacia:'Farmácia Popular R$ 0,00' },
+  { name:'Atorvastatina',      dose:'20 mg',     tipo:'Básico',  pmc:'R$ 22,00', badges:[] },
+  { name:'Omeprazol',          dose:'20 mg',     tipo:'Básico',  pmc:'R$ 10,00', badges:['farmacia'], farmacia:'Farmácia Popular R$ 0,00' },
+  { name:'Ibuprofeno',         dose:'600 mg',    tipo:'Básico',  pmc:'R$ 15,00', badges:[] },
+  { name:'Paracetamol',        dose:'750 mg',    tipo:'Básico',  pmc:'R$ 8,00',  badges:[] },
+  { name:'Prednisona',         dose:'20 mg',     tipo:'Básico',  pmc:'R$ 12,00', badges:[] },
+  { name:'Azitromicina',       dose:'500 mg',    tipo:'Básico',  pmc:'R$ 20,00', badges:[] },
+];
+
+let rxSelectedMed = null;
+let rxPrescribed  = [];
+let rxSearchTimer;
+
+function rxMedSearch(val) {
+  clearTimeout(rxSearchTimer);
+  const dd = document.getElementById('rxMedDropdown');
+  if (!dd) return;
+  if (val.trim().length < 2) { dd.classList.remove('open'); return; }
+  rxSearchTimer = setTimeout(() => {
+    const q = val.toLowerCase();
+    const found = RX_MEDS.filter(m => m.name.toLowerCase().includes(q));
+    rxRenderMedList(found);
+    dd.classList.add('open');
+  }, 180);
+}
+
+function rxRenderMedList(items) {
+  const list = document.getElementById('rxMedList');
+  if (!list) return;
+  list.innerHTML = '';
+  if (!items.length) {
+    list.innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--font-ui);font-size:13px;color:var(--text-tertiary);">Nenhum medicamento encontrado</div>';
+    return;
+  }
+  items.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'rx-med-item';
+    let badgesHtml = `<span class="rx-med-badge rx-med-badge-dose">${m.dose}</span>`;
+    if (m.badges.includes('lista-a')) badgesHtml += `<span class="rx-med-badge rx-med-badge-lista">Lista A1</span>`;
+    if (m.badges.includes('farmacia')) badgesHtml += `<span class="rx-med-badge rx-med-badge-farmacia">${m.farmacia}</span>`;
+    div.innerHTML = `
+      <div class="rx-med-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18.5 2h-13A1.5 1.5 0 0 0 4 3.5v17A1.5 1.5 0 0 0 5.5 22h13a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 18.5 2z"/><line x1="12" y1="7" x2="12" y2="17"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+      <div class="rx-med-item-body">
+        <div class="rx-med-item-name">${m.name} ${badgesHtml}</div>
+        <div class="rx-med-item-sub">
+          <span>${m.tipo}</span>
+          <span class="rx-med-item-price">$ PMC ${m.pmc}</span>
+          <span class="rx-med-badge rx-med-badge-cmed">CMED/ANVISA</span>
+        </div>
+      </div>
+      <span class="rx-med-item-rename">RENAME</span>`;
+    div.addEventListener('click', () => rxSelectMed(m));
+    list.appendChild(div);
+  });
+}
+
+function rxSelectMed(m) {
+  rxSelectedMed = m;
+  const input = document.getElementById('rxMedInput');
+  const tags  = document.getElementById('rxMedTags');
+  const badge = document.getElementById('rxRenameBadge');
+  const clear = document.getElementById('rxMedClear');
+  const dd    = document.getElementById('rxMedDropdown');
+  if (input) { input.value = m.name; input.disabled = true; }
+  if (tags) {
+    tags.style.display = 'flex';
+    tags.innerHTML = `
+      <span class="rx-med-tag rx-med-tag-dose">${m.dose}</span>
+      <span class="rx-med-tag rx-med-tag-tipo">${m.tipo}</span>`;
+  }
+  if (badge) badge.style.display = 'inline-flex';
+  if (clear) clear.style.display = 'flex';
+  if (dd) dd.classList.remove('open');
+}
+
+function rxClearMed() {
+  rxSelectedMed = null;
+  const input = document.getElementById('rxMedInput');
+  const tags  = document.getElementById('rxMedTags');
+  const badge = document.getElementById('rxRenameBadge');
+  const clear = document.getElementById('rxMedClear');
+  if (input)  { input.value = ''; input.disabled = false; input.focus(); }
+  if (tags)   { tags.style.display = 'none'; tags.innerHTML = ''; }
+  if (badge)  badge.style.display = 'none';
+  if (clear)  clear.style.display = 'none';
+}
+
+function rxChip(fieldId, btn) {
+  const field = document.getElementById(fieldId);
+  if (!field) return;
+  // Desselect irmãos
+  btn.closest('.rx-chips-sm').querySelectorAll('.rx-chip-sm').forEach(c => c.classList.remove('selected'));
+  btn.classList.add('selected');
+  field.value = btn.textContent.trim();
+}
+
+function rxChipAppend(fieldId, btn) {
+  const field = document.getElementById(fieldId);
+  if (!field) return;
+  btn.classList.toggle('selected');
+  const active = btn.closest('.rx-chips-sm').querySelectorAll('.rx-chip-sm.selected');
+  field.value = Array.from(active).map(b => b.textContent.trim()).join(', ');
+}
+
+function rxAddMed() {
+  const name  = rxSelectedMed ? rxSelectedMed.name + ' ' + rxSelectedMed.dose : document.getElementById('rxMedInput')?.value.trim();
+  const freq  = document.getElementById('rxFreq')?.value.trim();
+  const dur   = document.getElementById('rxDur')?.value.trim();
+  const qtd   = document.getElementById('rxQtd')?.value.trim();
+  const instr = document.getElementById('rxInstr')?.value.trim();
+  if (!name) { document.getElementById('rxMedInput')?.focus(); return; }
+
+  const item = { id: Date.now(), name, freq, dur, qtd, instr, dose: rxSelectedMed?.dose || '' };
+  rxPrescribed.push(item);
+  rxRenderPrescribed();
+  rxResetForm();
+}
+
+function rxResetForm() {
+  rxClearMed();
+  ['rxFreq','rxDur','rxQtd','rxInstr'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.querySelectorAll('#ncsPane6 .rx-chip-sm.selected').forEach(c => c.classList.remove('selected'));
+  const form = document.getElementById('rxFormCard');
+  if (form) form.style.display = 'none';
+}
+
+function rxRenderPrescribed() {
+  const empty  = document.getElementById('rxEmpty');
+  const header = document.getElementById('rxListHeader');
+  const list   = document.getElementById('rxList');
+  const title  = document.getElementById('rxListTitle');
+  if (!list) return;
+
+  if (rxPrescribed.length === 0) {
+    if (empty)  empty.style.display = 'flex';
+    if (header) header.style.display = 'none';
+    list.innerHTML = '';
+    return;
+  }
+  if (empty)  empty.style.display = 'none';
+  if (header) header.style.display = 'flex';
+  if (title)  title.textContent = `Medicamentos Prescritos (${rxPrescribed.length})`;
+
+  let addAnotherBtn = document.getElementById('rxAddAnotherBtn');
+  if (!addAnotherBtn) {
+    addAnotherBtn = document.createElement('button');
+    addAnotherBtn.id = 'rxAddAnotherBtn';
+    addAnotherBtn.className = 'rx-add-another-btn';
+    addAnotherBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Adicionar outro medicamento';
+    addAnotherBtn.onclick = rxOpenForm;
+    document.getElementById('rxList')?.after(addAnotherBtn);
+  }
+
+  list.innerHTML = '';
+  rxPrescribed.forEach((item, i) => {
+    const details = [item.dose, item.freq, item.dur, item.qtd].filter(Boolean).join(' - ');
+    const div = document.createElement('div');
+    div.className = 'rx-prescribed-item';
+    div.innerHTML = `
+      <div class="rx-pi-header">
+        <div class="rx-pi-dot"></div>
+        <span class="rx-pi-name">${item.name}</span>
+      </div>
+      ${details ? `<div class="rx-pi-details">${details}</div>` : ''}
+      ${item.instr ? `<div class="rx-pi-instr">${item.instr}</div>` : ''}
+      <button class="rx-pi-del" onclick="rxRemove(${i})">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>`;
+    list.appendChild(div);
+  });
+}
+
+function rxRemove(i) {
+  rxPrescribed.splice(i, 1);
+  rxRenderPrescribed();
+}
+
+// Fechar dropdown ao clicar fora
+document.addEventListener('click', e => {
+  if (!e.target.closest('.rx-med-search-wrap')) {
+    const dd = document.getElementById('rxMedDropdown');
+    if (dd) dd.classList.remove('open');
+  }
+});
+
+
+function rxOpenForm() {
+  const form  = document.getElementById('rxFormCard');
+  const empty = document.getElementById('rxEmpty');
+  if (form)  form.style.display = 'block';
+  if (empty) empty.style.display = 'none';
+  setTimeout(() => document.getElementById('rxMedInput')?.focus(), 80);
+}
+function rxCloseForm() {
+  rxResetForm();
+  const form  = document.getElementById('rxFormCard');
+  const empty = document.getElementById('rxEmpty');
+  if (form)  form.style.display = 'none';
+  // Mostrar empty apenas se não há prescritos ainda
+  if (empty && rxPrescribed.length === 0) empty.style.display = 'flex';
+}
+
+
+function rxSelectFill(inputId, selectId) {
+  const input  = document.getElementById(inputId);
+  const select = document.getElementById(selectId);
+  if (!input || !select || !select.value) return;
+  input.value = select.value;
+  select.value = '';  // reset para placeholder
+}
+function rxSelectAppend(textareaId, selectId) {
+  const ta     = document.getElementById(textareaId);
+  const select = document.getElementById(selectId);
+  if (!ta || !select || !select.value) return;
+  ta.value = ta.value ? ta.value + ', ' + select.value : select.value;
+  select.value = '';
+}
+
+
+// ── Autocomplete dropdown para Frequência / Duração ──
+function rxAcShow(wrapId) {
+  // Fechar outros
+  document.querySelectorAll('.rx-ac-dropdown').forEach(d => {
+    if (d.id !== wrapId + '-drop') d.classList.remove('open');
+  });
+  const drop = document.getElementById(wrapId + '-drop');
+  if (drop) {
+    // Resetar filtro
+    drop.querySelectorAll('.rx-ac-item').forEach(i => i.classList.remove('hidden'));
+    drop.classList.add('open');
+  }
+}
+
+function rxAcFilter(wrapId, val) {
+  const drop = document.getElementById(wrapId + '-drop');
+  if (!drop) return;
+  const q = val.trim().toLowerCase();
+  let visible = 0;
+  drop.querySelectorAll('.rx-ac-item').forEach(item => {
+    const match = !q || item.textContent.toLowerCase().includes(q);
+    item.classList.toggle('hidden', !match);
+    if (match) visible++;
+  });
+  drop.classList.toggle('open', visible > 0);
+}
+
+function rxAcSelect(inputId, wrapId, value) {
+  const input = document.getElementById(inputId);
+  if (input) input.value = value;
+  const drop = document.getElementById(wrapId + '-drop');
+  if (drop) drop.classList.remove('open');
+}
+
+// Fechar dropdowns ac ao clicar fora
+document.addEventListener('click', e => {
+  if (!e.target.closest('.rx-ac-wrap')) {
+    document.querySelectorAll('.rx-ac-dropdown').forEach(d => d.classList.remove('open'));
+  }
+});
+
+
+// ══════════════════════════════════════
+// EXAMES — Pane 7
+// ══════════════════════════════════════
+
+const EX_LIST = [
+  { code:'40301630', name:'Hemograma completo',                tipo:'Laboratorial' },
+  { code:'40304361', name:'Glicemia em jejum',                 tipo:'Laboratorial' },
+  { code:'40304485', name:'TSH (hormônio tireoestimulante)',    tipo:'Laboratorial' },
+  { code:'40304612', name:'Colesterol total e frações',        tipo:'Laboratorial' },
+  { code:'40304310', name:'Creatinina sérica',                 tipo:'Laboratorial' },
+  { code:'40304256', name:'TGO / AST',                         tipo:'Laboratorial' },
+  { code:'40304264', name:'TGP / ALT',                         tipo:'Laboratorial' },
+  { code:'40601013', name:'Raio-X de tórax PA e perfil',       tipo:'Imagem' },
+  { code:'40601374', name:'Ultrassom abdominal total',         tipo:'Imagem' },
+  { code:'40601110', name:'Ressonância magnética coluna',      tipo:'Imagem' },
+  { code:'40601269', name:'Tomografia computadorizada crânio', tipo:'Imagem' },
+  { code:'40501379', name:'Eletrocardiograma (ECG)',           tipo:'Cardiológico' },
+  { code:'40901014', name:'Urina tipo I (EAS)',                tipo:'Laboratorial' },
+  { code:'40308221', name:'HbA1c (hemoglobina glicada)',       tipo:'Laboratorial' },
+];
+
+let exSolicited = [];
+let exSearchTimer;
+
+function exOpenForm() {
+  const form  = document.getElementById('exFormCard');
+  const empty = document.getElementById('exEmpty');
+  if (form)  form.style.display = 'block';
+  if (empty) empty.style.display = 'none';
+  // Render lista inicial no dropdown
+  exRenderDropList(EX_LIST);
+  setTimeout(() => document.getElementById('exNameInput')?.focus(), 80);
+}
+
+function exCloseForm() {
+  exResetForm();
+  const form  = document.getElementById('exFormCard');
+  const empty = document.getElementById('exEmpty');
+  if (form)  form.style.display = 'none';
+  if (empty && exSolicited.length === 0) empty.style.display = 'flex';
+}
+
+function exResetForm() {
+  const input = document.getElementById('exNameInput');
+  const clear = document.getElementById('exClearBtn');
+  const drop  = document.getElementById('exNameDrop');
+  if (input) { input.value = ''; input.disabled = false; }
+  if (clear) clear.style.display = 'none';
+  if (drop)  drop.classList.remove('open');
+  ['exTUSS','exObs'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  const tipo = document.getElementById('exTipo'); if(tipo) tipo.value = 'Laboratorial';
+  const urg  = document.getElementById('exUrgencia'); if(urg)  urg.value  = 'Rotina';
+}
+
+function exRenderDropList(items) {
+  const list = document.getElementById('exNameDropList');
+  const lbl  = document.getElementById('exNameDropLbl');
+  if (!list) return;
+  list.innerHTML = '';
+  if (!items.length) {
+    list.innerHTML = '<div class="p1-not-found"><div class="p1-not-found-text">Nenhum exame encontrado</div></div>';
+    return;
+  }
+  if (lbl) lbl.textContent = items.length === EX_LIST.length ? 'Exames comuns' : `${items.length} resultado${items.length>1?'s':''}`;
+  items.forEach(ex => {
+    const el = document.createElement('div');
+    el.className = 'p1-result-item';
+    el.innerHTML = `
+      <div class="p1-result-av" style="background:rgba(16,185,129,0.1);color:var(--brand);font-size:9px;font-weight:800;">TUSS</div>
+      <div class="p1-result-body">
+        <div class="p1-result-name">${ex.name}</div>
+        <div class="p1-result-info">${ex.code} · ${ex.tipo}</div>
+      </div>
+      <div class="p1-result-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>`;
+    el.addEventListener('click', () => exSelectExame(ex));
+    list.appendChild(el);
+  });
+}
+
+function exNameSearch(val) {
+  clearTimeout(exSearchTimer);
+  const drop  = document.getElementById('exNameDrop');
+  const clear = document.getElementById('exClearBtn');
+  if (clear) clear.style.display = val.length > 0 ? 'flex' : 'none';
+  if (val.length === 0) {
+    exRenderDropList(EX_LIST);
+    if (drop) drop.classList.add('open');
+    return;
+  }
+  exSearchTimer = setTimeout(() => {
+    const q = val.toLowerCase();
+    const found = EX_LIST.filter(e =>
+      e.name.toLowerCase().includes(q) || e.code.includes(q) || e.tipo.toLowerCase().includes(q)
+    );
+    exRenderDropList(found);
+    if (drop) drop.classList.add('open');
+  }, 150);
+}
+
+function exSelectExame(ex) {
+  const input = document.getElementById('exNameInput');
+  const tuss  = document.getElementById('exTUSS');
+  const tipo  = document.getElementById('exTipo');
+  const drop  = document.getElementById('exNameDrop');
+  const clear = document.getElementById('exClearBtn');
+  if (input) { input.value = ex.name; input.disabled = true; }
+  if (tuss)  tuss.value  = ex.code;
+  if (tipo)  tipo.value  = ex.tipo;
+  if (drop)  drop.classList.remove('open');
+  if (clear) clear.style.display = 'flex';
+}
+
+function exClearName() {
+  const input = document.getElementById('exNameInput');
+  const tuss  = document.getElementById('exTUSS');
+  const drop  = document.getElementById('exNameDrop');
+  const clear = document.getElementById('exClearBtn');
+  if (input) { input.value = ''; input.disabled = false; input.focus(); }
+  if (tuss)  tuss.value = '';
+  if (drop)  drop.classList.remove('open');
+  if (clear) clear.style.display = 'none';
+}
+
+function exAddExame() {
+  const name = document.getElementById('exNameInput')?.value.trim();
+  const tipo = document.getElementById('exTipo')?.value;
+  const tuss = document.getElementById('exTUSS')?.value.trim();
+  const urg  = document.getElementById('exUrgencia')?.value;
+  const obs  = document.getElementById('exObs')?.value.trim();
+  if (!name) { document.getElementById('exNameInput')?.focus(); return; }
+
+  exSolicited.push({ id: Date.now(), name, tipo, tuss, urg, obs });
+  exRenderList();
+  exResetForm();
+  const form = document.getElementById('exFormCard');
+  if (form) form.style.display = 'none';
+}
+
+function exRenderList() {
+  const empty  = document.getElementById('exEmpty');
+  const header = document.getElementById('exListHeader');
+  const list   = document.getElementById('exList');
+  const title  = document.getElementById('exListTitle');
+  if (!list) return;
+
+  if (exSolicited.length === 0) {
+    if (empty)  empty.style.display = 'flex';
+    if (header) header.style.display = 'none';
+    list.innerHTML = ''; return;
+  }
+  if (empty)  empty.style.display = 'none';
+  if (header) header.style.display = 'flex';
+  if (title)  title.textContent = `Exames Solicitados (${exSolicited.length})`;
+
+  // Botão adicionar outro
+  let addBtn = document.getElementById('exAddAnotherBtn');
+  if (!addBtn) {
+    addBtn = document.createElement('button');
+    addBtn.id = 'exAddAnotherBtn';
+    addBtn.className = 'rx-add-another-btn';
+    addBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Solicitar outro exame';
+    addBtn.onclick = exOpenForm;
+    list.after(addBtn);
+  }
+
+  list.innerHTML = '';
+  exSolicited.forEach((ex, i) => {
+    const urgClass = ex.urg === 'Urgente' ? 'ex-urgencia-urgente' : ex.urg === 'Emergência' ? 'ex-urgencia-emergencia' : 'ex-urgencia-rotina';
+    const div = document.createElement('div');
+    div.className = 'rx-prescribed-item';
+    div.innerHTML = `
+      <div class="rx-pi-header">
+        <div class="rx-pi-dot" style="background:var(--brand,#10B981);"></div>
+        <span class="rx-pi-name">${ex.name}</span>
+        <span class="ex-tipo-badge">${ex.tipo}</span>
+        <span class="ex-urgencia-badge ${urgClass}">${ex.urg}</span>
+      </div>
+      ${ex.tuss ? `<div class="rx-pi-details">TUSS: ${ex.tuss}${ex.obs ? ' · ' + ex.obs : ''}</div>` : (ex.obs ? `<div class="rx-pi-details">${ex.obs}</div>` : '')}
+      <button class="rx-pi-del" onclick="exRemove(${i})">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>`;
+    list.appendChild(div);
+  });
+}
+
+function exRemove(i) {
+  exSolicited.splice(i, 1);
+  exRenderList();
+}
+
+// Fechar dropdown ao clicar fora
+document.addEventListener('click', e => {
+  if (!e.target.closest('#exNameWrap')) {
+    const dd = document.getElementById('exNameDrop');
+    if (dd) dd.classList.remove('open');
+  }
+});
+
+
+// ── Custom Select — Tipo / Urgência ──
+function exToggleDrop(wrapId) {
+  const btn  = document.getElementById(wrapId.replace('Wrap','Btn')) ||
+               document.querySelector(`#${wrapId} .ex-select-btn`);
+  const drop = document.getElementById(wrapId + '-drop');
+  if (!drop) return;
+
+  // Fechar outros
+  document.querySelectorAll('.ex-select-drop').forEach(d => {
+    if (d.id !== wrapId + '-drop') d.classList.remove('open');
+  });
+  document.querySelectorAll('.ex-select-btn').forEach(b => {
+    if (!b.closest('#' + wrapId)) b.classList.remove('open');
+  });
+
+  const isOpen = drop.classList.contains('open');
+  drop.classList.toggle('open', !isOpen);
+  if (btn) btn.classList.toggle('open', !isOpen);
+}
+
+function exSelectOpt(hiddenId, value, wrapId, itemEl) {
+  // Atualizar input hidden
+  const hidden = document.getElementById(hiddenId);
+  if (hidden) hidden.value = value;
+
+  // Atualizar texto do botão
+  const valEl = document.getElementById(wrapId.replace('Wrap','Val'));
+  if (valEl) valEl.textContent = value;
+
+  // Marcar ativo
+  itemEl.closest('.ex-select-drop').querySelectorAll('.ex-select-item').forEach(i => i.classList.remove('active'));
+  itemEl.classList.add('active');
+
+  // Fechar
+  const drop = document.getElementById(wrapId + '-drop');
+  const btn  = document.querySelector('#' + wrapId + ' .ex-select-btn');
+  if (drop) drop.classList.remove('open');
+  if (btn)  btn.classList.remove('open');
+}
+
+// Fechar ao clicar fora
+document.addEventListener('click', e => {
+  if (!e.target.closest('.ex-select-wrap')) {
+    document.querySelectorAll('.ex-select-drop').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.ex-select-btn').forEach(b => b.classList.remove('open'));
+  }
+});
+
+
+// ══════════════════════════════════════════════════════════
+// TOAST SYSTEM
+// ══════════════════════════════════════════════════════════
+function showToast({ title, sub = '', type = 'success', duration = 4000 }) {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+
+  const icons = {
+    success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" fill="#10B981" stroke="#10B981"/><polyline points="8 12 11 15 16 9" stroke="white" stroke-width="2.5"/></svg>',
+    error:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" fill="#EF4444" stroke="#EF4444"/><line x1="12" y1="8" x2="12" y2="12" stroke="white"/><line x1="12" y1="16" x2="12.01" y2="16" stroke="white" stroke-width="3"/></svg>',
+  };
+
+  const toast = document.createElement('div');
+  toast.className = 'toast toast-' + type;
+  toast.innerHTML = `
+    <div class="toast-ico">${icons[type] || icons.success}</div>
+    <div class="toast-body">
+      <div class="toast-title">${title}</div>
+      ${sub ? `<div class="toast-sub">${sub}</div>` : ''}
+    </div>
+    <button class="toast-close" onclick="removeToast(this.closest('.toast'))">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="toast-progress"></div>`;
+
+  container.appendChild(toast);
+
+  // Auto remove
+  setTimeout(() => removeToast(toast), duration);
+}
+
+function removeToast(toast) {
+  if (!toast || toast.classList.contains('leaving')) return;
+  toast.classList.add('leaving');
+  setTimeout(() => toast.remove(), 280);
+}
+
+
+// ══════════════════════════════════════
+// AGENDA CONTEXT MENU
+// ══════════════════════════════════════
+
+let _agendaCurrentItem = null;
+
+function agendaOpenMenu(e, name, time, type, badge) {
+  e.stopPropagation();
+  const menu = document.getElementById('agendaMenu');
+  if (!menu) return;
+
+  // Salvar referência
+  _agendaCurrentItem = { el: e.currentTarget, name, time, type, badge };
+
+  // Preencher header
+  document.getElementById('agendaMenuName').textContent = name;
+  document.getElementById('agendaMenuInfo').textContent = [time, type, badge].filter(Boolean).join(' · ');
+
+  // Posicionar
+  const rect = e.currentTarget.getBoundingClientRect();
+  const menuW = 220;
+  let left = rect.right + 8;
+  let top  = rect.top;
+
+  // Evitar sair da tela
+  if (left + menuW > window.innerWidth - 8) left = rect.left - menuW - 8;
+  if (top + 200 > window.innerHeight)       top  = window.innerHeight - 210;
+
+  menu.style.left = left + 'px';
+  menu.style.top  = top  + 'px';
+  menu.classList.add('open');
+}
+
+function agendaCloseMenu() {
+  const menu = document.getElementById('agendaMenu');
+  if (menu) menu.classList.remove('open');
+}
+
+function agendaVerDetalhes() {
+  agendaCloseMenu();
+  if (!_agendaCurrentItem) return;
+  showToast({
+    title: 'Ver detalhes',
+    sub: _agendaCurrentItem.name + ' · ' + _agendaCurrentItem.time,
+    type: 'success',
+    duration: 3000
+  });
+}
+
+function agendaEditar() {
+  agendaCloseMenu();
+  if (!_agendaCurrentItem) return;
+  showToast({
+    title: 'Editar consulta',
+    sub: 'Abrindo edição de ' + _agendaCurrentItem.name,
+    type: 'success',
+    duration: 3000
+  });
+}
+
+function agendaConfirmarCancelar() {
+  agendaCloseMenu();
+  const name = _agendaCurrentItem?.name || 'esta consulta';
+  const desc = document.getElementById('confirmDesc');
+  if (desc) desc.textContent = `A consulta de ${name} será marcada como cancelada. Esta ação não pode ser desfeita.`;
+  const backdrop = document.getElementById('confirmBackdrop');
+  if (backdrop) backdrop.classList.add('open');
+}
+
+function closeConfirm() {
+  const backdrop = document.getElementById('confirmBackdrop');
+  if (backdrop) backdrop.classList.remove('open');
+}
+
+function agendaCancelarConfirmado() {
+  closeConfirm();
+  if (!_agendaCurrentItem) return;
+  const { el, name } = _agendaCurrentItem;
+
+  // Atualizar badge do item
+  const badge = el.querySelector('[class*="cbg"]');
+  if (badge) {
+    badge.className = 'cbg cbg-e';
+    badge.textContent = 'Cancelada';
+  }
+  // Atualizar barra lateral do item
+  const bar = el.querySelector('.cbar');
+  if (bar) bar.style.background = '#EF4444';
+
+  // Atualizar contador
+  const concluidas = document.querySelectorAll('.cbg-ok').length;
+  const total      = document.querySelectorAll('.ci').length;
+  const cdscEl     = document.querySelector('.cdsc');
+  if (cdscEl) cdscEl.textContent = `${concluidas} de ${total} atendimentos concluídos`;
+
+  showToast({
+    title: 'Consulta cancelada',
+    sub: `A consulta de ${name} foi cancelada.`,
+    type: 'error',
+    duration: 4000
+  });
+
+  _agendaCurrentItem = null;
+}
+
+// Fechar menu ao clicar fora
+document.addEventListener('click', e => {
+  const menu = document.getElementById('agendaMenu');
+  if (menu && !menu.contains(e.target)) agendaCloseMenu();
+});
+// Fechar modal ao clicar no backdrop
+document.getElementById('confirmBackdrop')?.addEventListener('click', e => {
+  if (e.target === document.getElementById('confirmBackdrop')) closeConfirm();
+});
+// ESC fecha ambos
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    agendaCloseMenu();
+    closeConfirm();
+  }
+});
+
+
+// ══════════════════════════════════════
+// SMART AUTOCOMPLETE — sugestões inteligentes
+// ══════════════════════════════════════
+
+const QUEIXA_SUGESTOES = [
+  'Dor de cabeça há {N} dias, sem febre',
+  'Dor lombar há {N} dias, piora com movimento',
+  'Tosse seca há {N} dias, sem febre',
+  'Febre há {N} dias, temperatura de 38°C',
+  'Dor abdominal em região epigástrica',
+  'Náusea e vômitos após alimentação',
+  'Dispneia aos esforços, sem dor torácica',
+  'Retorno para avaliação de exames',
+  'Renovação de receita de uso contínuo',
+  'Check-up de rotina, assintomático',
+  'Dor articular em joelho direito',
+  'Cervicalgia há {N} dias, sem irradiação',
+  'Palpitações ocasionais sem causa aparente',
+  'Ansiedade e insônia há {N} semanas',
+];
+
+const DOENCA_SUGESTOES = [
+  'Hipertensão arterial sistêmica (HAS)',
+  'Diabetes mellitus tipo 2',
+  'Hipotireoidismo',
+  'Hipercolesterolemia',
+  'Asma brônquica',
+  'DPOC (Doença Pulmonar Obstrutiva Crônica)',
+  'Refluxo gastroesofágico (DRGE)',
+  'Artrite reumatoide',
+  'Osteoporose',
+  'Insuficiência cardíaca congestiva',
+  'Fibromialgia',
+  'Depressão',
+  'Ansiedade generalizada',
+  'Epilepsia',
+  'Doença de Crohn',
+  'Psoríase',
+];
+
+const ALERGIA_SUGESTOES = [
+  'Dipirona (metamizol)',
+  'Penicilina e derivados',
+  'AAS (ácido acetilsalicílico)',
+  'Ibuprofeno',
+  'Sulfas',
+  'Contraste iodado',
+  'Látex',
+  'Amendoim',
+  'Frutos do mar',
+  'Ovo',
+  'Leite (proteína do leite)',
+  'Glúten',
+  'Picada de abelha (veneno)',
+  'Poeira doméstica (ácaros)',
+  'Pelos de animais',
+];
+
+let _smartAcTimer;
+
+function smartAcInput(wrapId, inputId, list, val) {
+  clearTimeout(_smartAcTimer);
+  const drop = document.getElementById(wrapId + '-drop');
+  if (!drop) return;
+  _smartAcTimer = setTimeout(() => {
+    const q = val.trim().toLowerCase();
+    const filtered = q.length < 1
+      ? list.slice(0, 8)
+      : list.filter(s => s.toLowerCase().includes(q)).slice(0, 8);
+    renderSmartAc(drop, filtered, inputId, wrapId, false);
+    drop.classList.toggle('open', filtered.length > 0);
+  }, 150);
+}
+
+function smartAcInputShow(wrapId, inputId, list, val) {
+  const drop = document.getElementById(wrapId + '-drop');
+  if (!drop) return;
+  const filtered = list.slice(0, 8);
+  renderSmartAc(drop, filtered, inputId, wrapId, false);
+  drop.classList.add('open');
+}
+
+function smartAc(wrapId, taId, list, val) {
+  clearTimeout(_smartAcTimer);
+  const drop = document.getElementById(wrapId + '-drop');
+  if (!drop) return;
+  _smartAcTimer = setTimeout(() => {
+    const lines = val.split('\n');
+    const lastLine = lines[lines.length-1].trim().toLowerCase();
+    const filtered = lastLine.length < 1
+      ? list.slice(0, 6)
+      : list.filter(s => s.toLowerCase().includes(lastLine)).slice(0, 6);
+    renderSmartAc(drop, filtered, taId, wrapId, true);
+    drop.classList.toggle('open', filtered.length > 0);
+  }, 200);
+}
+
+function smartAcShow(wrapId, taId, list, val) {
+  const drop = document.getElementById(wrapId + '-drop');
+  if (!drop) return;
+  renderSmartAc(drop, list.slice(0, 6), taId, wrapId, true);
+  drop.classList.add('open');
+}
+
+function renderSmartAc(drop, items, targetId, wrapId, append) {
+  // Manter o label
+  const lbl = drop.querySelector('.rx-ac-label');
+  drop.innerHTML = '';
+  if (lbl) drop.appendChild(lbl);
+  items.forEach(s => {
+    const item = document.createElement('div');
+    item.className = 'rx-ac-item';
+    item.textContent = s;
+    item.addEventListener('mousedown', e => {
+      e.preventDefault();
+      const el = document.getElementById(targetId);
+      if (!el) return;
+      if (append && el.tagName === 'TEXTAREA') {
+        const cur = el.value;
+        const lines = cur.split('\n');
+        lines[lines.length - 1] = s;
+        el.value = lines.join('\n');
+      } else {
+        el.value = s;
+      }
+      drop.classList.remove('open');
+      el.focus();
+    });
+    drop.appendChild(item);
+  });
+}
+
+// Fechar smart ac ao clicar fora
+document.addEventListener('click', e => {
+  if (!e.target.closest('.rx-ac-wrap')) {
+    document.querySelectorAll('.smart-ac-drop').forEach(d => d.classList.remove('open'));
+  }
+});
+
 </script>
 
 <!-- ══ NOVA CONSULTA — STEPPER FLOW ══ -->
@@ -2891,24 +5555,31 @@ function hmpCheckEmpty(section) {
         <div class="ncs-field">
           <div class="ncs-label">
             <div class="ncs-label-text">Paciente <span class="req">*</span></div>
-            <button class="ncs-label-action" onclick="alert('Abrindo cadastro de paciente...')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              + Criar Paciente
-            </button>
           </div>
           <div class="ncs-hint">Digite o nome ou CPF para buscar (mín. 2 caracteres)</div>
-          <div class="ncs-input-wrap" id="ncsPatWrap">
-            <svg class="ncs-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-            <input id="ncsPatInput" class="ncs-input with-icon" type="text" placeholder="Buscar por nome ou CPF (min. 2 caracteres)" oninput="ncsPatSearch(this.value)" autocomplete="off"/>
-            <div class="ncs-dropdown" id="ncsPatDrop">
-              <div class="ncs-drop-lbl" id="ncsPatDropLbl">Resultados</div>
+          <div class="p1-search-wrap" id="ncsPatWrap">
+            <div class="p1-search-row">
+              <svg class="p1-search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input id="ncsPatInput" class="p1-search-input" type="text"
+                placeholder="Buscar por nome ou CPF (min. 2 caracteres)"
+                oninput="ncsPatSearch(this.value)" autocomplete="off"/>
+              <button class="p1-clear-btn" id="p1ClearBtn" style="display:none;" onclick="p1ClearSearch()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            <!-- Dropdown melhorado -->
+            <div class="p1-dropdown" id="ncsPatDrop">
+              <div class="p1-drop-header" id="ncsPatDropLbl">Resultados</div>
               <div id="ncsPatDropList"></div>
             </div>
           </div>
-          <button class="ncs-link-cadastrar" onclick="alert('Abrindo formulário de cadastro...')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Cadastrar novo paciente
-          </button>
+          <!-- Cadastrar novo paciente — centralizado -->
+          <div style="display:flex;justify-content:center;margin-top:14px;">
+            <button class="p1-cadastrar-btn" onclick="alert('Abrindo formulário de cadastro...')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              + Cadastrar novo paciente
+            </button>
+          </div>
         </div>
       </div>
 
@@ -2922,7 +5593,15 @@ function hmpCheckEmpty(section) {
         <div class="ncs-field">
           <div class="ncs-label"><div class="ncs-label-text">Queixa <span class="req">*</span></div></div>
           <div class="ncs-hint">Descreva brevemente o sintoma ou motivo da visita</div>
-          <textarea id="ncsQueixa" class="ncs-textarea" placeholder="Ex: Paciente refere dor de cabeça há 3 dias, acompanhada de febre..."></textarea>
+          <div class="rx-ac-wrap" id="queixaAcWrap">
+          <textarea id="ncsQueixa" class="ncs-textarea" 
+            placeholder="Ex: Paciente refere dor de cabeça há 3 dias, acompanhada de febre..."
+            oninput="smartAc('queixaAcWrap','ncsQueixa',QUEIXA_SUGESTOES,this.value)"
+            onfocus="smartAcShow('queixaAcWrap','ncsQueixa',QUEIXA_SUGESTOES,this.value)"></textarea>
+          <div class="rx-ac-dropdown smart-ac-drop" id="queixaAcWrap-drop" style="max-height:180px;overflow-y:auto;">
+            <div class="rx-ac-label">Sugestões para queixa</div>
+          </div>
+        </div>
           <div class="ncs-chips" id="ncsQueixaChips">
             <button class="ncs-chip" onclick="ncsToggleChip(this, 'ncsQueixa')">Dor</button>
             <button class="ncs-chip" onclick="ncsToggleChip(this, 'ncsQueixa')">Febre</button>
@@ -3110,7 +5789,16 @@ function hmpCheckEmpty(section) {
         <div class="ncs-soap-pane active" id="ncsHmp-doencas">
           <div class="ncs-hmp-input-row">
             <div class="ncs-input-wrap" style="flex:1;">
-              <input class="ncs-input" type="text" id="hmpDoencaInput" placeholder="Ex: Hipertensão arterial sistêmica, Diabetes mellitus tipo 2..."/>
+              <div class="rx-ac-wrap" id="doencaAcWrap" style="flex:1;">
+              <input class="ncs-input" type="text" id="hmpDoencaInput" 
+                placeholder="Ex: Hipertensão arterial sistêmica, Diabetes mellitus tipo 2..."
+                oninput="smartAcInput('doencaAcWrap','hmpDoencaInput',DOENCA_SUGESTOES,this.value)"
+                onfocus="smartAcInputShow('doencaAcWrap','hmpDoencaInput',DOENCA_SUGESTOES,this.value)"
+                autocomplete="off"/>
+              <div class="rx-ac-dropdown smart-ac-drop" id="doencaAcWrap-drop">
+                <div class="rx-ac-label">Doenças comuns</div>
+              </div>
+            </div>
             </div>
             <button class="ncs-soap-add-btn" onclick="hmpAdd('doencas')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -3159,8 +5847,9 @@ function hmpCheckEmpty(section) {
         <!-- ── ALERGIAS ── -->
         <div class="ncs-soap-pane" id="ncsHmp-alergias">
           <div class="ncs-hmp-input-row">
-            <div class="ncs-input-wrap" style="flex:2;">
-              <input class="ncs-input" type="text" id="hmpAlergiaInput" placeholder="Alérgeno (ex: Dipirona, Penicilina...)"/>
+            <div class="rx-ac-wrap" id="alergiaAcWrap" style="flex:2;">
+              <input class="ncs-input" type="text" id="hmpAlergiaInput" placeholder="Alérgeno (ex: Dipirona, Penicilina...)" oninput="smartAcInput('alergiaAcWrap','hmpAlergiaInput',ALERGIA_SUGESTOES,this.value)" onfocus="smartAcInputShow('alergiaAcWrap','hmpAlergiaInput',ALERGIA_SUGESTOES,this.value)" autocomplete="off"/>
+              <div class="rx-ac-dropdown smart-ac-drop" id="alergiaAcWrap-drop"><div class="rx-ac-label">Alérgenos comuns</div></div>
             </div>
             <div class="ncs-input-wrap" style="flex:1.5;">
               <input class="ncs-input" type="text" id="hmpAlergiaReacao" placeholder="Reação (ex: urticária, anafilaxia...)"/>
@@ -3231,11 +5920,28 @@ function hmpCheckEmpty(section) {
                 <svg viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="1.5" width="15" height="15"><path d="M18 12h2a2 2 0 0 1 0 4h-2"/><path d="M2 12h16v4H2z"/><path d="M7 12V7a3 3 0 0 1 6 0"/><line x1="22" y1="12" x2="22" y2="16"/></svg>
                 Tabagismo
               </div>
-              <select class="ncs-input" id="hmpTabagismo">
-                <option>Nunca fumou</option>
-                <option>Ex-tabagista</option>
-                <option>Tabagista ativo</option>
-              </select>
+              <div class="ex-select-wrap" id="hmpTabWrap">
+                <button class="ex-select-btn" id="hmpTabWrapBtn" onclick="exToggleDrop('hmpTabWrap')">
+                  <span id="hmpTabWrapVal">Nunca fumou</span>
+                  <svg class="ex-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="ex-select-drop" id="hmpTabWrap-drop">
+                  <div class="ex-select-item active" onclick="exSelectOpt('hmpTabagismo','Nunca fumou','hmpTabWrap',this)">
+                    <svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Nunca fumou
+                  </div>
+<div class="ex-select-item" onclick="exSelectOpt('hmpTabagismo','Ex-tabagista','hmpTabWrap',this)">
+                    <svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Ex-tabagista
+                  </div>
+<div class="ex-select-item" onclick="exSelectOpt('hmpTabagismo','Tabagista ativo','hmpTabWrap',this)">
+                    <svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Tabagista ativo
+                  </div>
+
+                </div>
+                <input type="hidden" id="hmpTabagismo" value="Nunca fumou"/>
+              </div>
             </div>
             <!-- Etilismo -->
             <div class="ncs-hmp-social-card">
@@ -3243,12 +5949,11 @@ function hmpCheckEmpty(section) {
                 <svg viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="1.5" width="15" height="15"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 4 2 7 5 7s5-3 5-7"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
                 Etilismo
               </div>
-              <select class="ncs-input" id="hmpEtilismo">
-                <option>Não consome</option>
-                <option>Consumo eventual</option>
-                <option>Consumo regular</option>
-                <option>Consumo abusivo</option>
-              </select>
+              <div class="ex-select-wrap" id="hmpEtilWrap"><button class="ex-select-btn" id="hmpEtilWrapBtn" onclick="exToggleDrop('hmpEtilWrap')"><span id="hmpEtilWrapVal">Não consome</span><svg class="ex-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="ex-select-drop" id="hmpEtilWrap-drop"><div class="ex-select-item active" onclick="exSelectOpt('hmpEtilismo','Não consome','hmpEtilWrap',this)"><svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Não consome</div>
+<div class="ex-select-item" onclick="exSelectOpt('hmpEtilismo','Consumo eventual','hmpEtilWrap',this)"><svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Consumo eventual</div>
+<div class="ex-select-item" onclick="exSelectOpt('hmpEtilismo','Consumo regular','hmpEtilWrap',this)"><svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Consumo regular</div>
+<div class="ex-select-item" onclick="exSelectOpt('hmpEtilismo','Consumo abusivo','hmpEtilWrap',this)"><svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Consumo abusivo</div>
+</div><input type="hidden" id="hmpEtilismo" value="Não consome"/></div>
             </div>
             <!-- Atividade Física -->
             <div class="ncs-hmp-social-card">
@@ -3309,72 +6014,400 @@ function hmpCheckEmpty(section) {
 
       <!-- ── STEP 5: DIAGNÓSTICO ── -->
       <div class="ncs-pane" id="ncsPane5">
+
         <div class="ncs-pane-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
         <div class="ncs-pane-title">Diagnóstico</div>
-        <div class="ncs-pane-sub">Registre o diagnóstico clínico com código CID ou descrição livre</div>
-        <div class="ncs-field">
-          <div class="ncs-label"><div class="ncs-label-text">Busca por CID-10</div></div>
-          <div class="ncs-hint">Digite o código ou descrição para buscar</div>
-          <div class="ncs-input-wrap">
-            <svg class="ncs-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-            <input id="ncsCid" class="ncs-input with-icon" type="text" placeholder="Ex: J11 — Gripe, M54.5 — Lombalgias..."/>
+        <div class="ncs-pane-sub">Registre o diagnóstico clínico com código CID-10</div>
+
+        <!-- CIDs frequentes -->
+        <div class="ncs-diag-section">
+          <div class="ncs-diag-label">CIDs frequentes</div>
+          <div class="ncs-diag-chips" id="diagChipsFreq">
+            <button class="ncs-diag-chip" onclick="diagSelectChip(this,'principal')">M75.1 Síndrome do manguito...</button>
+            <button class="ncs-diag-chip" onclick="diagSelectChip(this,'principal')">M17 Gonartrose</button>
+            <button class="ncs-diag-chip" onclick="diagSelectChip(this,'principal')">M54.5 Dor lombar baixa</button>
+            <button class="ncs-diag-chip" onclick="diagSelectChip(this,'principal')">M20.1 Hallux valgus</button>
+            <button class="ncs-diag-chip" onclick="diagSelectChip(this,'principal')">M54.2 Cervicalgia</button>
+            <button class="ncs-diag-chip" onclick="diagSelectChip(this,'principal')">M25.5 Dor articular</button>
+            <button class="ncs-diag-chip" onclick="diagSelectChip(this,'principal')">S82 Fratura da perna</button>
+            <button class="ncs-diag-chip" onclick="diagSelectChip(this,'principal')">M51 Transtornos de discos...</button>
+            <button class="ncs-diag-chip" onclick="diagSelectChip(this,'principal')">M65.4 Tenossinovite de De Q...</button>
+            <button class="ncs-diag-chip" onclick="diagSelectChip(this,'principal')">M77.1 Epicondilite lateral</button>
           </div>
         </div>
-        <div class="ncs-field">
-          <div class="ncs-label"><div class="ncs-label-text">Diagnóstico descritivo</div></div>
-          <textarea id="ncsDiagDesc" class="ncs-textarea large" placeholder="Descreva o diagnóstico, conduta e plano terapêutico..."></textarea>
-        </div>
-        <div class="ncs-field">
-          <div class="ncs-label"><div class="ncs-label-text">Tipo de diagnóstico</div></div>
-          <div class="ncs-chips">
-            <button class="ncs-chip" onclick="ncsSelectChip(this, 'diagTipo')">Definitivo</button>
-            <button class="ncs-chip" onclick="ncsSelectChip(this, 'diagTipo')">Presuntivo</button>
-            <button class="ncs-chip" onclick="ncsSelectChip(this, 'diagTipo')">Diferencial</button>
-            <button class="ncs-chip" onclick="ncsSelectChip(this, 'diagTipo')">Sem diagnóstico</button>
+
+        <!-- CID-10 Principal -->
+        <div class="ncs-diag-section">
+          <div class="ncs-diag-title">CID-10 Principal</div>
+          <div class="ncs-diag-sublabel">Busque o código CID-10 correspondente</div>
+          <div class="ncs-diag-select-wrap" id="diagPrincipalWrap">
+            <button class="ncs-diag-select-btn" id="diagPrincipalBtn" onclick="diagTogglePicker('principal')">
+              <span id="diagPrincipalText" class="ncs-diag-select-placeholder">Buscar CID-10...</span>
+              <svg class="ncs-diag-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <!-- Picker principal -->
+            <div class="ncs-diag-picker" id="diagPrincipalPicker">
+              <div class="ncs-diag-picker-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" class="ncs-diag-picker-input" id="diagPrincipalSearch" placeholder="Digite o código ou descrição..." oninput="diagFilter('principal', this.value)" autocomplete="off"/>
+              </div>
+              <div class="ncs-diag-picker-list" id="diagPrincipalList">
+                <!-- rendered by JS -->
+              </div>
+            </div>
           </div>
+          <!-- Tag do CID selecionado -->
+          <div class="ncs-diag-selected-tag" id="diagPrincipalTag" style="display:none;"></div>
         </div>
+
+        <!-- Diagnósticos Secundários -->
+        <div class="ncs-diag-section">
+          <div class="ncs-diag-title">Diagnósticos Secundários</div>
+          <div class="ncs-diag-sublabel">Adicione diagnósticos secundários se necessário</div>
+          <div class="ncs-diag-select-wrap" id="diagSecWrap">
+            <button class="ncs-diag-select-btn" id="diagSecBtn" onclick="diagTogglePicker('sec')">
+              <span id="diagSecText" class="ncs-diag-select-placeholder">Adicionar diagnóstico secundário...</span>
+              <svg class="ncs-diag-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <!-- Picker secundário -->
+            <div class="ncs-diag-picker" id="diagSecPicker">
+              <div class="ncs-diag-picker-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" class="ncs-diag-picker-input" id="diagSecSearch" placeholder="Digite o código ou descrição..." oninput="diagFilter('sec', this.value)" autocomplete="off"/>
+              </div>
+              <div class="ncs-diag-picker-list" id="diagSecList">
+                <!-- rendered by JS -->
+              </div>
+            </div>
+          </div>
+          <!-- Lista de secundários adicionados -->
+          <div class="ncs-diag-sec-tags" id="diagSecTags"></div>
+        </div>
+
+        <!-- Observações Clínicas -->
+        <div class="ncs-diag-section">
+          <div class="ncs-diag-title">Observações Clínicas</div>
+          <textarea id="diagObs" class="ncs-textarea" style="min-height:100px;" placeholder="Observações adicionais sobre o diagnóstico..."></textarea>
+        </div>
+
       </div>
 
       <!-- ── STEP 6: RECEITA ── -->
       <div class="ncs-pane" id="ncsPane6">
+
+        <!-- Header padrão -->
         <div class="ncs-pane-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6m-3-3v6m9-6a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
         </div>
         <div class="ncs-pane-title">Receita Médica</div>
-        <div class="ncs-pane-sub">Adicione os medicamentos prescritos para este atendimento</div>
-        <div class="ncs-item-list" id="ncsReceitaList"></div>
-        <button class="ncs-add-btn" onclick="ncsAddMed()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Adicionar medicamento
-        </button>
+        <div class="ncs-pane-sub">Prescreva os medicamentos para este atendimento</div>
+
+        <!-- Formulário de prescrição -->
+        <div class="rx-form-card" id="rxFormCard" style="display:none;">
+          <!-- Botão fechar formulário -->
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border,#E2E8F0);">
+            <span style="font-family:var(--font-ui);font-size:14px;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:7px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Novo medicamento
+            </span>
+            <button onclick="rxCloseForm()" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;border:none;background:transparent;cursor:pointer;color:var(--text-tertiary);transition:background .12s;" onmouseover="this.style.background='var(--bg-subtle)'" onmouseout="this.style.background='transparent'">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <!-- Campo medicamento -->
+          <div class="rx-field">
+            <div class="rx-label">Medicamento <span class="rx-req">*</span></div>
+            <div class="rx-sublabel">Busque na base RENAME/SUS – a dosagem já está inclusa no medicamento</div>
+            <div class="rx-med-search-wrap" id="rxMedWrap">
+              <div class="rx-med-search-row" id="rxMedSearchRow">
+                <svg class="rx-search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input id="rxMedInput" class="rx-med-input" type="text" placeholder="Buscar medicamento por nome..." autocomplete="off" oninput="rxMedSearch(this.value)"/>
+                <button class="rx-rename-badge" id="rxRenameBadge" style="display:none;" onclick="rxClearMed()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M18.5 2h-13A1.5 1.5 0 0 0 4 3.5v17A1.5 1.5 0 0 0 5.5 22h13a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 18.5 2z"/></svg>
+                  RENAME
+                </button>
+                <button class="rx-med-clear" id="rxMedClear" style="display:none;" onclick="rxClearMed()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+              <!-- Tags do medicamento selecionado -->
+              <div class="rx-med-tags" id="rxMedTags" style="display:none;"></div>
+              <!-- Dropdown de resultados -->
+              <div class="rx-med-dropdown" id="rxMedDropdown">
+                <div id="rxMedList"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Linha: Frequência / Duração / Quantidade -->
+          <div class="rx-row3">
+            <!-- Frequência -->
+            <div class="rx-field">
+              <div class="rx-label">Frequência <span class="rx-req">*</span></div>
+              <div class="rx-ac-wrap" id="rxFreqWrap">
+                <input id="rxFreq" class="rx-input" type="text" placeholder="Ex: 8/8h"
+                  onfocus="rxAcShow('rxFreqWrap')"
+                  oninput="rxAcFilter('rxFreqWrap', this.value)"
+                  autocomplete="off"/>
+                <div class="rx-ac-dropdown" id="rxFreqWrap-drop">
+                  <div class="rx-ac-label">Sugestões</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxFreq','rxFreqWrap','1x ao dia')">1x ao dia</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxFreq','rxFreqWrap','2x ao dia')">2x ao dia</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxFreq','rxFreqWrap','3x ao dia')">3x ao dia</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxFreq','rxFreqWrap','12/12h')">12/12h</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxFreq','rxFreqWrap','8/8h')">8/8h</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxFreq','rxFreqWrap','6/6h')">6/6h</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxFreq','rxFreqWrap','Se necessário')">Se necessário</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxFreq','rxFreqWrap','À noite')">À noite</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxFreq','rxFreqWrap','Em jejum')">Em jejum</div>
+                </div>
+              </div>
+            </div>
+            <!-- Duração -->
+            <div class="rx-field">
+              <div class="rx-label">Duração</div>
+              <div class="rx-ac-wrap" id="rxDurWrap">
+                <input id="rxDur" class="rx-input" type="text" placeholder="Ex: 7 dias"
+                  onfocus="rxAcShow('rxDurWrap')"
+                  oninput="rxAcFilter('rxDurWrap', this.value)"
+                  autocomplete="off"/>
+                <div class="rx-ac-dropdown" id="rxDurWrap-drop">
+                  <div class="rx-ac-label">Sugestões</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxDur','rxDurWrap','3 dias')">3 dias</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxDur','rxDurWrap','5 dias')">5 dias</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxDur','rxDurWrap','7 dias')">7 dias</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxDur','rxDurWrap','10 dias')">10 dias</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxDur','rxDurWrap','14 dias')">14 dias</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxDur','rxDurWrap','30 dias')">30 dias</div>
+                  <div class="rx-ac-item" onclick="rxAcSelect('rxDur','rxDurWrap','Uso contínuo')">Uso contínuo</div>
+                </div>
+              </div>
+            </div>
+            <!-- Quantidade -->
+            <div class="rx-field">
+              <div class="rx-label">Quantidade</div>
+              <input id="rxQtd" class="rx-input" type="text" placeholder="Ex: 21 comprimidos"/>
+            </div>
+          </div>
+
+          <!-- Instruções de uso -->
+          <div class="rx-field" style="margin-top:4px;">
+            <div class="rx-label">Instruções de Uso</div>
+            <textarea id="rxInstr" class="ncs-textarea" style="min-height:80px;" placeholder="Ex: Tomar após as refeições"></textarea>
+            <div class="rx-chips-sm" style="margin-top:8px;">
+              <button class="rx-chip-sm" onclick="rxChipAppend('rxInstr',this)">Com água</button>
+              <button class="rx-chip-sm" onclick="rxChipAppend('rxInstr',this)">Após refeições</button>
+              <button class="rx-chip-sm" onclick="rxChipAppend('rxInstr',this)">Em jejum</button>
+              <button class="rx-chip-sm" onclick="rxChipAppend('rxInstr',this)">À noite</button>
+              <button class="rx-chip-sm" onclick="rxChipAppend('rxInstr',this)">Uso tópico</button>
+              <button class="rx-chip-sm" onclick="rxChipAppend('rxInstr',this)">Não suspender</button>
+            </div>
+          </div>
+
+          <!-- Botão adicionar -->
+          <button class="rx-add-btn" onclick="rxAddMed()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar Medicamento
+          </button>
+        </div>
+
+        <!-- Lista de prescritos -->
+        <div class="rx-list-section" id="rxListSection">
+          <!-- Empty state — só o botão, sem repetir título -->
+          <div class="rx-empty" id="rxEmpty">
+            <button class="rx-empty-add-btn" onclick="rxOpenForm()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Adicionar medicamento
+            </button>
+          </div>
+          <!-- Lista -->
+          <div id="rxListHeader" style="display:none;" class="rx-list-header">
+            <span class="rx-list-title" id="rxListTitle">Medicamentos Prescritos (0)</span>
+            <button class="rx-print-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Imprimir Receita
+            </button>
+          </div>
+          <div id="rxList" class="rx-list"></div>
+        </div>
+
       </div>
 
       <!-- ── STEP 7: EXAMES ── -->
       <div class="ncs-pane" id="ncsPane7">
+
+        <!-- Header -->
         <div class="ncs-pane-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6"/><path d="M9 16h4"/></svg>
         </div>
         <div class="ncs-pane-title">Solicitação de Exames</div>
         <div class="ncs-pane-sub">Solicite os exames complementares necessários para este atendimento</div>
-        <div class="ncs-field">
-          <div class="ncs-label"><div class="ncs-label-text">Sugestões rápidas</div></div>
-          <div class="ncs-chips">
-            <button class="ncs-chip" onclick="ncsAddExameChip(this, 'Hemograma completo')">Hemograma</button>
-            <button class="ncs-chip" onclick="ncsAddExameChip(this, 'Raio-X de tórax')">Raio-X</button>
-            <button class="ncs-chip" onclick="ncsAddExameChip(this, 'Ultrassom abdominal')">Ultrassom</button>
-            <button class="ncs-chip" onclick="ncsAddExameChip(this, 'Glicemia em jejum')">Glicemia</button>
-            <button class="ncs-chip" onclick="ncsAddExameChip(this, 'Urina tipo I')">Urina I</button>
-            <button class="ncs-chip" onclick="ncsAddExameChip(this, 'Outros')">Outros</button>
+
+        <!-- Formulário de exame (oculto por padrão) -->
+        <div class="rx-form-card" id="exFormCard" style="display:none;">
+          <!-- Header do card -->
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border,#E2E8F0);">
+            <span style="font-family:var(--font-ui);font-size:14px;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:7px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Solicitar Exame
+            </span>
+            <button onclick="exCloseForm()" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;border:none;background:transparent;cursor:pointer;color:var(--text-tertiary);transition:background .12s;" onmouseover="this.style.background='var(--bg-subtle)'" onmouseout="this.style.background='transparent'">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          <!-- Row: Nome do Exame + Tipo -->
+          <div class="ex-row2">
+            <div class="rx-field">
+              <div class="rx-label">Nome do Exame <span class="rx-req">*</span></div>
+              <div class="p1-search-wrap" id="exNameWrap">
+                <div class="p1-search-row">
+                  <svg class="p1-search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                  <input id="exNameInput" class="p1-search-input" type="text"
+                    placeholder="Buscar exame por nome ou código TUSS..."
+                    oninput="exNameSearch(this.value)" autocomplete="off"/>
+                  <button class="p1-clear-btn" id="exClearBtn" style="display:none;" onclick="exClearName()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </button>
+                </div>
+                <div class="p1-dropdown" id="exNameDrop">
+                  <div class="p1-drop-header" id="exNameDropLbl">Exames comuns</div>
+                  <div id="exNameDropList"></div>
+                </div>
+              </div>
+            </div>
+            <div class="rx-field">
+              <div class="rx-label">Tipo</div>
+              <div class="ex-select-wrap" id="exTipoWrap">
+                <button class="ex-select-btn" id="exTipoBtn" onclick="exToggleDrop('exTipoWrap')">
+                  <span id="exTipoVal">Laboratorial</span>
+                  <svg class="ex-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="ex-select-drop" id="exTipoWrap-drop">
+                  <div class="ex-select-item active" onclick="exSelectOpt('exTipo','Laboratorial','exTipoWrap',this)">
+                    <svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Laboratorial
+                  </div>
+                  <div class="ex-select-item" onclick="exSelectOpt('exTipo','Imagem','exTipoWrap',this)">
+                    <svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Imagem
+                  </div>
+                  <div class="ex-select-item" onclick="exSelectOpt('exTipo','Cardiológico','exTipoWrap',this)">
+                    <svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Cardiológico
+                  </div>
+                  <div class="ex-select-item" onclick="exSelectOpt('exTipo','Endoscopia','exTipoWrap',this)">
+                    <svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Endoscopia
+                  </div>
+                  <div class="ex-select-item" onclick="exSelectOpt('exTipo','Outros','exTipoWrap',this)">
+                    <svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Outros
+                  </div>
+                </div>
+                <input type="hidden" id="exTipo" value="Laboratorial"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row: Código TUSS + Urgência -->
+          <div class="ex-row2" style="margin-top:4px;">
+            <div class="rx-field">
+              <div class="rx-label">Código TUSS</div>
+              <input id="exTUSS" class="rx-input" type="text" placeholder="Ex: 40301630"/>
+            </div>
+            <div class="rx-field">
+              <div class="rx-label">Urgência</div>
+              <div class="ex-select-wrap" id="exUrgWrap">
+                <button class="ex-select-btn" id="exUrgBtn" onclick="exToggleDrop('exUrgWrap')">
+                  <span id="exUrgVal">Rotina</span>
+                  <svg class="ex-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="ex-select-drop" id="exUrgWrap-drop">
+                  <div class="ex-select-item active" onclick="exSelectOpt('exUrgencia','Rotina','exUrgWrap',this)">
+                    <svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Rotina</span>
+                    <span class="ex-urgencia-badge ex-urgencia-rotina" style="margin-left:auto;">Rotina</span>
+                  </div>
+                  <div class="ex-select-item" onclick="exSelectOpt('exUrgencia','Urgente','exUrgWrap',this)">
+                    <svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Urgente</span>
+                    <span class="ex-urgencia-badge ex-urgencia-urgente" style="margin-left:auto;">Urgente</span>
+                  </div>
+                  <div class="ex-select-item" onclick="exSelectOpt('exUrgencia','Emergência','exUrgWrap',this)">
+                    <svg class="ex-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Emergência</span>
+                    <span class="ex-urgencia-badge ex-urgencia-emergencia" style="margin-left:auto;">Emergência</span>
+                  </div>
+                </div>
+                <input type="hidden" id="exUrgencia" value="Rotina"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Observações -->
+          <div class="rx-field" style="margin-top:4px;">
+            <div class="rx-label">Observações</div>
+            <input id="exObs" class="rx-input" type="text" placeholder="Instruções especiais..."/>
+          </div>
+
+          <!-- Botão Adicionar -->
+          <button class="rx-add-btn" onclick="exAddExame()" style="margin-top:16px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar Exame
+          </button>
+        </div>
+
+        <!-- Lista de exames + empty state -->
+        <div class="rx-list-section" id="exListSection">
+          <!-- Empty state -->
+          <div class="rx-empty" id="exEmpty">
+            <button class="rx-empty-add-btn" onclick="exOpenForm()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Solicitar exame
+            </button>
+          </div>
+          <!-- Header da lista -->
+          <div id="exListHeader" style="display:none;" class="rx-list-header">
+            <span class="rx-list-title" id="exListTitle">Exames Solicitados (0)</span>
+            <button class="rx-print-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Imprimir Solicitação
+            </button>
+          </div>
+          <div id="exList" class="rx-list"></div>
+        </div>
+
+        <!-- Seção: Imagens Médicas -->
+        <div class="ex-images-section">
+          <div class="ex-images-header">
+            <div class="ex-images-title-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <div>
+                <div class="ex-images-title">Imagens Médicas</div>
+                <div class="ex-images-sub">Exames de imagem do paciente (Raio-X, Tomografia, Ressonância, etc.)</div>
+              </div>
+            </div>
+            <button class="ex-register-btn" onclick="alert('Registrar exame de imagem...')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Registrar Exame
+            </button>
+          </div>
+          <div class="ex-images-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <div class="ex-images-empty-title">Nenhuma imagem médica registrada para este paciente.</div>
+            <button class="p1-cadastrar-btn" onclick="alert('Registrar primeiro exame...')" style="margin-top:10px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Registrar primeiro exame
+            </button>
           </div>
         </div>
-        <div class="ncs-item-list" id="ncsExamesList"></div>
-        <button class="ncs-add-btn" onclick="ncsAddExame()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Adicionar exame
-        </button>
+
       </div>
+
+      
 
     </div><!-- /ncs-content -->
 
@@ -3402,6 +6435,51 @@ function hmpCheckEmpty(section) {
     </footer>
 
   </div><!-- /ncs-main -->
+</div>
+
+
+<!-- ── Toast de feedback ── -->
+<div class="toast-container" id="toastContainer"></div>
+
+
+<!-- ── Agenda Context Menu ── -->
+<div class="agenda-menu" id="agendaMenu">
+  <div class="agenda-menu-header" id="agendaMenuHeader">
+    <div class="agenda-menu-name" id="agendaMenuName"></div>
+    <div class="agenda-menu-info" id="agendaMenuInfo"></div>
+  </div>
+  <div class="agenda-menu-divider"></div>
+  <button class="agenda-menu-item" onclick="agendaVerDetalhes()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    Ver detalhes
+  </button>
+  <button class="agenda-menu-item" onclick="agendaEditar()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    Editar
+  </button>
+  <div class="agenda-menu-divider"></div>
+  <button class="agenda-menu-item agenda-menu-danger" onclick="agendaConfirmarCancelar()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+    Cancelar
+  </button>
+</div>
+
+<!-- ── Modal de Confirmação ── -->
+<div class="confirm-backdrop" id="confirmBackdrop">
+  <div class="confirm-modal" id="confirmModal">
+    <div class="confirm-icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="3"/></svg>
+    </div>
+    <div class="confirm-title">Cancelar consulta?</div>
+    <div class="confirm-desc" id="confirmDesc">Esta ação não pode ser desfeita. A consulta será marcada como cancelada.</div>
+    <div class="confirm-actions">
+      <button class="confirm-btn-cancel" onclick="closeConfirm()">Manter consulta</button>
+      <button class="confirm-btn-danger" onclick="agendaCancelarConfirmado()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        Sim, cancelar
+      </button>
+    </div>
+  </div>
 </div>
 
 </body>
