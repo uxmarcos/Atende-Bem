@@ -4098,7 +4098,7 @@ body.sb-collapsed .ncs-screen {
   position: fixed; top:0; right:0; bottom:0;
   left: 268px; z-index: 9000;
   background: var(--bg-page, #F8FAFC);
-  display: flex; flex-direction: column;
+  display: none; flex-direction: column;
   opacity: 0; transition: opacity .2s, left .28s;
   overflow: hidden;
 }
@@ -4354,6 +4354,442 @@ body.sb-collapsed .ncs-screen {
   font-size: 14px; color: var(--text-tertiary);
 }
 
+
+/* ══════════════════════════════════════════════════════
+   TELEMEDICINA
+   ══════════════════════════════════════════════════════ */
+
+/* KPIs */
+.tele-kpis {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.tele-kpi {
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+[data-theme="dark"] .tele-kpi { background: #1E293B; border-color: #334155; }
+.tele-kpi-left { flex: 1; }
+.tele-kpi-label { font-family: var(--font-ui); font-size: 11px; color: var(--text-tertiary); margin-bottom: 4px; font-weight: 500; }
+.tele-kpi-val { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text-primary); }
+.tele-kpi-ico { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* Tabs */
+.tele-tabs {
+  display: flex; gap: 4px;
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 4px;
+  width: fit-content;
+}
+[data-theme="dark"] .tele-tabs { background: #1E293B; border-color: #334155; }
+.tele-tab {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 16px; border-radius: 7px;
+  border: none; background: transparent;
+  font-family: var(--font-ui); font-size: 13px; font-weight: 500;
+  color: var(--text-tertiary); cursor: pointer; transition: all .15s;
+}
+.tele-tab:hover { background: var(--bg-subtle); color: var(--text-secondary); }
+.tele-tab.active { background: var(--brand); color: #fff; font-weight: 600; }
+
+/* Tab content */
+.tele-tab-content { display: flex; flex-direction: column; gap: 12px; }
+
+/* Consultório grid */
+.tele-consultorio-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr 280px;
+  gap: 14px;
+  min-height: 500px;
+}
+
+/* Sala de Espera */
+.tele-sala-espera {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 14px;
+  padding: 18px; display: flex; flex-direction: column; gap: 12px;
+}
+[data-theme="dark"] .tele-sala-espera { background: #1E293B; border-color: #334155; }
+
+.tele-section-header { display: flex; align-items: center; justify-content: space-between; }
+.tele-section-title { font-family: var(--font-ui); font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.tele-count-badge {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--brand); color: #fff;
+  font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.tele-espera-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 10px;
+  background: var(--bg-subtle, #F8FAFC); border: 1px solid #E2E8F0;
+}
+[data-theme="dark"] .tele-espera-item { background: #0F172A; border-color: #334155; }
+.tele-admit-btn {
+  height: 28px; padding: 0 12px; border-radius: 7px;
+  background: var(--brand); color: #fff; border: none;
+  font-family: var(--font-ui); font-size: 11px; font-weight: 600;
+  cursor: pointer; transition: background .15s; flex-shrink: 0;
+}
+.tele-admit-btn:hover { background: var(--brand-hover, #059669); }
+
+/* Painel central */
+.tele-main-panel {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 14px;
+  padding: 20px; display: flex; flex-direction: column;
+}
+[data-theme="dark"] .tele-main-panel { background: #1E293B; border-color: #334155; }
+
+.tele-video-icon {
+  width: 72px; height: 72px; border-radius: 20px;
+  background: var(--bg-subtle, #F1F5F9);
+  border: 1px solid #E2E8F0;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-tertiary);
+}
+[data-theme="dark"] .tele-video-icon { background: #334155; border-color: #475569; }
+
+.tele-agendado-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 10px;
+  border: 1px solid #E2E8F0; background: #fff;
+  cursor: pointer; transition: all .15s; text-align: left;
+  min-width: 220px;
+}
+.tele-agendado-card:hover { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
+[data-theme="dark"] .tele-agendado-card { background: #1E293B; border-color: #334155; }
+.tele-iniciar-mini {
+  margin-left: auto; flex-shrink: 0;
+  height: 22px; padding: 0 8px; border-radius: 6px;
+  background: rgba(16,185,129,0.1); color: var(--brand);
+  font-family: var(--font-ui); font-size: 10px; font-weight: 700;
+  display: inline-flex; align-items: center;
+}
+
+/* Vídeo em andamento */
+.tele-ao-vivo-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #EF4444;
+  animation: pulseDot 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes pulseDot {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .6; transform: scale(1.3); }
+}
+.tele-encerrar-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 30px; padding: 0 12px; border-radius: 8px;
+  background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25);
+  color: #DC2626; font-family: var(--font-ui); font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: background .15s;
+}
+.tele-encerrar-btn:hover { background: rgba(239,68,68,0.14); }
+
+.tele-video-area {
+  flex: 1; background: #0F172A; border-radius: 12px;
+  position: relative; overflow: hidden; min-height: 240px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+}
+.tele-video-main {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.tele-video-patient-label {
+  font-family: var(--font-ui); font-size: 15px; font-weight: 600; color: #fff;
+}
+.tele-video-status {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-ui); font-size: 12px; color: #10B981;
+  background: rgba(16,185,129,0.15); padding: 4px 10px; border-radius: 99px;
+}
+.tele-video-self {
+  position: absolute; bottom: 12px; right: 12px;
+  width: 100px; height: 72px; border-radius: 8px;
+  background: #1E293B; border: 2px solid rgba(255,255,255,0.2);
+  overflow: hidden;
+}
+
+/* Controles de vídeo */
+.tele-controls {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.tele-ctrl-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--bg-subtle, #F1F5F9); border: 1px solid #E2E8F0;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary); cursor: pointer; transition: all .15s;
+}
+.tele-ctrl-btn:hover { background: #E2E8F0; color: var(--text-primary); }
+.tele-ctrl-btn.muted { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: #DC2626; }
+.tele-ctrl-danger { background: #EF4444; border-color: #EF4444; color: #fff; }
+.tele-ctrl-danger:hover { background: #DC2626; border-color: #DC2626; }
+[data-theme="dark"] .tele-ctrl-btn { background: #334155; border-color: #475569; color: #94A3B8; }
+
+/* Painel lateral */
+.tele-side-panel {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.tele-patient-card {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 14px; padding: 16px;
+}
+[data-theme="dark"] .tele-patient-card { background: #1E293B; border-color: #334155; }
+.tele-timer {
+  font-family: 'Courier New', monospace; font-size: 13px;
+  color: var(--brand); font-weight: 700; letter-spacing: .05em;
+}
+.tele-patient-meta-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.tele-meta-label { font-family: var(--font-ui); font-size: 11px; color: var(--text-tertiary); }
+.tele-meta-val { font-family: var(--font-ui); font-size: 12px; font-weight: 500; color: var(--text-primary); }
+.tele-action-link-btn {
+  display: flex; align-items: center; gap: 6px; justify-content: center;
+  height: 32px; border-radius: 8px;
+  border: 1px solid #E2E8F0; background: #fff;
+  font-family: var(--font-ui); font-size: 12px; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer; transition: background .15s;
+}
+.tele-action-link-btn:hover { background: var(--bg-subtle); }
+[data-theme="dark"] .tele-action-link-btn { background: #1E293B; border-color: #334155; }
+
+/* Chat */
+.tele-chat-card {
+  background: #fff; border: 1px solid #E2E8F0; border-radius: 14px; padding: 16px;
+  flex: 1; display: flex; flex-direction: column; min-height: 200px;
+}
+[data-theme="dark"] .tele-chat-card { background: #1E293B; border-color: #334155; }
+.tele-chat-msgs { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; min-height: 80px; margin-bottom: 8px; }
+.tele-chat-input-row { display: flex; gap: 8px; }
+.tele-chat-input {
+  flex: 1; height: 36px; padding: 0 12px; border-radius: 8px;
+  border: 1px solid #E2E8F0; background: #fff;
+  font-family: var(--font-ui); font-size: 12px; color: var(--text-primary);
+  outline: none;
+}
+.tele-chat-input:focus { border-color: var(--brand); }
+[data-theme="dark"] .tele-chat-input { background: #0F172A; border-color: #475569; color: #F1F5F9; }
+.tele-chat-send {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: var(--brand); color: #fff; border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .15s;
+}
+.tele-chat-send:hover { background: var(--brand-hover, #059669); }
+.tele-chat-msg-self {
+  align-self: flex-end; background: var(--brand); color: #fff;
+  padding: 6px 10px; border-radius: 10px 10px 2px 10px;
+  font-family: var(--font-ui); font-size: 12px; max-width: 85%;
+}
+.tele-chat-msg-other {
+  align-self: flex-start; background: var(--bg-subtle, #F1F5F9); color: var(--text-primary);
+  padding: 6px 10px; border-radius: 10px 10px 10px 2px;
+  font-family: var(--font-ui); font-size: 12px; max-width: 85%;
+}
+
+/* Agenda e Histórico list */
+.tele-status-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.tele-chip {
+  height: 30px; padding: 0 14px; border-radius: 99px;
+  border: 1.5px solid #E2E8F0; background: #fff;
+  font-family: var(--font-ui); font-size: 12px; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer; transition: all .15s;
+}
+.tele-chip:hover { border-color: #CBD5E1; }
+.tele-chip.active { border-color: var(--brand); background: rgba(16,185,129,0.08); color: var(--brand); font-weight: 600; }
+[data-theme="dark"] .tele-chip { background: #1E293B; border-color: #334155; color: #94A3B8; }
+
+.tele-agenda-list { display: flex; flex-direction: column; gap: 8px; }
+.tele-agenda-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px; border-radius: 12px;
+  background: #fff; border: 1px solid #E2E8F0;
+  transition: box-shadow .15s;
+}
+.tele-agenda-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-color: #CBD5E1; }
+[data-theme="dark"] .tele-agenda-item { background: #1E293B; border-color: #334155; }
+.tele-agenda-item-info { flex: 1; min-width: 0; }
+.tele-agenda-item-name { font-family: var(--font-ui); font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.tele-agenda-item-meta { font-family: var(--font-ui); font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+.tele-agenda-item-actions { display: flex; align-items: center; gap: 8px; }
+.tele-wa-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 30px; padding: 0 12px; border-radius: 7px;
+  border: 1px solid #E2E8F0; background: #fff;
+  font-family: var(--font-ui); font-size: 11px; font-weight: 500;
+  color: #25D366; cursor: pointer; transition: background .15s;
+}
+.tele-wa-btn:hover { background: rgba(37,211,102,0.08); border-color: rgba(37,211,102,0.3); }
+.tele-email-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 30px; padding: 0 12px; border-radius: 7px;
+  border: 1px solid #E2E8F0; background: #fff;
+  font-family: var(--font-ui); font-size: 11px; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer; transition: background .15s;
+}
+.tele-email-btn:hover { background: var(--bg-subtle); }
+.tele-iniciar-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 16px; border-radius: 8px;
+  background: var(--brand); color: #fff; border: none;
+  font-family: var(--font-ui); font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: background .15s;
+}
+.tele-iniciar-btn:hover { background: var(--brand-hover, #059669); }
+
+
+/* ══════════════════════════════════════════════════════
+   CUSTOM DATE PICKER
+   ══════════════════════════════════════════════════════ */
+
+/* Trigger button */
+.custom-dt-wrap { position: relative; width: 100%; }
+.custom-dt-btn {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%; height: 40px; padding: 0 12px;
+  border: 1px solid var(--border, #E2E8F0); border-radius: 10px;
+  background: #fff; cursor: pointer;
+  font-family: var(--font-ui); font-size: 13px;
+  color: var(--text-primary); text-align: left;
+  transition: border-color .15s, box-shadow .15s;
+}
+.custom-dt-btn:hover { border-color: #CBD5E1; }
+.custom-dt-btn:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(16,185,129,0.12); }
+[data-theme="dark"] .custom-dt-btn { background: #0F172A; border-color: #475569; color: #F1F5F9; }
+.custom-dt-btn svg { color: var(--text-tertiary); flex-shrink: 0; }
+.custom-dt-val { flex: 1; }
+
+/* Backdrop */
+.cdp-backdrop {
+  position: fixed; inset: 0; z-index: 99999;
+  background: transparent;
+}
+
+/* Panel */
+.cdp-panel {
+  position: fixed;
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.14);
+  width: 320px;
+  padding: 0;
+  overflow: hidden;
+  animation: cdpIn .15s cubic-bezier(.34,1.4,.64,1);
+  z-index: 100000;
+}
+[data-theme="dark"] .cdp-panel { background: #1E293B; border-color: #334155; }
+@keyframes cdpIn {
+  from { opacity:0; transform:scale(.94) translateY(-6px); }
+  to   { opacity:1; transform:scale(1)   translateY(0);    }
+}
+
+/* Header */
+.cdp-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px 8px;
+}
+.cdp-nav-btn {
+  width: 28px; height: 28px; border-radius: 8px;
+  border: 1px solid var(--border, #E2E8F0); background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary); cursor: pointer; transition: background .12s;
+}
+.cdp-nav-btn:hover { background: var(--bg-subtle); }
+[data-theme="dark"] .cdp-nav-btn { background: #1E293B; border-color: #334155; }
+.cdp-month-label {
+  font-family: var(--font-ui); font-size: 14px; font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Weekdays */
+.cdp-weekdays {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  padding: 0 12px 4px;
+}
+.cdp-weekdays span {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 600;
+  color: var(--text-tertiary); text-align: center; padding: 4px 0;
+}
+
+/* Grid */
+.cdp-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  padding: 0 12px 8px; gap: 2px;
+}
+.cdp-day {
+  aspect-ratio: 1; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-ui); font-size: 12px; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer;
+  transition: background .1s, color .1s;
+  border: none; background: transparent;
+}
+.cdp-day:hover { background: var(--bg-subtle); color: var(--text-primary); }
+.cdp-day.today {
+  background: #0F172A; color: #fff; font-weight: 700;
+}
+.cdp-day.selected {
+  background: var(--brand); color: #fff; font-weight: 700;
+}
+.cdp-day.other-month { color: var(--text-tertiary); opacity: .35; }
+.cdp-day.today.selected { background: var(--brand); }
+[data-theme="dark"] .cdp-day.today { background: #334155; }
+
+/* Time section */
+.cdp-time-section {
+  padding: 8px 14px 4px;
+  border-top: 1px solid var(--border, #E2E8F0);
+}
+[data-theme="dark"] .cdp-time-section { border-color: #334155; }
+.cdp-time-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cdp-time-field { flex: 1; }
+.cdp-time-label {
+  font-family: var(--font-ui); font-size: 10px; font-weight: 600;
+  color: var(--text-tertiary); margin-bottom: 4px; display: block;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+.cdp-time-input-wrap {
+  display: flex; align-items: center; gap: 6px;
+  height: 34px; padding: 0 10px;
+  border: 1px solid var(--border, #E2E8F0); border-radius: 8px;
+  background: #fff; color: var(--text-tertiary);
+}
+[data-theme="dark"] .cdp-time-input-wrap { background: #0F172A; border-color: #475569; }
+.cdp-time-input {
+  flex: 1; border: none; outline: none; background: transparent;
+  font-family: var(--font-ui); font-size: 13px; font-weight: 500;
+  color: var(--text-primary);
+}
+[data-theme="dark"] .cdp-time-input { color: #F1F5F9; }
+
+/* Footer */
+.cdp-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px 14px; gap: 8px;
+}
+.cdp-clear-btn, .cdp-today-btn {
+  height: 30px; padding: 0 12px; border-radius: 7px;
+  border: 1px solid var(--border, #E2E8F0); background: transparent;
+  font-family: var(--font-ui); font-size: 12px; font-weight: 500;
+  color: var(--text-tertiary); cursor: pointer; transition: background .12s;
+}
+.cdp-clear-btn:hover, .cdp-today-btn:hover { background: var(--bg-subtle); color: var(--text-secondary); }
+.cdp-today-btn { color: var(--brand); border-color: rgba(16,185,129,0.3); }
+.cdp-confirm-btn {
+  height: 30px; padding: 0 14px; border-radius: 7px;
+  background: var(--brand); color: #fff; border: none;
+  font-family: var(--font-ui); font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: background .15s; margin-left: auto;
+}
+.cdp-confirm-btn:hover { background: var(--brand-hover, #059669); }
+
 </style>
 </head>
 <body>
@@ -4391,7 +4827,7 @@ body.sb-collapsed .ncs-screen {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
         <span>Procedimento</span>
       </div>
-      <div class="ni-sub-item" onclick="event.stopPropagation()">
+      <div class="ni-sub-item" id="sbTelemedicina" onclick="event.stopPropagation();sbSetActive('sbTelemedicina');openTelemedicina()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
         <span>Telemedicina</span>
       </div>
@@ -7739,7 +8175,14 @@ function navCloseAll() {
   const ALL_SCREENS = ['ncsScreen','agvScreen','crmScreen','crmRelScreen','crmDetScreen','procScreen'];
   ALL_SCREENS.forEach(id => {
     const el = document.getElementById(id);
-    if (el) { el.classList.remove('open'); el.style.display = 'none'; }
+    if (el) {
+      el.classList.remove('open');
+      // Aguardar a transição antes de sumir (evita flash do dashboard)
+      const t = el;
+      setTimeout(() => {
+        if (!t.classList.contains('open')) t.style.display = 'none';
+      }, 250);
+    }
   });
 }
 
@@ -7758,8 +8201,15 @@ function navOpenScreen(screenId) {
   const screen = document.getElementById(screenId);
   if (screen) {
     screen.style.left = left;
+    // Mostrar ANTES de fechar as outras (evita flash do dashboard)
     screen.style.display = 'flex';
-    requestAnimationFrame(() => screen.classList.add('open'));
+    screen.style.opacity = '0';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        screen.classList.add('open');
+        screen.style.opacity = '';
+      });
+    });
   }
 }
 
@@ -7901,10 +8351,432 @@ if (document.readyState !== 'loading') {
   navSetActive('sbVisaoGeral', null);
 }
 
+
+// ══════════════════════════════════════════════════════════
+// TELEMEDICINA
+// ══════════════════════════════════════════════════════════
+
+const TELE_APPOINTMENTS = [
+  { id:1, name:'Maria Aparecida Santos',  initials:'MA', color:'#3B82F6', time:'14:00', date:'28/03/2026', status:'agendada',    dur:30 },
+  { id:2, name:'João Carlos Ferreira',    initials:'JC', color:'#10B981', time:'14:30', date:'28/03/2026', status:'aguardando',   dur:30 },
+  { id:3, name:'Ana Paula Rodrigues',     initials:'AP', color:'#8B5CF6', time:'15:00', date:'28/03/2026', status:'agendada',    dur:45 },
+  { id:4, name:'Carlos Eduardo Lima',     initials:'CE', color:'#F59E0B', time:'15:45', date:'28/03/2026', status:'agendada',    dur:30 },
+];
+
+const TELE_HISTORICO = [
+  { id:5, name:'Beatriz Santos Oliveira', initials:'BS', color:'#EF4444', time:'10:00', date:'26/03/2026', status:'concluida', dur:28 },
+  { id:6, name:'Roberto Alves Mendes',    initials:'RM', color:'#06B6D4', time:'11:00', date:'26/03/2026', status:'concluida', dur:35 },
+  { id:7, name:'Fernanda Costa Silva',    initials:'FC', color:'#EC4899', time:'09:00', date:'25/03/2026', status:'concluida', dur:22 },
+  { id:8, name:'Pedro Henrique Dias',     initials:'PH', color:'#6366F1', time:'14:00', date:'24/03/2026', status:'cancelada', dur:0  },
+];
+
+let teleTimerInterval = null;
+let teleTimerSeconds = 0;
+let teleCurrentPatient = null;
+
+function openTelemedicina() {
+  navCloseAll();
+  navSetActive(null, 'sbTelemedicina');
+  navOpenScreen('teleScreen');
+  teleSetTab('consultorio', document.querySelector('.tele-tab'));
+  teleRenderAgenda(TELE_APPOINTMENTS);
+  teleRenderHistorico(TELE_HISTORICO);
+}
+
+function teleSetTab(tab, btn) {
+  document.querySelectorAll('.tele-tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('.tele-tab-content').forEach(el => el.style.display = 'none');
+  const el = document.getElementById('tele' + tab.charAt(0).toUpperCase() + tab.slice(1));
+  if (el) el.style.display = 'flex';
+}
+
+function teleAtualizar() {
+  showToast({ title: 'Telemedicina atualizada', sub: 'Dados sincronizados.', type: 'success', duration: 2500 });
+}
+
+// ── Iniciar consulta ──
+function teleIniciarConsulta(pat) {
+  teleCurrentPatient = pat;
+  document.getElementById('teleIniciarState').style.display = 'none';
+  const andamento = document.getElementById('teleEmAndamentoState');
+  andamento.style.display = 'flex';
+
+  // Preencher painel lateral
+  document.getElementById('telePacienteInfo').style.display = 'none';
+  document.getElementById('telePacienteDetalhes').style.display = 'block';
+  document.getElementById('telePacAv').textContent = pat.initials;
+  document.getElementById('telePacAv').style.background = pat.color;
+  document.getElementById('telePacName').textContent = pat.name;
+  document.getElementById('telePacInicio').textContent = pat.time || new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('teleVideoPatientName').textContent = pat.name;
+
+  // Iniciar timer
+  teleTimerSeconds = 0;
+  if (teleTimerInterval) clearInterval(teleTimerInterval);
+  teleTimerInterval = setInterval(() => {
+    teleTimerSeconds++;
+    const m = String(Math.floor(teleTimerSeconds/60)).padStart(2,'0');
+    const s = String(teleTimerSeconds % 60).padStart(2,'0');
+    const el = document.getElementById('teleTimer');
+    if (el) el.textContent = m + ':' + s;
+  }, 1000);
+
+  showToast({ title: 'Consulta iniciada', sub: 'Conectado com ' + pat.name, type: 'success', duration: 3000 });
+}
+
+function teleEncerrar() {
+  if (teleTimerInterval) { clearInterval(teleTimerInterval); teleTimerInterval = null; }
+  document.getElementById('teleEmAndamentoState').style.display = 'none';
+  document.getElementById('teleIniciarState').style.display = 'block';
+  document.getElementById('telePacienteInfo').style.display = 'flex';
+  document.getElementById('telePacienteDetalhes').style.display = 'none';
+  showToast({ title: 'Consulta encerrada', sub: 'Duração: ' + document.getElementById('teleTimer').textContent, type: 'success', duration: 4000 });
+}
+
+function teleToggleMic(btn) {
+  btn.classList.toggle('muted');
+}
+function teleToggleCam(btn) {
+  btn.classList.toggle('muted');
+}
+
+// ── Chat ──
+function teleSendMsg() {
+  const input = document.getElementById('teleChatInput');
+  const msgs  = document.getElementById('teleChatMsgs');
+  if (!input || !msgs || !input.value.trim()) return;
+  // Limpar "nenhuma mensagem" se for o primeiro
+  if (msgs.querySelector('div[style]')) msgs.innerHTML = '';
+  const msg = document.createElement('div');
+  msg.className = 'tele-chat-msg-self';
+  msg.textContent = input.value.trim();
+  msgs.appendChild(msg);
+  input.value = '';
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ── Renderizar agenda ──
+function teleRenderAgenda(appts) {
+  const list = document.getElementById('teleAgendaList');
+  if (!list) return;
+  const statusMap = {
+    agendada:    { label:'Agendada',    cls:'agv-badge-wait' },
+    aguardando:  { label:'Aguardando',  cls:'agv-badge-conf' },
+    em_andamento:{ label:'Em Andamento',cls:'agv-badge-ok'   },
+    concluida:   { label:'Concluída',   cls:'agv-badge-ok'   },
+  };
+  list.innerHTML = '';
+  appts.forEach(a => {
+    const st = statusMap[a.status] || { label: a.status, cls:'agv-badge-wait' };
+    const el = document.createElement('div');
+    el.className = 'tele-agenda-item';
+    el.innerHTML = `
+      <div class="crm-patient-av" style="background:${a.color};width:40px;height:40px;font-size:13px;flex-shrink:0;">${a.initials}</div>
+      <div class="tele-agenda-item-info">
+        <div class="tele-agenda-item-name">${a.name} <span class="agv-appt-badge ${st.cls}" style="font-size:10px;padding:0 8px;">${st.label}</span></div>
+        <div class="tele-agenda-item-meta">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11" style="display:inline;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          ${a.date} ${a.time} · ${a.dur}min
+        </div>
+      </div>
+      <div class="tele-agenda-item-actions">
+        <button class="tele-wa-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          WhatsApp
+        </button>
+        <button class="tele-email-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Email
+        </button>
+        <button class="tele-iniciar-btn" onclick="teleSetTab('consultorio',document.querySelector('.tele-tab'));setTimeout(()=>teleIniciarConsulta({name:'${a.name.replace(/'/g,"\'")}',initials:'${a.initials}',color:'${a.color}',time:'${a.time}'}),100)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          Iniciar
+        </button>
+      </div>`;
+    list.appendChild(el);
+  });
+}
+
+// ── Renderizar histórico ──
+function teleRenderHistorico(appts) {
+  const list = document.getElementById('teleHistoricoList');
+  if (!list) return;
+  list.innerHTML = '';
+  appts.forEach(a => {
+    const isConcluida = a.status === 'concluida';
+    const el = document.createElement('div');
+    el.className = 'tele-agenda-item';
+    el.innerHTML = `
+      <div class="crm-patient-av" style="background:${a.color};width:40px;height:40px;font-size:13px;flex-shrink:0;">${a.initials}</div>
+      <div class="tele-agenda-item-info">
+        <div class="tele-agenda-item-name">${a.name}
+          <span class="agv-appt-badge ${isConcluida?'agv-badge-ok':'agv-badge-cancel'}" style="font-size:10px;padding:0 8px;">${isConcluida?'Concluída':'Cancelada'}</span>
+        </div>
+        <div class="tele-agenda-item-meta">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11" style="display:inline;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          ${a.date} ${a.time}${isConcluida ? ' · ' + a.dur + 'min' : ''}
+        </div>
+      </div>
+      ${isConcluida ? `<button class="tele-action-link-btn" style="font-size:12px;padding:0 12px;">Ver Prontuário</button>` : ''}`;
+    list.appendChild(el);
+  });
+}
+
+// ── Filtrar status agenda ──
+function teleFilterStatus(status, btn) {
+  document.querySelectorAll('#teleAgenda .tele-chip').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const filtered = status === 'todas' ? TELE_APPOINTMENTS : TELE_APPOINTMENTS.filter(a => a.status === status);
+  teleRenderAgenda(filtered);
+}
+
+// ── Busca de paciente no modal ──
+function telePatSearch(val) {
+  const drop  = document.getElementById('telePatDrop');
+  const list  = document.getElementById('telePatList');
+  const lbl   = document.getElementById('telePatLbl');
+  if (!drop || !list) return;
+  if (val.length < 2) { drop.classList.remove('open'); return; }
+  const q = val.toLowerCase();
+  const found = (typeof NCS_PATIENTS !== 'undefined' ? NCS_PATIENTS : []).filter(p =>
+    p.name.toLowerCase().includes(q) || p.cpf.replace(/[^0-9]/g,'').includes(q.replace(/[^0-9]/g,''))
+  );
+  list.innerHTML = '';
+  if (!found.length) {
+    if (lbl) lbl.textContent = 'Nenhum resultado';
+    list.innerHTML = `<div class="p1-not-found"><div class="p1-not-found-text">Nenhum resultado para "${val}"</div></div>`;
+  } else {
+    if (lbl) lbl.textContent = found.length + ' paciente(s)';
+    found.forEach(p => {
+      const el = document.createElement('div');
+      el.className = 'p1-result-item';
+      el.innerHTML = `<div class="p1-result-av">${p.initials}</div><div class="p1-result-body"><div class="p1-result-name">${p.name}</div><div class="p1-result-info">${p.cpf}</div></div>`;
+      el.onclick = () => { document.getElementById('telePatInput').value = p.name; drop.classList.remove('open'); };
+      list.appendChild(el);
+    });
+  }
+  drop.classList.add('open');
+}
+
+// ── Modal Nova Consulta Tele ──
+function openNovaConsultaTeleModal() {
+  document.getElementById('novaConsultaTeleBackdrop').classList.add('open');
+}
+function closeNovaConsultaTeleModal() {
+  document.getElementById('novaConsultaTeleBackdrop').classList.remove('open');
+}
+function submitNovaConsultaTele() {
+  const pat = document.getElementById('telePatInput')?.value.trim();
+  if (!pat) { document.getElementById('telePatInput')?.focus(); return; }
+  closeNovaConsultaTeleModal();
+  showToast({ title: 'Consulta agendada!', sub: 'Link enviado para ' + pat, type: 'success', duration: 4000 });
+}
+
+document.getElementById('novaConsultaTeleBackdrop')?.addEventListener('click', function(e) {
+  if (e.target === this) closeNovaConsultaTeleModal();
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('#telePatWrap')) {
+    const drop = document.getElementById('telePatDrop');
+    if (drop) drop.classList.remove('open');
+  }
+});
+
+// Registrar no sistema de navegação central
+const _navCloseAllOrig = navCloseAll;
+navCloseAll = function() {
+  _navCloseAllOrig();
+  const tele = document.getElementById('teleScreen');
+  if (tele) {
+    tele.classList.remove('open');
+    setTimeout(() => { if (!tele.classList.contains('open')) tele.style.display = 'none'; }, 250);
+  }
+};
+
+
+// ══════════════════════════════════════════════════════════
+// CUSTOM DATE PICKER
+// ══════════════════════════════════════════════════════════
+
+const CDP_MONTHS = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const CDP_MONTHS_SHORT = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+let cdpState = {
+  wrapId: null,
+  mode: 'date', // 'date' | 'datetime'
+  year: 2026, month: 2, day: null,
+};
+
+function openDatePicker(wrapId, mode) {
+  cdpState.wrapId = wrapId;
+  cdpState.mode = mode || 'date';
+
+  // Ler valor atual do hidden input para pré-selecionar
+  const hiddenId = wrapId.replace('Wrap', '');
+  const hidden = document.getElementById(hiddenId);
+  if (hidden && hidden.value) {
+    const d = new Date(hidden.value);
+    if (!isNaN(d)) {
+      cdpState.year  = d.getFullYear();
+      cdpState.month = d.getMonth();
+      cdpState.day   = d.getDate();
+      const timeStart = document.getElementById('cdpTimeStart');
+      if (timeStart && mode === 'datetime') {
+        timeStart.value = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+      }
+      const timeEnd = document.getElementById('cdpTimeEnd');
+      if (timeEnd) timeEnd.value = '';
+    }
+  } else {
+    const now = new Date(2026, 2, 28);
+    cdpState.year  = now.getFullYear();
+    cdpState.month = now.getMonth();
+    cdpState.day   = null;
+  }
+
+  // Mostrar/ocultar seção de hora
+  const timeSection = document.getElementById('cdpTimeSection');
+  if (timeSection) timeSection.style.display = mode === 'datetime' ? 'block' : 'none';
+
+  // Posicionar o painel
+  const btn = document.querySelector(`#${wrapId} .custom-dt-btn`);
+  const panel = document.getElementById('cdpPanel');
+  if (btn && panel) {
+    const rect = btn.getBoundingClientRect();
+    let top = rect.bottom + 6;
+    let left = rect.left;
+    // Evitar sair da tela
+    if (left + 280 > window.innerWidth) left = window.innerWidth - 290;
+    if (top + 380 > window.innerHeight) top = rect.top - 380 - 6;
+    panel.style.top  = top  + 'px';
+    panel.style.left = left + 'px';
+  }
+
+  const picker = document.getElementById('customDatePicker');
+  if (picker) picker.style.display = 'block';
+  cdpRenderGrid();
+}
+
+function cdpRenderGrid() {
+  const grid  = document.getElementById('cdpGrid');
+  const label = document.getElementById('cdpMonthLabel');
+  if (!grid || !label) return;
+  label.textContent = CDP_MONTHS[cdpState.month] + ' ' + cdpState.year;
+  grid.innerHTML = '';
+
+  const firstDay    = new Date(cdpState.year, cdpState.month, 1).getDay();
+  const daysInMonth = new Date(cdpState.year, cdpState.month + 1, 0).getDate();
+  const daysInPrev  = new Date(cdpState.year, cdpState.month, 0).getDate();
+  const today       = new Date(2026, 2, 28);
+
+  // Prev month
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const btn = document.createElement('button');
+    btn.className = 'cdp-day other-month';
+    btn.textContent = daysInPrev - i;
+    grid.appendChild(btn);
+  }
+  // Current month
+  for (let d = 1; d <= daysInMonth; d++) {
+    const btn = document.createElement('button');
+    let cls = 'cdp-day';
+    const isToday = cdpState.year === today.getFullYear() && cdpState.month === today.getMonth() && d === today.getDate();
+    if (isToday) cls += ' today';
+    if (d === cdpState.day) cls += ' selected';
+    btn.className = cls;
+    btn.textContent = d;
+    const day = d;
+    btn.addEventListener('click', e => { e.stopPropagation(); cdpState.day = day; cdpRenderGrid(); });
+    grid.appendChild(btn);
+  }
+  // Next month
+  const total = firstDay + daysInMonth;
+  const rem   = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (let d = 1; d <= rem; d++) {
+    const btn = document.createElement('button');
+    btn.className = 'cdp-day other-month';
+    btn.textContent = d;
+    grid.appendChild(btn);
+  }
+}
+
+function cdpNavMonth(dir) {
+  cdpState.month += dir;
+  if (cdpState.month > 11) { cdpState.month = 0; cdpState.year++; }
+  if (cdpState.month < 0)  { cdpState.month = 11; cdpState.year--; }
+  cdpRenderGrid();
+}
+
+function cdpGoToday() {
+  cdpState.year = 2026; cdpState.month = 2; cdpState.day = 28;
+  cdpRenderGrid();
+}
+
+function cdpClear() {
+  cdpState.day = null;
+  cdpRenderGrid();
+  if (cdpState.wrapId) {
+    const hiddenId = cdpState.wrapId.replace('Wrap','');
+    const valId    = hiddenId + 'Val';
+    const hidden   = document.getElementById(hiddenId);
+    const valEl    = document.getElementById(valId);
+    if (hidden) hidden.value = '';
+    if (valEl) { valEl.textContent = 'Selecionar data'; valEl.style.color = 'var(--text-tertiary)'; }
+  }
+  cdpClose();
+}
+
+function cdpConfirm() {
+  if (!cdpState.day) { cdpClose(); return; }
+  const y = cdpState.year;
+  const m = cdpState.month;
+  const d = cdpState.day;
+  const timeStart = document.getElementById('cdpTimeStart');
+  const timeEnd   = document.getElementById('cdpTimeEnd');
+  const startVal  = (cdpState.mode === 'datetime' && timeStart) ? timeStart.value : '';
+  const endVal    = (cdpState.mode === 'datetime' && timeEnd && timeEnd.value) ? timeEnd.value : '';
+
+  const pad = n => String(n).padStart(2,'0');
+  const dateStr    = `${y}-${pad(m+1)}-${pad(d)}`;
+  const displayDate = `${pad(d)}/${pad(m+1)}/${y}`;
+
+  if (cdpState.wrapId) {
+    const hiddenId = cdpState.wrapId.replace('Wrap','');
+    const valId    = hiddenId + 'Val';
+    const hidden   = document.getElementById(hiddenId);
+    const valEl    = document.getElementById(valId);
+    if (hidden) hidden.value = cdpState.mode === 'datetime' ? dateStr + 'T' + (startVal || '08:00') : dateStr;
+    if (valEl) {
+      let display = displayDate;
+      if (cdpState.mode === 'datetime') {
+        display += '  ' + (startVal || '08:00');
+        if (endVal) display += ' – ' + endVal;
+      }
+      valEl.textContent = display;
+      valEl.style.color = '';
+    }
+  }
+  cdpClose();
+}
+
+function cdpClose() {
+  const picker = document.getElementById('customDatePicker');
+  if (picker) picker.style.display = 'none';
+  cdpState.wrapId = null;
+}
+
+// Fechar ao clicar no backdrop
+document.getElementById('customDatePicker')?.addEventListener('click', function(e) {
+  if (e.target === this) cdpClose();
+});
+// Fechar com ESC
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cdpClose(); });
+
 </script>
 
 <!-- ══ NOVA CONSULTA — STEPPER FLOW ══ -->
-<div class="ncs-screen" id="ncsScreen">
+<div class="ncs-screen" id="ncsScreen" style="display:none;">
 
   <!-- ── Stepper Sidebar ── -->
   <aside class="ncs-sidebar">
@@ -8902,7 +9774,7 @@ if (document.readyState !== 'loading') {
 
 
 <!-- ══ VISUALIZAR AGENDA ══ -->
-<div class="agv-screen" id="agvScreen">
+<div class="agv-screen" id="agvScreen" style="display:none;">
 
   <!-- Topbar -->
   <header class="agv-topbar">
@@ -9270,14 +10142,14 @@ if (document.readyState !== 'loading') {
       </div>
 
       <!-- Início + Fim -->
-      <div class="agv-modal-row2">
-        <div class="agv-modal-field">
-          <label class="agv-modal-label">Início <span class="rx-req">*</span></label>
-          <input class="agv-modal-input" type="datetime-local" id="naInicio" value="2026-03-28T13:45"/>
-        </div>
-        <div class="agv-modal-field">
-          <label class="agv-modal-label">Fim <span class="rx-req">*</span></label>
-          <input class="agv-modal-input" type="datetime-local" id="naFim" value="2026-03-28T14:15"/>
+      <div class="agv-modal-field">
+        <label class="agv-modal-label">Data e Hora <span class="rx-req">*</span></label>
+        <div class="custom-dt-wrap" id="naInicioWrap">
+          <button class="custom-dt-btn" onclick="openDatePicker('naInicioWrap','datetime')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span class="custom-dt-val" id="naInicioVal" style="color:var(--text-tertiary);">Selecionar data e hora</span>
+          </button>
+          <input type="hidden" id="naInicio" value=""/>
         </div>
       </div>
 
@@ -10124,7 +10996,13 @@ if (document.readyState !== 'loading') {
             <div class="agv-modal-row2">
               <div class="agv-modal-field">
                 <label class="agv-modal-label">Data de retorno</label>
-                <input id="procRetorno" class="agv-modal-input" type="date"/>
+                <div class="custom-dt-wrap" id="procRetornoWrap">
+                <button class="custom-dt-btn" onclick="openDatePicker('procRetornoWrap','date')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  <span class="custom-dt-val" id="procRetornoVal" style="color:var(--text-tertiary);">Selecionar data</span>
+                </button>
+                <input type="hidden" id="procRetorno" value=""/>
+              </div>
               </div>
               <div class="agv-modal-field">
                 <label class="agv-modal-label">Observações do retorno</label>
@@ -10169,6 +11047,427 @@ if (document.readyState !== 'loading') {
         </div>
       </div>
 
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ TELA TELEMEDICINA ══ -->
+<div class="crm-screen" id="teleScreen">
+
+  <!-- Topbar -->
+  <header class="agv-topbar" style="padding-bottom:0;">
+    <div class="agv-breadcrumb">
+      <button class="agv-breadcrumb-link" onclick="openDashboard()">Dashboard</button>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="9 18 15 12 9 6"/></svg>
+      <span>Telemedicina</span>
+    </div>
+    <div class="agv-topbar-title-row">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="agv-date-btn" onclick="openDashboard()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div>
+          <h1 class="agv-page-title">Central de Telemedicina</h1>
+          <p class="agv-page-sub">Plataforma de consultas por vídeo em tempo real</p>
+        </div>
+      </div>
+      <div class="agv-topbar-actions">
+        <button class="agv-btn-secondary" onclick="teleAtualizar()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+          Atualizar
+        </button>
+        <button class="agv-btn-primary" onclick="openNovaConsultaTeleModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nova Consulta
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="crm-body">
+
+    <!-- KPIs -->
+    <div class="tele-kpis">
+      <div class="tele-kpi">
+        <div class="tele-kpi-left">
+          <div class="tele-kpi-label">Consultas Hoje</div>
+          <div class="tele-kpi-val">4</div>
+        </div>
+        <div class="tele-kpi-ico" style="background:rgba(99,102,241,0.1);color:#6366F1;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+      </div>
+      <div class="tele-kpi">
+        <div class="tele-kpi-left">
+          <div class="tele-kpi-label">Concluídas</div>
+          <div class="tele-kpi-val" style="color:#10B981;">2</div>
+        </div>
+        <div class="tele-kpi-ico" style="background:rgba(16,185,129,0.1);color:#10B981;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+      </div>
+      <div class="tele-kpi">
+        <div class="tele-kpi-left">
+          <div class="tele-kpi-label">Sala de Espera</div>
+          <div class="tele-kpi-val" style="color:#F59E0B;">1</div>
+        </div>
+        <div class="tele-kpi-ico" style="background:rgba(245,158,11,0.1);color:#F59E0B;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+      </div>
+      <div class="tele-kpi">
+        <div class="tele-kpi-left">
+          <div class="tele-kpi-label">Em Andamento</div>
+          <div class="tele-kpi-val" style="color:#3B82F6;">1</div>
+        </div>
+        <div class="tele-kpi-ico" style="background:rgba(59,130,246,0.1);color:#3B82F6;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+      </div>
+      <div class="tele-kpi">
+        <div class="tele-kpi-left">
+          <div class="tele-kpi-label">Duração Média</div>
+          <div class="tele-kpi-val" style="color:#8B5CF6;">28min</div>
+        </div>
+        <div class="tele-kpi-ico" style="background:rgba(139,92,246,0.1);color:#8B5CF6;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+      </div>
+      <div class="tele-kpi">
+        <div class="tele-kpi-left">
+          <div class="tele-kpi-label">Satisfação</div>
+          <div class="tele-kpi-val" style="color:#F59E0B;">4.8 ★</div>
+        </div>
+        <div class="tele-kpi-ico" style="background:rgba(245,158,11,0.1);color:#F59E0B;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tele-tabs">
+      <button class="tele-tab active" onclick="teleSetTab('consultorio',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        Consultório
+      </button>
+      <button class="tele-tab" onclick="teleSetTab('agenda',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Agenda
+      </button>
+      <button class="tele-tab" onclick="teleSetTab('historico',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+        Histórico
+      </button>
+    </div>
+
+    <!-- Tab: Consultório (padrão) -->
+    <div id="teleConsultorio" class="tele-tab-content">
+      <div class="tele-consultorio-grid">
+
+        <!-- Sala de Espera -->
+        <div class="tele-sala-espera">
+          <div class="tele-section-header">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15" style="color:var(--text-tertiary);"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              <span class="tele-section-title">Sala de Espera</span>
+            </div>
+            <span class="tele-count-badge" id="teleSalaCount">1</span>
+          </div>
+          <div id="teleSalaList">
+            <!-- Paciente aguardando -->
+            <div class="tele-espera-item">
+              <div class="crm-patient-av" style="background:#8B5CF6;width:38px;height:38px;font-size:13px;">LT</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--text-primary);">Lucia Aparecida Torres</div>
+                <div style="font-family:var(--font-ui);font-size:11px;color:var(--text-tertiary);display:flex;align-items:center;gap:4px;margin-top:2px;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="10" height="10"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Aguardando há 4min
+                </div>
+              </div>
+              <button class="tele-admit-btn" onclick="teleIniciarConsulta({name:'Lucia Aparecida Torres',initials:'LT',color:'#8B5CF6',time:'14:30',type:'Telemedicina'})">
+                Admitir
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Painel central: consulta em andamento ou iniciar -->
+        <div class="tele-main-panel" id="teleMainPanel">
+          <!-- Estado: iniciar consulta (padrão) -->
+          <div id="teleIniciarState">
+            <div class="tele-section-header" style="margin-bottom:20px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15" style="color:var(--text-tertiary);"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                <span class="tele-section-title">Iniciar Consulta</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:32px 24px;gap:16px;">
+              <div class="tele-video-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+              </div>
+              <div style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--text-primary);">Criar Nova Sala de Consulta</div>
+              <div style="font-family:var(--font-ui);font-size:13px;color:var(--text-tertiary);max-width:320px;">Agende uma nova consulta de telemedicina e envie o link para o paciente</div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px;">
+                <!-- Pacientes agendados prontos para iniciar -->
+                <button class="tele-agendado-card" onclick="teleIniciarConsulta({name:'Maria Aparecida Santos',initials:'MA',color:'#3B82F6',time:'14:00',type:'Telemedicina'})">
+                  <div class="crm-patient-av" style="background:#3B82F6;width:32px;height:32px;font-size:11px;flex-shrink:0;">MA</div>
+                  <div style="text-align:left;">
+                    <div style="font-size:12px;font-weight:600;color:var(--text-primary);">Maria Aparecida Santos</div>
+                    <div style="font-size:10px;color:var(--text-tertiary);">14:00 · Agendada</div>
+                  </div>
+                  <span class="tele-iniciar-mini">Iniciar</span>
+                </button>
+                <button class="tele-agendado-card" onclick="teleIniciarConsulta({name:'João Carlos Ferreira',initials:'JC',color:'#10B981',time:'15:00',type:'Telemedicina'})">
+                  <div class="crm-patient-av" style="background:#10B981;width:32px;height:32px;font-size:11px;flex-shrink:0;">JC</div>
+                  <div style="text-align:left;">
+                    <div style="font-size:12px;font-weight:600;color:var(--text-primary);">João Carlos Ferreira</div>
+                    <div style="font-size:10px;color:var(--text-tertiary);">15:00 · Agendada</div>
+                  </div>
+                  <span class="tele-iniciar-mini">Iniciar</span>
+                </button>
+              </div>
+              <button class="agv-btn-primary" style="height:42px;padding:0 28px;gap:8px;margin-top:4px;" onclick="openNovaConsultaTeleModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Criar Sala de Consulta
+              </button>
+            </div>
+          </div>
+
+          <!-- Estado: consulta em andamento -->
+          <div id="teleEmAndamentoState" style="display:none;flex-direction:column;height:100%;">
+            <div class="tele-section-header" style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="tele-ao-vivo-dot"></span>
+                <span class="tele-section-title">Consulta em Andamento</span>
+              </div>
+              <button class="tele-encerrar-btn" onclick="teleEncerrar()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+                Encerrar
+              </button>
+            </div>
+            <!-- Simulação de vídeo -->
+            <div class="tele-video-area">
+              <div class="tele-video-main">
+                <div class="tele-video-patient-label" id="teleVideoPatientName">Paciente</div>
+                <div class="tele-video-status">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                  Conectado
+                </div>
+              </div>
+              <div class="tele-video-self">
+                <div style="font-family:var(--font-ui);font-size:10px;color:#fff;opacity:.7;position:absolute;bottom:6px;left:8px;">Dr. Ricardo</div>
+              </div>
+            </div>
+            <!-- Controles -->
+            <div class="tele-controls">
+              <button class="tele-ctrl-btn" id="teleMicBtn" onclick="teleToggleMic(this)" title="Microfone">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              </button>
+              <button class="tele-ctrl-btn" id="teleCamBtn" onclick="teleToggleCam(this)" title="Câmera">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+              </button>
+              <button class="tele-ctrl-btn" title="Compartilhar tela">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </button>
+              <button class="tele-ctrl-btn tele-ctrl-danger" onclick="teleEncerrar()" title="Encerrar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Painel direito: paciente atual + chat -->
+        <div class="tele-side-panel" id="teleSidePanel">
+          <!-- Paciente atual -->
+          <div class="tele-patient-card" id="telePacienteCard">
+            <div class="tele-section-title" style="margin-bottom:12px;">Paciente Atual</div>
+            <div id="telePacienteInfo" style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 0;gap:8px;">
+              <div class="tele-video-icon" style="width:40px;height:40px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div style="font-family:var(--font-ui);font-size:12px;color:var(--text-tertiary);">Nenhuma consulta ativa</div>
+            </div>
+            <div id="telePacienteDetalhes" style="display:none;">
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 0 12px;">
+                <div class="crm-patient-av" id="telePacAv" style="background:#8B5CF6;width:40px;height:40px;font-size:13px;flex-shrink:0;">P</div>
+                <div>
+                  <div style="font-family:var(--font-ui);font-size:14px;font-weight:600;color:var(--text-primary);" id="telePacName">—</div>
+                  <div class="tele-timer" id="teleTimer">00:00</div>
+                </div>
+              </div>
+              <div class="tele-patient-meta-row">
+                <span class="tele-meta-label">Início</span>
+                <span class="tele-meta-val" id="telePacInicio">—</span>
+              </div>
+              <div class="tele-patient-meta-row">
+                <span class="tele-meta-label">Tipo</span>
+                <span class="tele-meta-val">Consulta Online</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
+                <button class="tele-action-link-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+                  Receita
+                </button>
+                <button class="tele-action-link-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+                  Notas
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat -->
+          <div class="tele-chat-card">
+            <div class="tele-section-title" style="margin-bottom:10px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" style="color:var(--text-tertiary);display:inline;margin-right:5px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Chat
+            </div>
+            <div class="tele-chat-msgs" id="teleChatMsgs">
+              <div style="font-family:var(--font-ui);font-size:12px;color:var(--text-tertiary);text-align:center;padding:16px;">Nenhuma mensagem ainda</div>
+            </div>
+            <div class="tele-chat-input-row">
+              <input class="tele-chat-input" id="teleChatInput" type="text" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')teleSendMsg()"/>
+              <button class="tele-chat-send" onclick="teleSendMsg()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Agenda -->
+    <div id="teleAgenda" class="tele-tab-content" style="display:none;">
+      <!-- Filter chips de status -->
+      <div class="tele-status-chips">
+        <button class="tele-chip active" onclick="teleFilterStatus('todas',this)">Todas</button>
+        <button class="tele-chip" onclick="teleFilterStatus('agendada',this)">Agendadas</button>
+        <button class="tele-chip" onclick="teleFilterStatus('aguardando',this)">Aguardando</button>
+        <button class="tele-chip" onclick="teleFilterStatus('em_andamento',this)">Em Andamento</button>
+        <button class="tele-chip" onclick="teleFilterStatus('concluida',this)">Concluídas</button>
+      </div>
+      <div id="teleAgendaList" class="tele-agenda-list"></div>
+    </div>
+
+    <!-- Tab: Histórico -->
+    <div id="teleHistorico" class="tele-tab-content" style="display:none;">
+      <div class="tele-status-chips">
+        <button class="tele-chip active">Todas</button>
+        <button class="tele-chip">Concluídas</button>
+        <button class="tele-chip">Canceladas</button>
+      </div>
+      <div id="teleHistoricoList" class="tele-agenda-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ MODAL: NOVA CONSULTA TELEMEDICINA ══ -->
+<div class="agv-modal-backdrop" id="novaConsultaTeleBackdrop">
+  <div class="agv-modal" style="max-width:500px;">
+    <div class="agv-modal-header">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="agv-modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        </div>
+        <div>
+          <div class="agv-modal-title">Nova Consulta de Telemedicina</div>
+          <div class="agv-modal-sub">Agende uma nova consulta por vídeo com seu paciente. O link será enviado automaticamente.</div>
+        </div>
+      </div>
+      <button class="agv-modal-close" onclick="closeNovaConsultaTeleModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="agv-modal-body" style="gap:14px;">
+      <div class="agv-modal-field">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <label class="agv-modal-label">Paciente <span class="rx-req">*</span></label>
+          <button class="agv-modal-link-btn" onclick="openCadastroRapidoModal()">+ Criar Paciente</button>
+        </div>
+        <div class="p1-search-wrap" id="telePatWrap">
+          <div class="p1-search-row" style="height:40px;">
+            <svg class="p1-search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input class="p1-search-input" type="text" placeholder="Buscar por nome ou CPF (min. 2 caracteres)"
+              id="telePatInput" oninput="telePatSearch(this.value)" autocomplete="off"/>
+          </div>
+          <div class="p1-dropdown" id="telePatDrop">
+            <div class="p1-drop-header" id="telePatLbl">Pacientes</div>
+            <div id="telePatList"></div>
+          </div>
+        </div>
+      </div>
+      <div class="agv-modal-field">
+        <label class="agv-modal-label">Data e Hora <span class="rx-req">*</span></label>
+        <div class="custom-dt-wrap" id="teleDataInicioWrap">
+          <button class="custom-dt-btn" onclick="openDatePicker('teleDataInicioWrap','datetime')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span class="custom-dt-val" id="teleDataInicioVal" style="color:var(--text-tertiary);">Selecionar data e hora</span>
+          </button>
+          <input type="hidden" id="teleDataInicio" value=""/>
+        </div>
+      </div>
+      <div class="agv-modal-field">
+        <label class="agv-modal-label">Observações</label>
+        <div style="font-family:var(--font-ui);font-size:10px;color:var(--text-tertiary);margin-bottom:4px;">Motivo da consulta, instruções para o paciente</div>
+        <textarea class="agv-modal-textarea" placeholder="Motivo da consulta, instruções para o paciente..." id="teleObs" style="min-height:90px;"></textarea>
+      </div>
+    </div>
+    <div class="agv-modal-footer">
+      <button class="agv-modal-btn-cancel" onclick="closeNovaConsultaTeleModal()">Cancelar</button>
+      <button class="agv-modal-btn-primary" onclick="submitNovaConsultaTele()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Agendar Consulta
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ CUSTOM DATE PICKER POPUP ══ -->
+<div id="customDatePicker" class="cdp-backdrop" style="display:none;">
+  <div class="cdp-panel" id="cdpPanel">
+    <!-- Header -->
+    <div class="cdp-header">
+      <button class="cdp-nav-btn" onclick="cdpNavMonth(-1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="cdp-month-label" id="cdpMonthLabel">março 2026</div>
+      <button class="cdp-nav-btn" onclick="cdpNavMonth(1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+    <!-- Weekdays -->
+    <div class="cdp-weekdays">
+      <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+    </div>
+    <!-- Grid -->
+    <div class="cdp-grid" id="cdpGrid"></div>
+    <!-- Time picker (só para datetime) -->
+    <div class="cdp-time-section" id="cdpTimeSection">
+      <div class="cdp-time-row">
+        <div class="cdp-time-field">
+          <label class="cdp-time-label">Hora de início <span style="color:#EF4444;">*</span></label>
+          <div class="cdp-time-input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <input type="time" class="cdp-time-input" id="cdpTimeStart" value="08:00"/>
+          </div>
+        </div>
+        <div class="cdp-time-field">
+          <label class="cdp-time-label">Hora de fim <span style="color:var(--text-tertiary);font-weight:400;">(opcional)</span></label>
+          <div class="cdp-time-input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <input type="time" class="cdp-time-input" id="cdpTimeEnd" value=""/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Footer -->
+    <div class="cdp-footer">
+      <button class="cdp-clear-btn" onclick="cdpClear()">Limpar</button>
+      <button class="cdp-today-btn" onclick="cdpGoToday()">Hoje</button>
+      <button class="cdp-confirm-btn" onclick="cdpConfirm()">Confirmar</button>
     </div>
   </div>
 </div>
